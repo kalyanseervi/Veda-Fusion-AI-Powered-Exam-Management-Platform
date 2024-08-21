@@ -23,6 +23,7 @@ import { SubjectUpdateComponent } from './components/pages/admin-dashboard/subje
 import { SubjectListComponent } from './components/pages/admin-dashboard/subject-manage/subject-list/subject-list.component';
 import { ClassListComponent } from './components/pages/admin-dashboard/class-manage/class-list/class-list.component';
 import { TeacherCreateComponent } from './components/pages/admin-dashboard/teacher-details/teacher-create/teacher-create.component';
+import { ExamManageComponent } from './components/pages/teacher-dashboard/exam-manage/exam-manage.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -54,7 +55,11 @@ export const routes: Routes = [
             }
         ]
     },
-    { path: 'dashboard/teacher', component: TeacherDashboardComponent, canActivate: [AuthGuard, RoleGuard], data: { role: 'teacher' } },
+    { path: 'dashboard/teacher', component: TeacherDashboardComponent, canActivate: [AuthGuard, RoleGuard], data: { role: 'teacher' },
+    children:[
+        {path: 'student-details',component:StudentDetailsComponent},
+        {path: 'exam-manage',component:ExamManageComponent},
+    ] },
     { path: 'dashboard/student', component: StudentDashboardComponent, canActivate: [AuthGuard, RoleGuard], data: { role: 'student' } },
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
