@@ -1,0 +1,85 @@
+
+<div class="sidebar">    
+    <!-- Admin Routes -->
+    <ng-container *ngIf="userRole === 'admin'">
+        <a [routerLink]="['/dashboard/admin/home-page']" 
+        [class.active]="isActive('/dashboard/admin/home-page')">
+            <span class="material-icons-sharp">grid_view</span>
+            <h3>Dashboard</h3>
+        </a>
+        <a [routerLink]="['/dashboard/admin/teacher-details']" 
+        [class.active]="isActive('/dashboard/admin/teacher-details')">
+            <span class="material-icons-sharp">group</span>
+            <h3>Teachers Details</h3>
+        </a>
+        <a [routerLink]="['/dashboard/admin/student-details']" 
+        [class.active]="isActive('/dashboard/admin/student-details')">
+            <span class="material-icons-sharp">group</span>
+            <h3>Students Details</h3>
+        </a>
+        <a [routerLink]="['/dashboard/admin/class-manage']"
+        [class.active]="isActive('/dashboard/admin/class-manage')" >
+            <span class="material-icons-sharp">group</span>
+            <h3>Manage Class</h3>
+        </a>
+        <a [routerLink]="['/dashboard/admin/subject-manage']"
+        [class.active]="isActive('/dashboard/admin/subject-manage')" >
+            <span class="material-icons-sharp">group</span>
+            <h3>Manage Subject</h3>
+        </a>
+        <a [routerLink]="['/settings']" 
+        [class.active]="isActive('/settings')">
+            <span class="material-icons-sharp">settings</span>
+            <h3>Settings</h3>
+        </a>
+        <a (click)="onLogout()">
+            <span class="material-icons-sharp">logout</span>
+            <h3>Log Out</h3>
+        </a>
+    </ng-container>
+
+    <!-- Teacher Routes -->
+    <ng-container *ngIf="userRole === 'teacher'">
+        <a [routerLink]="['/studentdetails']"
+        [class.active]="isActive('/examdetails')" >
+            <span class="material-icons-sharp">group</span>
+            <h3>Students Details</h3>
+        </a>
+        <a [routerLink]="['/examdetails']" 
+        [class.active]="isActive('/dashboard/admin/home-page')">
+            <span class="material-icons-sharp">quiz</span>
+            <h3>Exam Details</h3>
+        </a>
+        <a [routerLink]="['/settings']" 
+        [class.active]="isActive('/settings')" >
+            <span class="material-icons-sharp">settings</span>
+            <h3>Settings</h3>
+        </a>
+        <a (click)="onLogout()">
+            <span class="material-icons-sharp">logout</span>
+            <h3>Log Out</h3>
+        </a>
+    </ng-container>
+
+    <!-- Student Routes -->
+    <ng-container *ngIf="userRole === 'student'">
+        <a [routerLink]="['/examdetails']" 
+        [class.active]="isActive('/examdetails')">
+            <span class="material-icons-sharp">quiz</span>
+            <h3>Exam Details</h3>
+        </a>
+        <a [routerLink]="['/settings']" 
+        [class.active]="isActive('/settings')" >
+            <span class="material-icons-sharp">settings</span>
+            <h3>Settings</h3>
+        </a>
+        <a (click)="onLogout()">
+            <span class="material-icons-sharp">logout</span>
+            <h3>Log Out</h3>
+        </a>
+    </ng-container>
+
+    <!-- Common Routes -->
+   
+   
+</div>

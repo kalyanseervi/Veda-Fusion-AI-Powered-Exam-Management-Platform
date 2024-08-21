@@ -1,0 +1,29 @@
+<div class="teacher-cards-container">
+    <h3>Teachers List</h3>
+    <div class="teacher-cards">
+        <div *ngFor="let teacher of teachers" class="teacher-card">
+            <div class="teacher-card-header">
+                <h4>{{ teacher.name }}</h4>
+                <p>{{ teacher.email }}</p>
+            </div>
+            <div class="teacher-card-body">
+                <p><strong>Contact:</strong> {{ teacher.contactNumber }}</p>
+                <p><strong>City:</strong> {{ teacher.city }}</p>
+                <p><strong>School:</strong> {{ teacher.school.name }}</p>
+                <p><strong>Classes:</strong></p>
+                <ul>
+                    <li *ngFor="let classItem of teacher.teachingClasses">{{ classItem.classname }}</li>
+                </ul>
+                <p><strong>Subjects:</strong></p>
+                <ul>
+                    <li *ngFor="let subject of teacher.teachingSubjects">{{ subject.subjectName }}</li>
+                </ul>
+            </div>
+            <div class="teacher-card-footer">
+                <button (click)="viewTeacherDetails(teacher._id)">View</button>
+                <button (click)="editTeacher(teacher._id)">Edit</button>
+                <button (click)="deleteTeacher(teacher._id)" class="delete-btn">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>

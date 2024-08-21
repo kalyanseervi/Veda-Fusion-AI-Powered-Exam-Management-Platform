@@ -1,0 +1,18 @@
+<div class="class-list-container">
+    <h2>Class List</h2>
+    <a routerLink="/dashboard/admin/class-manage/class-create" class="add-class-button">Add New Class</a>
+    <div class="class-list">
+      <div class="class-item" *ngFor="let classItem of classes">
+        <div class="class-details">
+          <h3>{{ classItem.classname }}</h3>
+          <p *ngIf="classItem.description">{{ classItem.description }}</p>
+          <p><strong>Academic Year:</strong> {{ classItem.academicYear }}</p>
+        </div>
+        <div class="class-actions">
+          <button (click)="deleteClass(classItem._id)" class="delete-button">Delete</button>
+          <a [routerLink]="['/dashboard/admin/class-manage/class-update', classItem._id]" class="edit-button">Edit</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  

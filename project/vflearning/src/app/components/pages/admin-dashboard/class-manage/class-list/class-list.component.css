@@ -1,0 +1,84 @@
+.class-list-container {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: var(--padding-1);
+    background-color: var(--color-white);
+    box-shadow: var(--box-shadow);
+    border-radius: var(--card-border-radius);
+  }
+  
+  h2 {
+    text-align: center;
+    margin-bottom: var(--padding-1);
+    color: var(--color-primary);
+  }
+  
+  .add-class-button {
+    display: inline-block;
+    padding: 0.7rem 1.5rem;
+    margin-bottom: var(--padding-1);
+    border-radius: var(--border-radius-2);
+    background-color: var(--color-success);
+    color: var(--color-white);
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+  }
+  
+  .add-class-button:hover {
+    background-color: var(--color-primary-variant);
+  }
+  
+  .class-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--padding-1);
+  }
+  
+  .class-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--padding-1);
+    background-color: var(--color-info-light);
+    border-radius: var(--border-radius-2);
+    box-shadow: var(--box-shadow);
+  }
+  
+  .class-details {
+    flex: 1;
+  }
+  
+  .class-actions {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .edit-button,
+  .delete-button {
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius-1);
+    color: var(--color-white);
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .edit-button {
+    background-color: var(--color-primary);
+  }
+  
+  .edit-button:hover {
+    background-color: var(--color-primary-variant);
+  }
+  
+  .delete-button {
+    background-color: var(--color-danger);
+  }
+  
+  .delete-button:hover {
+    background-color: var(--color-danger);
+  }
+  

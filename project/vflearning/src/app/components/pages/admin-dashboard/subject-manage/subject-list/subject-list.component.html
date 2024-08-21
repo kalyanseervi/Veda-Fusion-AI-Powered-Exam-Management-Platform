@@ -1,0 +1,19 @@
+<div class="subject-list-container">
+    <h2>Subject List</h2>
+    <a routerLink="/dashboard/admin/subject-manage/subject-create" class="add-subject-button">Add New Subject</a>
+    <div class="subject-list">
+      <div class="subject-item" *ngFor="let subject of subjects">
+        <div class="subject-details">
+          <h3>{{ subject.subjectName }}</h3>
+          <p><strong>Subject Code:</strong> {{ subject.subjectCode }}</p>
+          <p *ngIf="subject.description"><strong>Description:</strong> {{ subject.description }}</p>
+          <p><strong>Academic Year:</strong> {{ subject.academicYear }}</p>
+        </div>
+        <div class="subject-actions">
+          <button (click)="deleteSubject(subject._id)" class="delete-button">Delete</button>
+          <a [routerLink]="['/dashboard/admin/subject-manage/subject-update', subject._id]" class="edit-button">Edit</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  

@@ -1,0 +1,115 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  .form-container {
+    background: var(--color-white);
+    padding: var(--card-padding);
+    border-radius: var(--card-border-radius);
+    box-shadow: var(--box-shadow);
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+  }
+  
+  .form-group {
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+  .form-group label {
+    display: block;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--color-dark);
+    transition: color 300ms ease;
+  }
+  
+  .form-group input,
+  .form-group select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid var(--color-light);
+    border-radius: var(--border-radius-1);
+    background: var(--color-white);
+  }
+  
+  .form-group input:focus,
+  .form-group select:focus {
+    border-color: var(--color-primary);
+    outline: none;
+  }
+  
+  .buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+  }
+  
+  .buttons button {
+    background: var(--color-primary);
+    color: var(--color-white);
+    border: none;
+    border-radius: var(--border-radius-1);
+    padding: 0.8rem 1.6rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 300ms ease, transform 300ms ease;
+  }
+  
+  .buttons button:disabled {
+    background: var(--color-info-light);
+    cursor: not-allowed;
+  }
+  
+  .buttons button:hover {
+    background: var(--color-primary-variant);
+    transform: translateY(-2px);
+  }
+  
+  .submit-button {
+    background: var(--color-success);
+  }
+  
+  .submit-button:hover {
+    background: var(--color-success);
+    transform: translateY(-2px);
+  }
+  
+  h3 {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--color-dark);
+    position: relative;
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.5rem;
+    transition: color 300ms ease, transform 300ms ease;
+  }
+  
+  h3::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 50%;
+    height: 3px;
+    background: var(--color-primary);
+    transform: scaleX(0);
+    transform-origin: bottom right;
+    transition: transform 300ms ease;
+  }
+  
+  h3:hover {
+    color: var(--color-primary);
+    transform: translateY(-2px);
+  }
+  
+  h3:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+  }
+  

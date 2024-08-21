@@ -1,0 +1,66 @@
+<div class="container">
+  <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" class="form-container">
+      <div *ngIf="stepIndex === 0">
+          <h3 >Step 1: Personal Information</h3>
+          <div class="form-group">
+              <label for="name">Name</label>
+              <input id="name" formControlName="name" type="text" />
+          </div>
+          <div class="form-group">
+              <label for="dob">Date of Birth</label>
+              <input id="dob" formControlName="dob" type="date" />
+          </div>
+          <div class="form-group">
+              <label for="email">Email</label>
+              <input id="email" formControlName="email" type="email" />
+          </div>
+          <!-- <div class="form-group">
+              <label for="confirmEmail">Confirm Email</label>
+              <input id="confirmEmail" formControlName="confirmEmail" type="email" />
+          </div>
+          <div *ngIf="registrationForm.hasError('emailsMismatch') && registrationForm.get('confirmEmail')?.touched">
+            Emails do not match.
+          </div> -->
+      </div>
+
+
+      <div *ngIf="stepIndex === 1">
+          <h3>Step 3: Academic Information</h3>
+
+          <div class="form-group">
+              <label for="instituteName">School/College/Institute Name</label>
+              <input id="instituteName" formControlName="instituteName" type="text" />
+          </div>
+          <div class="form-group">
+            <label for="instituteAddress">Address</label>
+            <input id="instituteAddress" formControlName="instituteAddress" type="text" />
+        </div>
+          <div class="form-group">
+              <label for="institutephoneNumber">Institute Phone Number</label>
+              <input id="institutephoneNumber" formControlName="institutephoneNumber" type="number" />
+          </div>
+      </div>
+
+      <div *ngIf="stepIndex === 2">
+          <h3>Step 4: Department</h3>
+          <div class="form-group">
+              <label for="department">Department</label>
+              <input id="department" formControlName="department" type="text" />
+          </div>
+          <div class="form-group">
+            <label for="password">Password:</label>
+            <input id="password" formControlName="password" type="password" required />
+          </div>
+          <div class="form-group">
+            <label for="confirmpassword">Confirem Password:</label>
+            <input id="confirmpassword" formControlName="confirmpassword" type="password" required />
+          </div>
+      </div>
+
+      <div class="buttons">
+          <button type="button" (click)="prevStep()" [disabled]="stepIndex === 0">Previous</button>
+          <button type="button" *ngIf="stepIndex < 2" (click)="nextStep()">Next</button>
+          <button type="submit" *ngIf="stepIndex === 2" class="submit-button">Submit</button>
+      </div>
+  </form>
+</div>

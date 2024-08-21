@@ -1,0 +1,10 @@
+<h2>Manage Roles</h2>
+<form [formGroup]="roleForm" (ngSubmit)="addRole()">
+  <label>Role Name:</label>
+  <input formControlName="name" type="text" placeholder="Role Name" />
+  <button type="submit">Add Role</button>
+</form>
+
+<ul>
+  <li *ngFor="let role of roles">{{ role.name }}</li>
+</ul>

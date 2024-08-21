@@ -1,0 +1,18 @@
+{"level":"error","message":"Registration error for kalyanseervi700@gmail.com: User validation failed: mobile: Path `mobile` is required., lastName: Path `lastName` is required., firstName: Path `firstName` is required.","timestamp":"2024-08-14T18:09:02.824Z"}
+{"level":"error","message":"Registration error for kalyanseervi700@gmail.com: User validation failed: mobile: Path `mobile` is required., lastName: Path `lastName` is required., firstName: Path `firstName` is required.","timestamp":"2024-08-14T18:15:16.888Z"}
+{"level":"info","message":"Verification email sent to kalyanseervi700@gmail.com successfully.","timestamp":"2024-08-14T18:17:44.772Z"}
+{"level":"error","message":"Login error for kalyanseervi700@gmail.com: read ECONNRESET","timestamp":"2024-08-15T08:49:11.629Z"}
+{"level":"error","message":"Login error for kalyanseervi700@gmail.com: read ECONNRESET","timestamp":"2024-08-15T08:49:24.566Z"}
+{"level":"info","message":"Verification email sent to kalyanseervi567@gmail.com successfully.","timestamp":"2024-08-15T20:47:15.073Z"}
+{"level":"info","message":"Verification email sent to kalyanseervi567@gmail.com successfully.","timestamp":"2024-08-15T20:51:27.585Z"}
+{"level":"info","message":"Credentials email sent to kalyanseervi567@gmail.com successfully.","timestamp":"2024-08-15T20:51:31.014Z"}
+{"level":"error","message":"Login error for kalyanseervi567@gmail.com: user.matchPassword is not a function","timestamp":"2024-08-15T20:56:10.433Z"}
+{"level":"error","message":"Login error for kalyanseervi567@gmail.com: user.matchPassword is not a function","timestamp":"2024-08-15T20:56:13.734Z"}
+{"level":"error","message":"Login error for kalyanseervi567@gmail.com: user.matchPassword is not a function","timestamp":"2024-08-15T20:56:23.166Z"}
+{"level":"error","message":"Login error for kalyanseervi567@gmail.com: user.matchPassword is not a function","timestamp":"2024-08-15T20:58:20.499Z"}
+{"level":"error","message":"Login error for kalyanseervi567@gmail.com: user.matchPassword is not a function","timestamp":"2024-08-15T20:59:45.911Z"}
+{"level":"error","message":"Login error for kalyanseervi567@gmail.com: user.matchPassword is not a function","timestamp":"2024-08-15T21:00:37.276Z"}
+{"level":"info","message":"Verification email sent to vjai2324@gmail.com successfully.","timestamp":"2024-08-16T06:51:31.129Z"}
+{"level":"info","message":"Verification email sent to kalyanseervi700@gmail.com successfully.","timestamp":"2024-08-20T09:54:48.418Z"}
+{"level":"error","message":"Error creating teacher: user is not defined","timestamp":"2024-08-20T09:54:48.422Z"}
+{"level":"error","message":"Error creating teacher: E11000 duplicate key error collection: vflearning.teachers index: email_1 dup key: { email: \"kalyanseervi700@gmail.com\" }","timestamp":"2024-08-20T09:55:06.467Z"}
