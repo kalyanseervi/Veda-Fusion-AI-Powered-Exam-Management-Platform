@@ -1,1 +1,41 @@
-<p>student-dashboard works!</p>
+<div class="container1">
+    <aside #sideMenu>
+        <div class="top">
+            <div class="logo">
+                <img src="assets\images\vf.jpg" alt="">
+                <h2> VF <span class="danger">Learning</span> </h2>
+            </div>
+            <div class="close" id="close-btn" #closeBtn>
+                <span class="material-icons-sharp">close</span>
+            </div>
+        </div>
+        <app-sidenavbar></app-sidenavbar>
+    </aside>
+    <main>
+        <router-outlet></router-outlet>
+
+    </main>
+    <div class="right">
+        <div class="top">
+            <button id="menu-btn" #menuBtn>
+                <span class="material-icons-sharp">menu</span>
+            </button>
+            <div class="theme-toggle" #themeToggler>
+                <span class="material-icons-sharp active">light_mode</span>
+                <span class="material-icons-sharp">dark_mode</span>
+            </div>
+            <div class="profile">
+                <div class="info">
+                    <p>Hey, <b>{{username}}</b></p>
+                    <small class="text-muted">{{userrole }}</small>
+                </div>
+                <div class="profile-photo">
+                    <img src="assets\images\profile-avatar.png" alt="{{ username }}">
+
+                </div>
+            </div>
+        </div>
+
+        <app-rightsidebar></app-rightsidebar>
+    </div>
+</div>

@@ -120,9 +120,8 @@ router.post("/create", auth, upload.single("photo"), async (req, res) => {
     const photo = req.file ? req.file.buffer : null;
 
     // Create a new teacher
-    const newTeacher = new Teacher({
+    const newStudent = new Student({
       name,
-      enrollmentId,
       dob,
       address,
       contactNumber,
@@ -144,24 +143,25 @@ router.post("/create", auth, upload.single("photo"), async (req, res) => {
       role: userRole._id,
     });
 
-    const token = newTeacher.createEmailVerificationToken();
 
-    await newTeacher.save();
+    const token = newStudent.createEmailVerificationToken();
+
+    await newStudent.save();
 
     // Send verification email
-    await sendVerificationEmail(newTeacher, token);
+    await sendVerificationEmail(newStudent, token);
 
     // Send an email with the random password
     await sendCredentialsEmail(email, name, randomPassword);
 
     res
       .status(201)
-      .json({ message: "Student created successfully", teacher: newTeacher });
+      .json({ message: "Student created successfully", teacher: newStudent });
   } catch (error) {
     logger.error(`Error creating Student: ${error.message}`);
     res
       .status(500)
-      .json({ message: "Failed to create teacher", error: error.message });
+      .json({ message: "Failed to create student", error: error.message });
   }
 });
 
@@ -283,3 +283,5 @@ router.delete("/:id", auth, async (req, res) => {
       .json({ message: "Failed to delete Student", error: error.message });
   }
 });
+
+module.exports = router;

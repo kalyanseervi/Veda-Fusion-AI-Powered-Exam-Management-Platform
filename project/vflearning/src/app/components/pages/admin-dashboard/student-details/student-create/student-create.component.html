@@ -1,6 +1,6 @@
 <div class="form-container mat-dialog-content">
    
-    <h3>Teacher Registration</h3>
+    <h3>Student Registration</h3>
     <form [formGroup]="studentForm" (ngSubmit)="onSubmit()" class="form">
         <div [ngClass]="{'first': !isSecondSectionActive, 'second': isSecondSectionActive}">
             <!-- First Section: Personal Details -->
@@ -18,6 +18,10 @@
                     <div class="input-field">
                         <label for="email">Email</label>
                         <input id="email" formControlName="email" type="email" placeholder="Enter email" />
+                    </div>
+                    <div class="input-field">
+                        <label for="dob">Date of birth</label>
+                        <input id="dob" formControlName="dob" type="date" placeholder="date of birth" />
                     </div>
                     <div class="input-field">
                         <label for="city">City</label>
@@ -53,14 +57,14 @@
                 <span class="title">Professional Details</span>
                 <div class="fields">
                     <div class="input-field">
-                        <label for="teachingClasses">Teaching Classes</label>
-                        <select id="teachingClasses" formControlName="teachingClasses" multiple>
+                        <label for="studentClass">Select Class</label>
+                        <select id="studentClass" formControlName="studentClass">
                             <option *ngFor="let classItem of availableClasses" [value]="classItem._id">{{ classItem.classname }}</option>
                         </select>
                     </div>
                     <div class="input-field">
-                        <label for="teachingSubjects">Teaching Subjects</label>
-                        <select id="teachingSubjects" formControlName="teachingSubjects" multiple>
+                        <label for="studentsubjects">Subjects</label>
+                        <select id="studentsubjects" formControlName="studentsubjects" multiple>
                             <option *ngFor="let subject of availableSubjects" [value]="subject._id">{{ subject.subjectName }}</option>
                         </select>
                     </div>

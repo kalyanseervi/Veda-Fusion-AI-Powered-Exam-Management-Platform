@@ -2,6 +2,7 @@ const express = require('express');
 const { User, Role } = require('../models/User');
 const Teacher = require('../models/Teacher'); // Adjust the path as needed
 const School = require('../models/School');
+const Student = require('../models/Student');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
@@ -105,32 +106,49 @@ router.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        // Check if the user exists as a regular user
-        let user = await User.findOne({ email }).populate('role').populate('school').exec();
+        let user;
 
-        // If not found as a user, check if it's a teacher
+        // Check if the user exists in the User collection
+        user = await User.findOne({ email }).populate('role').populate('school').exec();
+
+        // If not found in User, check in Teacher collection
         if (!user) {
+
             user = await Teacher.findOne({ email }).populate('role').populate('school').exec();
-            if (!user) {
-                return res.status(400).json({ msg: 'Invalid Credentials' });
-            }
-            console.log(user)
         }
 
+        // If not found in Teacher, check in Student collection
+        if (!user) {
+            console.log('i am here')
+            user = await Student.findOne({ email }).populate('role').populate('school').exec();
+        }
+
+        // If user is still not found, return an error
+        if (!user) {
+            return res.status(400).json({ msg: 'Invalid Credentials' });
+        }
+        console.log('i am new student user',user.emailVerified)
+
+        // Check if the email is verified
         if (!user.emailVerified) {
             return res.status(400).json({ msg: 'Email not verified' });
         }
 
-        // Check password match (assume `matchPassword` is a method available in both User and Teacher models)
+        // Check password match
+        console.log(password)
         const isMatch = await user.matchPassword(password);
-        console.log('yes', isMatch)
+        console.log(isMatch)
         if (!isMatch) {
             return res.status(400).json({ msg: 'Invalid Credentials' });
         }
 
-        console.log("my data is here", user);
-
-        const payload = { userEmail: user.email, userRole: user.role.name, userName:user.name, school: user.school._id };
+        // Prepare the payload and generate JWT
+        const payload = { 
+            userEmail: user.email, 
+            userRole: user.role.name, 
+            userName: user.name, 
+            school: user.school._id 
+        };
         const token = jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
 
         res.status(200).json({ msg: 'Login successful', token });
@@ -140,10 +158,12 @@ router.post('/login', async (req, res) => {
     }
 });
 
+
 router.get('/verify/:token', async (req, res) => {
     try {
         // Create the hashed token from the request parameter
         const emailVerificationToken = crypto.createHash('sha256').update(req.params.token).digest('hex');
+        console.log("this is my token",emailVerificationToken)
 
         // Check for a user with the verification token
         let user = await User.findOne({
@@ -157,6 +177,13 @@ router.get('/verify/:token', async (req, res) => {
                 emailVerificationToken,
                 emailVerificationTokenExpiry: { $gt: Date.now() }
             });
+        }
+        if (!user) {
+            user = await Student.findOne({
+                emailVerificationToken,
+                emailVerificationTokenExpiry: { $gt: Date.now() }
+            });
+
         }
 
         if (!user) {

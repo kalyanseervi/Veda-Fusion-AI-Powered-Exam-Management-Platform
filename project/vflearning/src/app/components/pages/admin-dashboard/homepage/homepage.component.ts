@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Teacher } from '../../../../models/teacher.model';
 import { TeacherService } from '../../../../services/teacher/teacher.service';
 import { Router } from '@angular/router';
+import { StudentService } from '../../../../services/student/student.service';
 
 @Component({
   selector: 'app-homepage',
@@ -13,11 +14,13 @@ import { Router } from '@angular/router';
 export class HomepageComponent implements OnInit {
   teachers: Teacher[] = [];
   totalTeachers: Number | 0 | undefined;
+  totalStudents:Number |0 |undefined;
 
-  constructor(private teacherService: TeacherService, private router: Router) {}
+  constructor(private teacherService: TeacherService, private router: Router, private studentService: StudentService) {}
 
   ngOnInit(): void {
     this.loadTeachers();
+    this.loadStudents();
   }
 
   loadTeachers(): void {
@@ -25,6 +28,11 @@ export class HomepageComponent implements OnInit {
       this.teachers = teachers;
       this.totalTeachers = teachers.length
     });
+  }
+  loadStudents():void{
+    this.studentService.getAllStudent().subscribe((students:any[])=>{
+      this.totalStudents = students.length
+    })
   }
 
 }

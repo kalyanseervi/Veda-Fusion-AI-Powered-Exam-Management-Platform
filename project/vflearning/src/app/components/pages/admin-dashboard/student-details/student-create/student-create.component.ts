@@ -50,6 +50,7 @@ export class StudentCreateComponent implements OnInit {
     this.studentForm = this.fb.group({
       name: ['', [Validators.required]],
       contactNumber: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
+      dob: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       city: ['', [Validators.required]],
       district: ['', [Validators.required]],
@@ -119,12 +120,12 @@ export class StudentCreateComponent implements OnInit {
 
       this.studentService.createStudent(formData).subscribe(
         () => {
-          alert('Teacher registered successfully!');
+          alert('Student registered successfully!');
           this.router.navigate(['/dashboard/admin']);
         },
         (error: any) => {
-          console.error('Error registering teacher:', error);
-          alert('Failed to register teacher. Please try again.');
+          console.error('Error registering student:', error);
+          alert('Failed to register student. Please try again.');
         }
       );
     } else {

@@ -24,6 +24,10 @@ import { SubjectListComponent } from './components/pages/admin-dashboard/subject
 import { ClassListComponent } from './components/pages/admin-dashboard/class-manage/class-list/class-list.component';
 import { TeacherCreateComponent } from './components/pages/admin-dashboard/teacher-details/teacher-create/teacher-create.component';
 import { ExamManageComponent } from './components/pages/teacher-dashboard/exam-manage/exam-manage.component';
+import path from 'node:path';
+import { StudentCreateComponent } from './components/pages/admin-dashboard/student-details/student-create/student-create.component';
+import { StudentListComponent } from './components/pages/admin-dashboard/student-details/student-list/student-list.component';
+import { TeacherUpdateComponent } from './components/pages/admin-dashboard/teacher-details/teacher-update/teacher-update.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -35,9 +39,13 @@ export const routes: Routes = [
             { path: 'teacher-details', component: TeacherDetailsComponent,
                 children:[
                     {path: 'teacher-create',component:TeacherCreateComponent},
+                    {path: 'teacher-update',component:TeacherUpdateComponent},
                 ]
              },
-            { path: 'student-details', component: StudentDetailsComponent },
+            { path: 'student-details', component: StudentDetailsComponent ,children:[
+                {path: 'student-create',component:StudentCreateComponent},
+                {path: 'student-list',component:StudentListComponent},
+            ]},
             { path: 'subject-manage', component: SubjectManageComponent ,
                 children:[
 

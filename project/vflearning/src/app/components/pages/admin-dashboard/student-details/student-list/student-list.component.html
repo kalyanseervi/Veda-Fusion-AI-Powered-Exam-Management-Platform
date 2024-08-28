@@ -1,1 +1,24 @@
-<p>student-list works!</p>
+<div class="student-cards-container">
+    <h2>students List</h2>
+    <div class="student-cards">
+        <div *ngFor="let student of students" class="student-card">
+            <div class="student-card-header">
+                <img src="assets\images\profile-avatar.png" alt="{{ student.name }}" class="student-photo">
+                <div class="student-info">
+                    <h4>{{ student.name |  uppercase }}</h4>
+
+                    <p>{{ student.email }}</p>
+                </div>
+            </div>
+            <div class="student-card-body">
+                <p><strong>Contact:</strong> {{ student.contactNumber }}</p>
+                <p><strong>School:</strong> {{ student.school.name }}</p>
+            </div>
+            <div class="student-card-footer">
+                <button (click)="viewStudentDetails(student._id)">View</button>
+                <button (click)="editStudent(student._id)">Edit</button>
+                <button (click)="deleteStudent(student._id)" class="delete-btn">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
