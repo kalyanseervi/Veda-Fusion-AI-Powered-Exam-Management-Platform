@@ -50,6 +50,8 @@ export class StudentService {
     return this.http.delete(`${this.baseUrl}/${id}`, { headers });
   }
 
+
+
   // Utility method to get the auth token (implement as needed)
   private getToken(): string | null {
     return localStorage.getItem('token'); // Adjust as per your authentication flow

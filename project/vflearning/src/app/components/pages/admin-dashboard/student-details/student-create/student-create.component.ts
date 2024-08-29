@@ -67,7 +67,9 @@ export class StudentCreateComponent implements OnInit {
   ngOnInit(): void {
     this.loadSchools();
     this.loadClasses();
-    this.loadSubjects();
+    this.studentForm.get('studentClass')?.valueChanges.subscribe(classId => {
+      this.loadSubjects(classId); // Load subjects based on the selected class
+    });
   }
 
   loadSchools(): void {
@@ -82,8 +84,8 @@ export class StudentCreateComponent implements OnInit {
     });
   }
 
-  loadSubjects(): void {
-    this.subjectService.getSubjects().subscribe((subjects: Subject[]) => {
+  loadSubjects(classId: string): void {
+    this.subjectService.getSubjectsByClass(classId).subscribe((subjects: Subject[]) => {
       this.availableSubjects = subjects;
     });
   }

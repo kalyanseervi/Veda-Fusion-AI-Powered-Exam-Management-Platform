@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { User } = require('../models/User');
+const Teacher = require('../models/Teacher');
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -38,8 +39,16 @@ const auth = async (req, res, next) => {
 
     try {
         const decoded = jwt.verify(token, JWT_SECRET);
-        let email = decoded.userEmail;
-        req.user = await User.findOne({email}).populate('role').select('-password');
+        req.user = await User.findOne({ email: decoded.userEmail }).populate('role').select('-password');
+        if (!req.user) {
+            req.user = await Teacher.findOne({ email: decoded.userEmail }).populate('role').select('-password');
+        }
+
+        if (!req.user) {
+            return res.status(404).json({ msg: 'User not found' });
+        }
+
+        console.log(req.user.email)
         
         next();
     } catch (err) {

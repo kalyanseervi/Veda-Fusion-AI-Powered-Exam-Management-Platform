@@ -84,6 +84,21 @@ router.post("/create", auth, upload.single("photo"), async (req, res) => {
         .status(403)
         .json({ msg: "Access denied. Only admins can create teachers." });
     }
+    let user
+
+    user = await User.findOne({ email });
+    if (user) {
+        return res.status(400).json({ msg: 'User already exists with email' });
+    }
+    user = await Teacher.findOne({ email });
+    if (user) {
+        return res.status(400).json({ msg: 'User already exists with email' });
+    }
+    user = await Student.findOne({ email });
+    if (user) {
+        return res.status(400).json({ msg: 'User already exists with email' });
+    }
+
 
     // Validate required fields
     if (
@@ -283,5 +298,7 @@ router.delete("/:id", auth, async (req, res) => {
       .json({ message: "Failed to delete Student", error: error.message });
   }
 });
+
+
 
 module.exports = router;

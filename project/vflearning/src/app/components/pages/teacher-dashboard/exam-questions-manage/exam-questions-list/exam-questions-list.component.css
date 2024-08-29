@@ -1,0 +1,8 @@
+.no-exams-message {
+    font-size: 1.2rem;
+    color: var(--color-info-dark);
+    text-align: center;
+    margin-top: 2rem;
+    font-family: 'Poppins', sans-serif;
+  }
+  

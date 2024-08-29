@@ -69,6 +69,24 @@ router.delete('/subjects/:id', async (req, res) => {
       res.status(500).json({ message: error.message });
     }
   });
+
+  router.get('/subjects/classSubject/:classId', async (req, res) => {
+    try {
+        const { classId } = req.params;
+
+        // Find subjects that belong to the specified class
+        const subjects = await Subject.find({ classId: classId });
+
+        if (!subjects || subjects.length === 0) {
+            return res.status(404).json({ msg: 'No subjects found for this class' });
+        }
+
+        res.json(subjects);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server error');
+    }
+});
   
 
 

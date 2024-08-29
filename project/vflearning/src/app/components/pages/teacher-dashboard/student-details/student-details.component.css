@@ -1,0 +1,104 @@
+.student-cards-container {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.student-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.student-card {
+    background: var(--color-white);
+    border-radius: var(--border-radius-2);
+    box-shadow: var(--box-shadow);
+    padding: 1rem;
+    width: calc(33.333% - 1.5rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.student-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 2rem 4rem var(--color-light);
+}
+
+.student-card-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.student-photo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--color-primary);
+}
+
+.student-info h4 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--color-dark);
+}
+
+.student-info p {
+    margin: 0.3rem 0 0;
+    font-size: 0.9rem;
+    color: var(--color-info-dark);
+}
+
+.student-card-body p {
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+    color: var(--color-dark-variant);
+}
+
+.student-card-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+}
+
+.student-card-footer button {
+    padding: 0.4rem 1rem;
+    border: none;
+    border-radius: var(--border-radius-1);
+    background: var(--color-primary);
+    color: var(--color-white);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 0.3rem;
+}
+
+.student-card-footer button:hover {
+    background: var(--color-primary-variant);
+}
+
+.student-card-footer .delete-btn {
+    background: var(--color-danger);
+}
+
+.student-card-footer .delete-btn:hover {
+    background: var(--color-danger-dark);
+}
+
+@media (max-width: 768px) {
+    .student-card {
+        width: calc(50% - 1.5rem);
+    }
+}
+
+@media (max-width: 480px) {
+    .student-card {
+        width: 100%;
+    }
+}

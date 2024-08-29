@@ -12,7 +12,7 @@ import { StudentDashboardComponent } from './components/pages/student-dashboard/
 import { RoleGuard } from './guards/role/role.guard';
 import { UnauthorizedComponent } from './components/pages/unauthorized/unauthorized.component';
 import { TeacherDetailsComponent } from './components/pages/admin-dashboard/teacher-details/teacher-details.component';
-import { StudentDetailsComponent } from './components/pages/admin-dashboard/student-details/student-details.component';
+import { StudentDetailsManageComponent } from './components/pages/admin-dashboard/student-details/student-details.component';
 import { HomepageComponent } from './components/pages/admin-dashboard/homepage/homepage.component';
 import { SubjectManageComponent } from './components/pages/admin-dashboard/subject-manage/subject-manage.component';
 import { ClassManageComponent } from './components/pages/admin-dashboard/class-manage/class-manage.component';
@@ -28,6 +28,13 @@ import path from 'node:path';
 import { StudentCreateComponent } from './components/pages/admin-dashboard/student-details/student-create/student-create.component';
 import { StudentListComponent } from './components/pages/admin-dashboard/student-details/student-list/student-list.component';
 import { TeacherUpdateComponent } from './components/pages/admin-dashboard/teacher-details/teacher-update/teacher-update.component';
+import { StudentDetailsComponent } from './components/pages/teacher-dashboard/student-details/student-details.component';
+import { ExamCreateComponent } from './components/pages/teacher-dashboard/exam-manage/exam-create/exam-create.component';
+import { ExamListComponent } from './components/pages/teacher-dashboard/exam-manage/exam-list/exam-list.component';
+import { ExamQuestionsManageComponent } from './components/pages/teacher-dashboard/exam-questions-manage/exam-questions-manage.component';
+import { ExamQuestionsCreateComponent } from './components/pages/teacher-dashboard/exam-questions-manage/exam-questions-create/exam-questions-create.component';
+import { ExamQuestionsListComponent } from './components/pages/teacher-dashboard/exam-questions-manage/exam-questions-list/exam-questions-list.component';
+import { ExamQuestionsGenerateComponent } from './components/pages/teacher-dashboard/exam-questions-manage/exam-questions-generate/exam-questions-generate.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -42,7 +49,7 @@ export const routes: Routes = [
                     {path: 'teacher-update',component:TeacherUpdateComponent},
                 ]
              },
-            { path: 'student-details', component: StudentDetailsComponent ,children:[
+            { path: 'student-details', component: StudentDetailsManageComponent ,children:[
                 {path: 'student-create',component:StudentCreateComponent},
                 {path: 'student-list',component:StudentListComponent},
             ]},
@@ -66,7 +73,19 @@ export const routes: Routes = [
     { path: 'dashboard/teacher', component: TeacherDashboardComponent, canActivate: [AuthGuard, RoleGuard], data: { role: 'teacher' },
     children:[
         {path: 'student-details',component:StudentDetailsComponent},
-        {path: 'exam-manage',component:ExamManageComponent},
+        {path:'exam-questions-manage/:selectedExamId',component:ExamQuestionsManageComponent,
+            children:[
+                {path: 'exam-questions-create/:selectedExamId',component:ExamQuestionsCreateComponent},
+                {path: 'exam-questions-list',component:ExamQuestionsListComponent},
+                {path: 'exam-questions-generate',component:ExamQuestionsGenerateComponent},
+            ]
+        },
+        {path: 'exam-manage',component:ExamManageComponent,
+            children:[
+                {path: 'exam-create',component:ExamCreateComponent},
+                {path: 'exam-list',component:ExamListComponent},
+            ]
+        },
     ] },
     { path: 'dashboard/student', component: StudentDashboardComponent, canActivate: [AuthGuard, RoleGuard], data: { role: 'student' } },
     { path: 'login', component: LoginComponent },

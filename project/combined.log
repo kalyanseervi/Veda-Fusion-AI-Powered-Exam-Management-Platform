@@ -33,3 +33,9 @@
 {"level":"info","message":"Credentials email sent to kalyanseerviy125@gmail.com successfully.","timestamp":"2024-08-28T06:41:28.496Z"}
 {"level":"info","message":"Verification email sent to kalyanseerviy125@gmail.com successfully.","timestamp":"2024-08-28T08:29:22.059Z"}
 {"level":"info","message":"Credentials email sent to kalyanseerviy125@gmail.com successfully.","timestamp":"2024-08-28T08:29:24.527Z"}
+{"level":"info","message":"Verification email sent to hvg@gmail.com successfully.","timestamp":"2024-08-29T04:57:19.377Z"}
+{"level":"info","message":"Credentials email sent to hvg@gmail.com successfully.","timestamp":"2024-08-29T04:57:22.412Z"}
+{"level":"info","message":"Verification email sent to anilseervi123@gmail.com successfully.","timestamp":"2024-08-29T05:36:21.802Z"}
+{"level":"info","message":"Credentials email sent to anilseervi123@gmail.com successfully.","timestamp":"2024-08-29T05:36:24.517Z"}
+{"level":"error","message":"Login error for kalyanseervi567@gmail.com: Operation `users.findOne()` buffering timed out after 10000ms","timestamp":"2024-08-29T09:49:09.031Z"}
+{"level":"error","message":"Login error for kalyanseervi567@gmail.com: Operation `users.findOne()` buffering timed out after 10000ms","timestamp":"2024-08-29T09:49:24.239Z"}

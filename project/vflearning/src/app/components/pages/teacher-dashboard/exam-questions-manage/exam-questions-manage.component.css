@@ -1,0 +1,16 @@
+.action-btn {
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: var(--border-radius-2);
+  color: var(--color-white);
+  padding: 0.6rem 1.2rem;
+  cursor: pointer;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.9rem;
+  margin: 0.6rem;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.action-btn.view-btn {
+  background-color: var(--color-info-dark);
+}

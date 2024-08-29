@@ -21,3 +21,5 @@
 {"level":"error","message":"Error creating Student: Student validation failed: studentClass: Cast to string failed for value \"[ '66be17d6241965ef0cfc662f' ]\" (type Array) at path \"studentClass\", enrollmentId: Path `enrollmentId` is required.","timestamp":"2024-08-28T06:04:47.417Z"}
 {"level":"error","message":"Error creating Student: newTeacher is not defined","timestamp":"2024-08-28T06:08:54.366Z"}
 {"level":"error","message":"Error creating Student: E11000 duplicate key error collection: vflearning.students index: email_1 dup key: { email: \"kalyanseerviy125@gmail.com\" }","timestamp":"2024-08-28T06:09:31.346Z"}
+{"level":"error","message":"Login error for kalyanseervi567@gmail.com: Operation `users.findOne()` buffering timed out after 10000ms","timestamp":"2024-08-29T09:49:09.031Z"}
+{"level":"error","message":"Login error for kalyanseervi567@gmail.com: Operation `users.findOne()` buffering timed out after 10000ms","timestamp":"2024-08-29T09:49:24.239Z"}

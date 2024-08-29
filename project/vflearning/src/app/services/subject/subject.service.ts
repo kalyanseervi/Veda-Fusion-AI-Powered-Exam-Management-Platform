@@ -28,4 +28,8 @@ export class SubjectService {
   deleteSubject(id: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
+
+  getSubjectsByClass(classId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/classSubject/${classId}`);
+  }
 }

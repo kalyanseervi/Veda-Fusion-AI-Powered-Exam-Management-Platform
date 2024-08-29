@@ -31,7 +31,7 @@ export class TeacherService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.getToken()}`,
     }); // Add token handling as needed
-    return this.http.get<any>(`${this.baseUrl}/${id}`, { headers });
+    return this.http.get<any>(`${this.baseUrl}/singleTeacher/${id}`, { headers });
   }
 
   // Update a teacher
@@ -48,6 +48,16 @@ export class TeacherService {
       Authorization: `Bearer ${this.getToken()}`,
     }); // Add token handling as needed
     return this.http.delete(`${this.baseUrl}/${id}`, { headers });
+  }
+  // Delete a teacher
+  studdentBySubjects(): Observable<any> {
+    console.log('i ma here')
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.getToken()}`,
+    }); // Add token handling as needed
+    return this.http.get<any[]>(`${this.baseUrl}/studentByClassSubjects/`, {
+      headers,
+    });
   }
 
   // Utility method to get the auth token (implement as needed)

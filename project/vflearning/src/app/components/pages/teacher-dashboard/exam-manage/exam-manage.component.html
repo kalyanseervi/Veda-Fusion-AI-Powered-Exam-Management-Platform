@@ -1,1 +1,10 @@
-<p>exam-manage works!</p>
+<button (click)="openPopup()" style="padding: 10px 20px; cursor: pointer;">Add Exam</button>
+
+<app-exam-list></app-exam-list>
+
+<div class="popup-container" *ngIf="isPopupVisible">
+    <div class="add_teacher">
+      <app-exam-create></app-exam-create>
+    </div>
+    <button class="close-popup" (click)="closePopup()">Close</button>
+  </div>
