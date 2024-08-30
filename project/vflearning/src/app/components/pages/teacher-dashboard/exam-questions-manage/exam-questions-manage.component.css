@@ -14,3 +14,16 @@
 .action-btn.view-btn {
   background-color: var(--color-info-dark);
 }
+
+.popup-container{
+  margin: auto;
+  display: flex;
+  
+  box-sizing: border-box; /* Ensures padding and border are included in the container's total width and height */
+}
+
+.add_questions{
+  justify-content: center;
+  max-width: 900px;
+  box-shadow: var(--box-shadow);
+}

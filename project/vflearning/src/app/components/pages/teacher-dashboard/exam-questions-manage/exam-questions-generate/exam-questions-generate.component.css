@@ -1,0 +1,161 @@
+/* General Styles */
+.exam-form {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--padding-1);
+    background-color: var(--color-white);
+    border-radius: var(--border-radius-2);
+    box-shadow: var(--box-shadow);
+  }
+  
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-check {
+    margin-bottom: 1rem;
+  }
+  
+  .form-control {
+    border-radius: var(--border-radius-1);
+    border: 1px solid var(--color-info-light);
+    padding: 0.5rem;
+    font-size: 1rem;
+    color: var(--color-dark);
+  }
+  
+  .form-control:focus {
+    border-color: var(--color-primary);
+    outline: none;
+  }
+  
+  .btn-primary {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-white);
+    border-radius: var(--border-radius-1);
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+  }
+  
+  .btn-primary:hover {
+    background-color: var(--color-primary-variant);
+    border-color: var(--color-primary-variant);
+  }
+  
+  .form-check-input {
+    margin-right: 0.5rem;
+  }
+  
+  .form-check-label {
+    font-size: 1rem;
+    color: var(--color-dark);
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 768px) {
+    .exam-form {
+      padding: var(--padding-1);
+    }
+  
+    .form-control {
+      font-size: 0.875rem;
+    }
+  
+    .btn-primary {
+      font-size: 0.875rem;
+    }
+  }
+
+  /* Custom Checkbox and Radio Button Styles */
+.form-check {
+    position: relative;
+    padding-left: 2rem; /* Space for custom checkboxes/radio buttons */
+    margin-bottom: 1rem;
+  }
+  
+  .form-check-input {
+    position: absolute;
+    left: 0;
+    top: 0.25rem;
+    width: 1rem;
+    height: 1rem;
+    cursor: pointer;
+    opacity: 0;
+  }
+  
+  .form-check-input:checked ~ .form-check-label::before {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+  }
+  
+  .form-check-input:checked ~ .form-check-label::after {
+    content: "";
+    display: block;
+    width: 0.5rem;
+    height: 0.5rem;
+    background-color: var(--color-white);
+    border-radius: 50%;
+    position: absolute;
+    top: 0.25rem;
+    left: 0.25rem;
+  }
+  
+  .form-check-label {
+    position: relative;
+    padding-left: 1.5rem;
+    font-size: 1rem;
+    color: var(--color-dark);
+    cursor: pointer;
+  }
+  
+  .form-check-label::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1rem;
+    height: 1rem;
+    border: 1px solid var(--color-info-light);
+    border-radius: 0.25rem;
+    background-color: var(--color-white);
+    transition: background-color 0.2s, border-color 0.2s;
+  }
+  
+  .form-check-input[type="radio"] {
+    border-radius: 50%;
+  }
+  
+  .form-check-input[type="radio"] + .form-check-label::before {
+    border-radius: 50%;
+  }
+  
+  .form-check-input[type="radio"]:checked + .form-check-label::after {
+    background-color: var(--color-white);
+    border-radius: 50%;
+  }
+  
+  /* Hover and Focus Styles */
+  .form-check-input:focus ~ .form-check-label::before {
+    border-color: var(--color-primary);
+  }
+  
+  .form-check-input:checked ~ .form-check-label::before {
+    border-color: var(--color-primary);
+  }
+  
+  .form-check-input:checked ~ .form-check-label::after {
+    background-color: var(--color-white);
+  }
+  
+  .output-container {
+    max-height: 400px; /* Adjust the height as needed */
+    max-width: 100%; /* Adjust the width as needed */
+    overflow: auto; /* Shows both vertical and horizontal scrollbars as needed */
+    border: 1px solid #ccc; /* Optional: Adds a border around the container */
+    padding: 10px; /* Optional: Adds padding inside the container */
+    background-color: #f9f9f9; /* Optional: Sets a background color for better readability */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Adds a shadow for visual effect */
+    box-sizing: border-box; /* Ensures padding and border are included in the container's total width and height */
+  }
+  

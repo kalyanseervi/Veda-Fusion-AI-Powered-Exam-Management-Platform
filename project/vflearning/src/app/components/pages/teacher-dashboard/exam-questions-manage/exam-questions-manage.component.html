@@ -1,5 +1,14 @@
 <button class="action-btn view-btn" (click)="examQuestionsCreate()">Add Questions</button>
 
+<button class="action-btn" (click)="openPopup()" >Generate Questions Using AI</button>
+
+
+<div class="popup-container" *ngIf="isPopupVisible">
+    <div class="add_questions">
+        <app-exam-questions-generate></app-exam-questions-generate>
+    </div>
+    <button class="close-popup" (click)="closePopup()">Close</button>
+  </div>
 <router-outlet></router-outlet>
 
 <app-exam-questions-list></app-exam-questions-list>

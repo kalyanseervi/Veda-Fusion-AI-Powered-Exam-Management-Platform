@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -6,12 +7,12 @@ import { ActivatedRoute, Router } from '@angular/router';
   standalone: true,
   imports: [],
   templateUrl: './exam-questions-create.component.html',
-  styleUrl: './exam-questions-create.component.css'
+  styleUrl: './exam-questions-create.component.css',
 })
-export class ExamQuestionsCreateComponent  implements OnInit {
+export class ExamQuestionsCreateComponent implements OnInit {
   selectedExamId: string | null = null;
 
-  constructor(private route: ActivatedRoute,private router: Router) {}
+  constructor(private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit(): void {
     // Retrieve the selectedExamId from the route parameters
@@ -20,5 +21,6 @@ export class ExamQuestionsCreateComponent  implements OnInit {
     // You can now use the selectedExamId in your component logic
     console.log('Selected Exam ID:', this.selectedExamId);
   }
+
 
 }
