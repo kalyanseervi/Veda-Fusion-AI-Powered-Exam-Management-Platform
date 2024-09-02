@@ -1,26 +1,137 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import {
+  FormBuilder,
+  FormGroup,
+  FormArray,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-exam-questions-create',
   standalone: true,
-  imports: [],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './exam-questions-create.component.html',
-  styleUrl: './exam-questions-create.component.css',
+  styleUrls: ['./exam-questions-create.component.css'],
 })
 export class ExamQuestionsCreateComponent implements OnInit {
   selectedExamId: string | null = null;
+  questionsForm: FormGroup;
 
-  constructor(private route: ActivatedRoute, private router: Router) {}
+  constructor(
+    private route: ActivatedRoute,
+    private fb: FormBuilder
+  ) {
+    this.questionsForm = this.fb.group({
+      questions: this.fb.array([this.createQuestionFormGroup()]),
+    });
+  }
 
   ngOnInit(): void {
     // Retrieve the selectedExamId from the route parameters
     this.selectedExamId = this.route.snapshot.paramMap.get('selectedExamId');
-
-    // You can now use the selectedExamId in your component logic
     console.log('Selected Exam ID:', this.selectedExamId);
   }
 
+  createQuestionFormGroup(): FormGroup {
+    return this.fb.group({
+      type: ['mcq', Validators.required],
+      title: ['', Validators.required],
+      marks: [null, Validators.required],
+      wordLimit: [null],
+      answer: ['', Validators.required],
+      options: this.fb.array([]),
+      imageUrl: [''],
+    });
+  }
 
+  get questions(): FormArray {
+    return this.questionsForm.get('questions') as FormArray;
+  }
+
+  addQuestion() {
+    this.questions.push(this.createQuestionFormGroup());
+  }
+
+  removeQuestion(index: number) {
+    this.questions.removeAt(index);
+  }
+
+  addOption(questionIndex: number) {
+    const options = this.getOptionsControl(questionIndex);
+    options.push(this.fb.control('', Validators.required));
+  }
+
+  removeOption(questionIndex: number, optionIndex: number) {
+    const options = this.getOptionsControl(questionIndex);
+    options.removeAt(optionIndex);
+  }
+
+  onQuestionTypeChange(index: number) {
+    const question = this.questions.at(index) as FormGroup;
+    const type = question.get('type')?.value;
+
+    if (type === 'mcq') {
+      this.populateOptions(question);
+    } else {
+      this.clearOptions(question);
+    }
+  }
+
+  populateOptions(question: FormGroup) {
+    const options = question.get('options') as FormArray;
+    while (options.length) {
+      options.removeAt(0);
+    }
+    // Example options, adjust as needed
+    ['Option 1', 'Option 2'].forEach(option => options.push(this.fb.control(option)));
+  }
+
+  clearOptions(question: FormGroup) {
+    const options = question.get('options') as FormArray;
+    while (options.length) {
+      options.removeAt(0);
+    }
+  }
+
+  onImageUpload(event: any, index: number) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        const question = this.questions.at(index) as FormGroup;
+        question.get('imageUrl')?.setValue(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  onSubmit() {
+    if (this.questionsForm.valid) {
+      const submittedQuestions = this.questionsForm.value.questions;
+      console.log('Submitted Questions:', submittedQuestions);
+      this.questionsForm.reset();
+      this.questions.clear();
+      this.addQuestion(); // Add an empty question form group to start with
+    } else {
+      console.log('Form is invalid');
+    }
+  }
+
+  getOptionsControl(questionIndex: number): FormArray {
+    const question = this.questions.at(questionIndex) as FormGroup;
+    return question.get('options') as FormArray;
+  }
+
+  getQuestionType(index: number): string {
+    const question = this.questions.at(index) as FormGroup;
+    return question.get('type')?.value || '';
+  }
+
+  getWordLimit(index: number): number | null {
+    const question = this.questions.at(index) as FormGroup;
+    return question.get('wordLimit')?.value || null;
+  }
 }

@@ -1,1 +1,91 @@
-<p>hello i am here</p>
+<div class="question-creator">
+    <h2>Create Questions</h2>
+  
+    <!-- Form to Add Questions -->
+    <form [formGroup]="questionsForm" (ngSubmit)="onSubmit()">
+      <div formArrayName="questions"  >
+
+        <div *ngFor="let question of questions.controls; let i = index" [formGroupName]="i" class="question-block">
+          <div class="form-group">
+            <div class="question-number">Question: {{i+1}}</div>
+            <label for="type-{{i}}" class="form-label">Question Type:</label>
+            <select id="type-{{i}}" formControlName="type" class="form-control" (change)="onQuestionTypeChange(i)">
+              <option value="mcq">MCQ</option>
+              <option value="short">Short Answer</option>
+              <option value="long">Long Answer</option>
+              <option value="yes_no">Yes/No</option>
+              <option value="fill_blank">Fill in the Blank</option>
+            </select>
+          </div>
+  
+          <div class="form-group">
+            <label for="title-{{i}}" class="form-label">Question:</label>
+            <input type="text" id="title-{{i}}" formControlName="title" class="form-control" placeholder="Enter question" required>
+          </div>
+  
+          <div class="form-group">
+            <label for="marks-{{i}}" class="form-label">Marks:</label>
+            <input type="number" id="marks-{{i}}" formControlName="marks" class="form-control" placeholder="Marks" required>
+          </div>
+  
+          <div class="form-group">
+            <label for="image-{{i}}" class="form-label">Upload Image:</label>
+            <input type="file" id="image-{{i}}" class="form-control-file" (change)="onImageUpload($event, i)">
+          </div>
+  
+          <!-- Dynamic fields based on selected question type -->
+          <div *ngIf="getQuestionType(i) === 'mcq'">
+            <div class="form-group">
+              <label class="form-label">Options:</label>
+              <div formArrayName="options">
+                <div *ngFor="let option of getOptionsControl(i).controls; let j = index" class="option-group">
+                  <input type="text" [formControlName]="j" class="form-control option-input" placeholder="Option {{j + 1}}" required>
+                  <button type="button" class="btn btn-danger btn-sm" (click)="removeOption(i, j)">Remove</button>
+                </div>
+                <button type="button" class="btn btn-primary btn-sm" (click)="addOption(i)">Add Option</button>
+              </div>
+            </div>
+  
+            <div class="form-group">
+              <label for="answer-{{i}}" class="form-label">Correct Answer:</label>
+              <select id="answer-{{i}}" formControlName="answer" class="form-control" required>
+                <option *ngFor="let option of getOptionsControl(i).controls; let j = index" [value]="option.value">
+                  Option {{j + 1}}
+                </option>
+              </select>
+            </div>
+          </div>
+  
+          <div *ngIf="getQuestionType(i) !== 'mcq' && getQuestionType(i) !== 'yes_no'">
+            <div class="form-group">
+              <label for="wordLimit-{{i}}" class="form-label">Word Limit:</label>
+              <input type="number" id="wordLimit-{{i}}" formControlName="wordLimit" class="form-control" placeholder="Word limit" required>
+            </div>
+  
+            <div class="form-group">
+              <label for="answer-{{i}}" class="form-label">Correct Answer:</label>
+              <textarea id="answer-{{i}}" formControlName="answer" class="form-control" rows="3" [attr.maxlength]="getWordLimit(i)" placeholder="Enter correct answer" required></textarea>
+            </div>
+          </div>
+  
+          <div *ngIf="getQuestionType(i) === 'yes_no'">
+            <div class="form-group">
+              <label for="answer-{{i}}" class="form-label">Correct Answer:</label>
+              <select id="answer-{{i}}" formControlName="answer" class="form-control" required>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+              </select>
+            </div>
+          </div>
+  
+          <button type="button" class="btn btn-danger btn-sm" (click)="removeQuestion(i)">Remove Question</button>
+        </div>
+      </div>
+  
+      <div class="form-actions">
+        <button type="button" class="btn btn-primary btn-sm" (click)="addQuestion()">Add New Question</button>
+        <button type="submit" class="btn btn-success btn-sm">Submit All Questions</button>
+      </div>
+    </form>
+  </div>
+  

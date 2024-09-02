@@ -67,6 +67,7 @@ export class ExamService {
 
       xhr.onload = () => {
         if (xhr.status === 200) {
+          
           observer.complete();
         } else {
           observer.error(xhr.statusText);

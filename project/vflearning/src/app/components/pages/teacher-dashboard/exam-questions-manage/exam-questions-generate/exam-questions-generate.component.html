@@ -117,4 +117,18 @@
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
   </div>
+<<<<<<< Updated upstream
   
+=======
+  <div *ngIf="isProcessing && !mcqOutput">
+    <p>Loading... Please wait.</p>
+</div>
+
+<!-- Show the MCQ output if available -->
+<div *ngIf="mcqOutput">
+    <h2>Generated Questions</h2>
+    <div class="output-container">
+        <pre>{{ mcqOutput }}</pre>
+    </div>
+</div>
+>>>>>>> Stashed changes

@@ -103,16 +103,42 @@ export class ExamQuestionsGenerateComponent implements OnInit {
 
       this.examService.genQuestions(formData).subscribe({
         next: (chunk) => {
+          // console.log(chunk)
           this.mcqOutput += chunk;
+<<<<<<< Updated upstream
+=======
+        
+>>>>>>> Stashed changes
         },
         error: (err) => {
           this.errorMessage = `Error: ${err.message}`;
         },
         complete: () => {
           this.isProcessing = false;
+<<<<<<< Updated upstream
           console.log('Streaming complete');
+=======
+          if (this.mcqOutput.endsWith('```')) {
+            console.log('now i am here')
+            this.mcqOutput = this.mcqOutput.slice(0, -3); // Remove ending ```
+          }
+          
+          
+          try {
+            // Parse the accumulated string into JSON
+            const jsonData = JSON.parse(this.mcqOutput);
+            console.log("i am here",jsonData);
+  
+          } catch (error) {
+            this.errorMessage = `Error parsing JSON: ${error}`;
+          }
+>>>>>>> Stashed changes
         }
       });
     }
   }
+<<<<<<< Updated upstream
 }
+=======
+}
+>>>>>>> Stashed changes
