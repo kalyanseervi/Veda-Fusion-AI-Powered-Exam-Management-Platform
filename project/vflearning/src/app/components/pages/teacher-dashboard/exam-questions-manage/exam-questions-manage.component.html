@@ -5,7 +5,139 @@
 
 <div class="popup-container" *ngIf="isPopupVisible">
     <div class="add_questions">
-        <app-exam-questions-generate></app-exam-questions-generate>
+      <div *ngIf="!isProcessing && !mcqOutput">
+        <form [formGroup]="examForm" (ngSubmit)="onSubmit()" class="exam-form">
+          <div class="form-group">
+            <label for="class">Class:</label>
+            <input id="class" formControlName="class" type="text" class="form-control" required>
+          </div>
+      
+          <div class="form-group">
+            <label for="subject">Subject:</label>
+            <input id="subject" formControlName="subject" type="text" class="form-control" required>
+          </div>
+      
+          <div class="form-group">
+            <label for="topics">Topics (comma-separated):</label>
+            <input id="topics" formControlName="topics" type="text" class="form-control">
+          </div>
+      
+          <div class="form-group">
+            <label for="pdfInput">Upload PDF (optional):</label>
+            <input id="pdfInput" formControlName="pdfInput" type="file" class="form-control">
+          </div>
+      
+          <div class="form-group">
+            <label>Question Types:</label>
+            <div class="form-check">
+              <input type="checkbox" id="showMCQ" (change)="onQuestionTypeChange('mcq', $event)" class="form-check-input">
+              <label for="showMCQ" class="form-check-label">MCQ</label>
+            </div>
+            <div class="form-check">
+              <input type="checkbox" id="showShortAnswer" (change)="onQuestionTypeChange('short_answer', $event)" class="form-check-input">
+              <label for="showShortAnswer" class="form-check-label">Short Answer</label>
+            </div>
+            <div class="form-check">
+              <input type="checkbox" id="showLongAnswer" (change)="onQuestionTypeChange('long_answer', $event)" class="form-check-input">
+              <label for="showLongAnswer" class="form-check-label">Long Answer</label>
+            </div>
+            <div class="form-check">
+              <input type="checkbox" id="showYesNo" (change)="onQuestionTypeChange('yes_no', $event)" class="form-check-input">
+              <label for="showYesNo" class="form-check-label">Yes/No</label>
+            </div>
+            <div class="form-check">
+              <input type="checkbox" id="showFillInTheBlanks" (change)="onQuestionTypeChange('fill_in_the_blanks', $event)" class="form-check-input">
+              <label for="showFillInTheBlanks" class="form-check-label">Fill in the Blanks</label>
+            </div>
+          </div>
+      
+          <!-- Conditional Fields -->
+          <ng-container *ngIf="showQuestionTypeFields['mcq']">
+            <div class="form-group" formGroupName="questionTypes">
+              <div class="form-group" formGroupName="mcq">
+                <label for="mcqCount">MCQ Count:</label>
+                <input id="mcqCount" formControlName="count" type="number" class="form-control">
+                <label for="mcqMarks">MCQ Marks:</label>
+                <input id="mcqMarks" formControlName="marks" type="number" class="form-control">
+              </div>
+            </div>
+          </ng-container>
+      
+          <ng-container *ngIf="showQuestionTypeFields['short_answer']">
+            <div class="form-group" formGroupName="questionTypes">
+              <div class="form-group" formGroupName="short_answer">
+                <label for="shortAnswerCount">Short Answer Count:</label>
+                <input id="shortAnswerCount" formControlName="count" type="number" class="form-control">
+                <label for="shortAnswerMarks">Short Answer Marks:</label>
+                <input id="shortAnswerMarks" formControlName="marks" type="number" class="form-control">
+              </div>
+            </div>
+          </ng-container>
+      
+          <ng-container *ngIf="showQuestionTypeFields['long_answer']">
+            <div class="form-group" formGroupName="questionTypes">
+              <div class="form-group" formGroupName="long_answer">
+                <label for="longAnswerCount">Long Answer Count:</label>
+                <input id="longAnswerCount" formControlName="count" type="number" class="form-control">
+                <label for="longAnswerMarks">Long Answer Marks:</label>
+                <input id="longAnswerMarks" formControlName="marks" type="number" class="form-control">
+              </div>
+            </div>
+          </ng-container>
+      
+          <ng-container *ngIf="showQuestionTypeFields['yes_no']">
+            <div class="form-group" formGroupName="questionTypes">
+              <div class="form-group" formGroupName="yes_no">
+                <label for="yesNoCount">Yes/No Count:</label>
+                <input id="yesNoCount" formControlName="count" type="number" class="form-control">
+                <label for="yesNoMarks">Yes/No Marks:</label>
+                <input id="yesNoMarks" formControlName="marks" type="number" class="form-control">
+              </div>
+            </div>
+          </ng-container>
+      
+          <ng-container *ngIf="showQuestionTypeFields['fill_in_the_blanks']">
+            <div class="form-group" formGroupName="questionTypes">
+              <div class="form-group" formGroupName="fill_in_the_blanks">
+                <label for="fillInTheBlanksCount">Fill in the Blanks Count:</label>
+                <input id="fillInTheBlanksCount" formControlName="count" type="number" class="form-control">
+                <label for="fillInTheBlanksMarks">Fill in the Blanks Marks:</label>
+                <input id="fillInTheBlanksMarks" formControlName="marks" type="number" class="form-control">
+              </div>
+            </div>
+          </ng-container>
+      
+          <div class="form-group">
+            <label for="difficulty">Difficulty Level:</label>
+            <select id="difficulty" formControlName="difficulty_levels" class="form-control">
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="hard">Hard</option>
+            </select>
+          </div>
+      
+          <div class="form-group">
+            <label for="totalMarks">Total Marks:</label>
+            <input id="totalMarks" formControlName="total_marks" type="number" class="form-control" readonly>
+          </div>
+      
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+
+      <div *ngIf="isProcessing && !mcqOutput">
+        <p class="danger">Loading... Please wait.</p>
+    </div>
+    
+    <!-- Show the MCQ output if available -->
+    <div *ngIf="mcqOutput">
+        <h2>Generated Questions</h2>
+        <div class="output-container">
+            <pre>{{ mcqOutput }}</pre>
+        </div>
+    </div>
+
+    
     </div>
     <button class="close-popup" (click)="closePopup()">Close</button>
   </div>

@@ -18,6 +18,8 @@ app.use('/api/subject',require('./routes/subject'));
 app.use('/api/schools',require('./routes/school'));
 app.use('/api/class',require('./routes/class'));
 app.use('/api/exam',require('./routes/exam'));
+app.use('/api/exam-questions',require('./routes/examQuestion'));
+app.use('/api/assignExam',require('./routes/assignExam'));
 app.use('/api/student',require('./routes/student'));
 app.use('/api/protected', require('./routes/protected')); // Example of protected routes
 

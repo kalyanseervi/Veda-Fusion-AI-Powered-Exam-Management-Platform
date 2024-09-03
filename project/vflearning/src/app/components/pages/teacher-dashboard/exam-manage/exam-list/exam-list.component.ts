@@ -1,35 +1,48 @@
 import { Component, OnInit } from '@angular/core';
 import { ExamService } from '../../../../../services/exam/exam.service';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ExamAssignComponent } from "../exam-assign/exam-assign.component";
 
 @Component({
   selector: 'app-exam-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ExamAssignComponent],
   templateUrl: './exam-list.component.html',
-  styleUrl: './exam-list.component.css'
+  styleUrl: './exam-list.component.css',
 })
 export class ExamListComponent implements OnInit {
-
-  
   allExams: any[] = [];
- 
+  selectedExamId: string | undefined;
 
-
-  constructor(private examservice:ExamService,private router: Router){}
+  constructor(private examservice: ExamService, private router: Router,private route: ActivatedRoute,) {}
   ngOnInit(): void {
     this.loadAllExams();
   }
-  loadAllExams():void{
-    this.examservice.getAllExam().subscribe((exams)=>{
+  loadAllExams(): void {
+    this.examservice.getAllExam().subscribe((exams) => {
       console.log(exams);
       this.allExams = exams;
-    })
+    });
   }
 
-  examQuestionsManage(selectedExamId:string) {
-    this.router.navigate([`/dashboard/teacher/exam-questions-manage/${selectedExamId}`]);
-    }
+  isPopupVisible = false;
 
+  openPopup(): void {
+    
+  }
+
+  closePopup(): void {
+    this.isPopupVisible = false;
+  }
+
+  examQuestionsManage(selectedExamId: string) {
+    this.router.navigate([
+      `/dashboard/teacher/exam-questions-manage/${selectedExamId}`,
+    ]);
+  }
+  examAssign(arg0:string){
+    this.selectedExamId = arg0
+    this.isPopupVisible = true;
+  }
 }

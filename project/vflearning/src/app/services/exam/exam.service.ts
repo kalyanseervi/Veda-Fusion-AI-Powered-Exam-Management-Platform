@@ -22,7 +22,6 @@ interface Exam {
   providedIn: 'root',
 })
 export class ExamService {
-
   private baseUrl = 'http://localhost:5000/api/exam';
   private pyUrl = 'http://localhost:8000/api/questions/generate/';
 
@@ -48,7 +47,7 @@ export class ExamService {
 
   genQuestions(formData: FormData): Observable<string> {
     console.log('FormData:', Array.from((formData as any).entries()));
-    return new Observable(observer => {
+    return new Observable((observer) => {
       const xhr = new XMLHttpRequest();
       xhr.open('POST', this.pyUrl, true);
       // Do not set Content-Type header when sending FormData
@@ -59,7 +58,9 @@ export class ExamService {
       xhr.onprogress = () => {
         if (xhr.readyState === XMLHttpRequest.LOADING) {
           // Only push new chunk data
-          const newChunk = xhr.responseText.substring(accumulatedResponse.length);
+          const newChunk = xhr.responseText.substring(
+            accumulatedResponse.length
+          );
           accumulatedResponse += newChunk;
           observer.next(newChunk);
         }
@@ -67,7 +68,6 @@ export class ExamService {
 
       xhr.onload = () => {
         if (xhr.status === 200) {
-          
           observer.complete();
         } else {
           observer.error(xhr.statusText);
@@ -79,6 +79,8 @@ export class ExamService {
       xhr.send(formData);
     });
   }
+
+ 
 
   private getToken(): string | null {
     return localStorage.getItem('token'); // Adjust as per your authentication flow

@@ -102,3 +102,13 @@
         width: 100%;
     }
 }
+
+
+.popup-container{
+    margin: auto;
+    display: flex;
+    
+    box-sizing: border-box; /* Ensures padding and border are included in the container's total width and height */
+  }
+
+

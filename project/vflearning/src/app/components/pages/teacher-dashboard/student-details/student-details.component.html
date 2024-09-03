@@ -15,8 +15,17 @@
                 <p><strong>School:</strong> {{ student.school.name }}</p>
             </div>
             <div class="student-card-footer">
-                <button (click)="viewStudentDetails(student._id)">View</button>
+                <button (click)="viewStudentDetail(student._id)">View</button>
             </div>
         </div>
     </div>
+</div>
+
+<div class="popup-container" *ngIf="isPopupVisible">
+    <div class="popup-content" >
+        <p><strong>Name:</strong> {{ singleStudent['name'] || 'N/A' }}</p>
+    </div>
+
+
+    <button class="close-popup" (click)="closePopup()">Close</button>
 </div>

@@ -1,0 +1,31 @@
+<h1 class="assigned-exam-title">Assigned Exam Details</h1>
+<div *ngIf="stdexamdtl && stdexamdtl.assignedExams.length > 0; else noData">
+  <table class="assigned-exam-table">
+    <thead>
+      <tr>
+        <th>Exam Name</th>
+        <th>Status</th>
+        <th>Assigned At</th>
+        <th>Completed At</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let exam of stdexamdtl.assignedExams">
+        <td>{{ exam.examId.examName }}</td>
+        <td>{{ exam.status }}</td>
+        <td>{{ exam.assignedAt | date: 'medium' }}</td>
+        <td>{{ exam.completedAt | date: 'medium' }}</td>
+        <td *ngIf="exam.status =='pending'; else startexam">
+          <button (click)="startExam(exam.examId._id, exam.examId.examName)" class="action-button">Start Exam</button>
+        </td>
+        <ng-template #startexam>
+          <p class="completed-exam-message">You have successfully completed the Exam</p>
+        </ng-template>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<ng-template #noData>
+  <p class="no-data-message">No assigned exams found.</p>
+</ng-template>

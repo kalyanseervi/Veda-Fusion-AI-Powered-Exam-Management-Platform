@@ -1,0 +1,49 @@
+<div class="container">
+    <!-- Error Modal -->
+    <div *ngIf="errorMessage" class="modal-overlay">
+      <div class="modal-container">
+        <div class="modal-header">
+          <h3 class="modal-title">Error</h3>
+          <button class="modal-close-button" (click)="errorMessage = ''">Close</button>
+        </div>
+        <div class="modal-body">
+          <p>{{ errorMessage }}</p>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Students Table -->
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Sr.No</th>
+          <th>Assign</th>
+          <th>Student Enrolment</th>
+          <th>Student Name</th>
+          <th>Class</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let std of totalStudents; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>
+            <label class="custom-checkbox">
+              <input type="checkbox" id="selectedStudents{{ i }}" [checked]="selectedStudents[i]" (change)="toggleSelection($event, i)">
+              <span class="checkmark"></span>
+            </label>
+          </td>
+          <td>{{ std.enrollmentId }}</td>
+          <td>{{ std.name }}</td>
+          <td *ngFor="let stdcl of std.studentClass;">{{stdcl.classname }}</td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <!-- Action Buttons -->
+    <div class="button-group">
+      <button class="button button-primary" (click)="selectAll()">Select All</button>
+      <button class="button button-danger" (click)="clearSelection()">Clear Selection</button>
+      <button class="button button-success" (click)="assignExamAndNotify()">Assign Exam</button>
+    </div>
+  </div>
+  

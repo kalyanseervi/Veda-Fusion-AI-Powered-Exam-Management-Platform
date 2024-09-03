@@ -8,6 +8,7 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { QuestionsService } from '../../../../../services/questions/questions.service';
 
 @Component({
   selector: 'app-exam-questions-create',
@@ -22,7 +23,8 @@ export class ExamQuestionsCreateComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private examQuestionsService: QuestionsService
   ) {
     this.questionsForm = this.fb.group({
       questions: this.fb.array([this.createQuestionFormGroup()]),
@@ -86,7 +88,9 @@ export class ExamQuestionsCreateComponent implements OnInit {
       options.removeAt(0);
     }
     // Example options, adjust as needed
-    ['Option 1', 'Option 2'].forEach(option => options.push(this.fb.control(option)));
+    ['Option 1', 'Option 2'].forEach((option) =>
+      options.push(this.fb.control(option))
+    );
   }
 
   clearOptions(question: FormGroup) {
@@ -108,15 +112,51 @@ export class ExamQuestionsCreateComponent implements OnInit {
     }
   }
 
-  onSubmit() {
+  onSubmit(): void {
     if (this.questionsForm.valid) {
-      const submittedQuestions = this.questionsForm.value.questions;
+      // Prepare data for submission
+      const examId = this.selectedExamId;
+      const submittedQuestions = this.questionsForm.value.questions.map(
+        (question: {
+          type: any;
+          title: any;
+          marks: any;
+          wordLimit: any;
+          answer: any;
+          options: any;
+          imageUrl: any;
+        }) => ({
+          type: question.type,
+          title: question.title,
+          marks: question.marks,
+          wordLimit: question.wordLimit,
+          answer: question.answer,
+          options: Array.isArray(question.options) ? question.options : [], // Ensure options is an array
+          imageUrl: question.imageUrl,
+        })
+      );
+
       console.log('Submitted Questions:', submittedQuestions);
-      this.questionsForm.reset();
-      this.questions.clear();
-      this.addQuestion(); // Add an empty question form group to start with
+
+      // Assuming you have a service method to handle the POST request
+      this.examQuestionsService
+        .createExamQuestion({ examId, questions: submittedQuestions })
+        .subscribe({
+          next: (response) => {
+            console.log('Questions successfully submitted:', response);
+            // Reset the form and clear fields after successful submission
+            this.questionsForm.reset();
+            this.questions.clear();
+            this.addQuestion(); // Add an empty question form group to start with
+          },
+          error: (error) => {
+            console.error('Error submitting questions:', error);
+            // Handle errors, e.g., show an error message to the user
+          },
+        });
     } else {
       console.log('Form is invalid');
+      // Optionally, trigger form validation feedback
     }
   }
 

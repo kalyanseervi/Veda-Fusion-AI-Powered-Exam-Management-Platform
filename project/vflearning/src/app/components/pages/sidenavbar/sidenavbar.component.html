@@ -63,10 +63,15 @@
 
     <!-- Student Routes -->
     <ng-container *ngIf="userRole === 'student'">
-        <a [routerLink]="['/examdetails']" 
-        [class.active]="isActive('/examdetails')">
+        <a [routerLink]="['/dashboard/student/dashboard']" 
+        [class.active]="isActive('/dashboard/student/dashboard')">
+            <span class="material-icons-sharp">grid_view</span>
+            <h3>Dashboard</h3>
+        </a>
+        <a [routerLink]="['/dashboard/student/exams']" 
+        [class.active]="isActive('/dashboard/student/exams')">
             <span class="material-icons-sharp">quiz</span>
-            <h3>Exam Details</h3>
+            <h3>Exams</h3>
         </a>
         <a [routerLink]="['/settings']" 
         [class.active]="isActive('/settings')" >

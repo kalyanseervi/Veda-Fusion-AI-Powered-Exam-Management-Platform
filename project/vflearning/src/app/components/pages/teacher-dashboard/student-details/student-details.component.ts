@@ -2,6 +2,7 @@ import { Component, OnInit, Pipe } from '@angular/core';
 import { TeacherService } from '../../../../services/teacher/teacher.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { StudentService } from '../../../../services/student/student.service';
 
 @Component({
   selector: 'app-student-details',
@@ -11,17 +12,14 @@ import { CommonModule } from '@angular/common';
   styleUrl: './student-details.component.css',
 })
 export class StudentDetailsComponent implements OnInit {
-  deleteStudent(arg0: any) {
-    throw new Error('Method not implemented.');
-  }
-  editStudent(arg0: any) {
-    throw new Error('Method not implemented.');
-  }
-  viewStudentDetails(arg0: any) {
-    throw new Error('Method not implemented.');
-  }
   students: any[] = [];
-  constructor(private teacherservice: TeacherService, private router: Router) {}
+  singleStudent: Record<string, any> = [];
+
+  constructor(
+    private teacherservice: TeacherService,
+    private studentservice: StudentService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.classStudents();
@@ -37,5 +35,34 @@ export class StudentDetailsComponent implements OnInit {
         console.error('Error fetching students: ', error);
       }
     );
+  }
+
+  isPopupVisible = false;
+
+  openPopup(): void {
+    this.isPopupVisible = true;
+  }
+
+  closePopup(): void {
+    this.isPopupVisible = false;
+  }
+
+  viewStudentDetail(arg0: any) {
+    this.isPopupVisible = true;
+
+    this.studentservice.getStudentById(arg0).subscribe(
+      (student: any) => {
+        if (student && typeof student === 'object') {
+          this.singleStudent = student;
+        } else {
+          console.error('Invalid student data');
+        }
+        console.log('Student details fetched: ', student);
+      },
+      (error) => {
+        console.error('Error fetching student details: ', error);
+      }
+    );
+    console.log('my argument ', arg0);
   }
 }

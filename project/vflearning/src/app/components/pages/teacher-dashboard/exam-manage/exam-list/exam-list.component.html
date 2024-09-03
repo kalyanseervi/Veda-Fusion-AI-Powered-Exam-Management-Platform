@@ -9,9 +9,11 @@
         <p><strong>Time:</strong> {{ exam.examTime }}</p>
         <p><strong>Duration:</strong> {{ exam.examDuration }} minutes</p>
         <p><strong>Negative Marking:</strong> {{ exam.negativeMarking }}</p>
+        <p><button class="action-btn view-btn" (click)="examAssign(exam._id)">Assign Exam</button></p>
       </div>
       <div class="card-footer">
         <button class="action-btn view-btn">View Details</button>
+        
         <button class="action-btn edit-btn">Edit Exam</button>
         <button class="action-btn edit-btn" (click)="examQuestionsManage(exam._id)">Add Questions</button>
       </div>
@@ -22,3 +24,10 @@
     <p class="no-exams-message">No exams found.</p>
   </ng-template>
   
+  
+<div class="popup-container" *ngIf="isPopupVisible && selectedExamId">
+  <div class="add_teacher">
+    <app-exam-assign [examId]="selectedExamId"></app-exam-assign>
+  </div>
+  <button class="close-popup" (click)="closePopup()">Close</button>
+</div>

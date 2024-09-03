@@ -1,0 +1,166 @@
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: var(--padding-1) 0;
+    box-shadow: var(--box-shadow);
+  }
+  
+  .table th,
+  .table td {
+    border: 1px solid var(--color-info-light);
+    padding: var(--padding-1);
+    text-align: left;
+  }
+  
+  .table th {
+    background-color: var(--color-primary-variant);
+    color: var(--color-white);
+    font-weight: 600;
+  }
+  
+  .table td {
+    background-color: var(--color-white);
+  }
+  
+  .table tbody tr:nth-child(even) td {
+    background-color: var(--color-info-light);
+  }
+
+  .custom-checkbox {
+    display: inline-block;
+    position: relative;
+    /* padding-left: 25px; */
+    cursor: pointer;
+    font-size: 16px;
+    user-select: none;
+    color: var(--color-dark);
+  }
+  
+  .custom-checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+  
+  .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: var(--color-white);
+    border: 2px solid var(--color-dark-variant);
+    border-radius: var(--border-radius-1);
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+  }
+  
+  .custom-checkbox input:checked ~ .checkmark {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+  }
+  
+  .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+    left: 6px;
+    top: 2px;
+    width: 6px;
+    height: 12px;
+    border: solid var(--color-white);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+  
+  .custom-checkbox input:checked ~ .checkmark:after {
+    display: block;
+  }
+  
+  
+  .button {
+    display: inline-block;
+    padding: var(--padding-1) 1.5rem;
+    border-radius: var(--border-radius-2);
+    text-align: center;
+    color: var(--color-white);
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: var(--box-shadow);
+  }
+  
+  .button-primary {
+    background-color: var(--color-primary);
+  }
+  
+  .button-primary:hover {
+    background-color: var(--color-primary-variant);
+  }
+  
+  .button-danger {
+    background-color: var(--color-danger);
+  }
+  
+  .button-danger:hover {
+    background-color: darken(var(--color-danger), 10%);
+  }
+  
+  .button-success {
+    background-color: var(--color-success);
+  }
+  
+  .button-success:hover {
+    background-color: darken(var(--color-success), 10%);
+  }
+  
+  /* Modal styles */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.75);
+    z-index: 1000;
+  }
+  
+  .modal-container {
+    background-color: var(--color-white);
+    border-radius: var(--card-border-radius);
+    max-width: 500px;
+    margin: 5% auto;
+    padding: var(--card-padding);
+    box-shadow: var(--box-shadow);
+  }
+  
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--padding-1);
+  }
+  
+  .modal-title {
+    font-size: 1.5rem;
+    color: var(--color-dark);
+  }
+  
+  .modal-body {
+    margin-bottom: var(--padding-1);
+  }
+  
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .modal-close-button {
+    background-color: var(--color-danger);
+    color: var(--color-white);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius-1);
+    cursor: pointer;
+  }
+  
+  .modal-close-button:hover {
+    background-color: darken(var(--color-danger), 10%);
+  }

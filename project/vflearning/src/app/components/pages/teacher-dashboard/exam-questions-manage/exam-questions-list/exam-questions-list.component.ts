@@ -1,12 +1,66 @@
-import { Component } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { QuestionsService } from '../../../../../services/questions/questions.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms'; // Import FormsModule
 
 @Component({
   selector: 'app-exam-questions-list',
   standalone: true,
-  imports: [],
+  imports: [CommonModule, FormsModule], // Include FormsModule in imports
   templateUrl: './exam-questions-list.component.html',
-  styleUrl: './exam-questions-list.component.css'
+  styleUrls: ['./exam-questions-list.component.css'] // Ensure correct spelling here
 })
-export class ExamQuestionsListComponent {
+export class ExamQuestionsListComponent implements OnInit {
+  questions: any[] = [];
+  total: number = 0;
+  page: number = 1;
+  limit: number = 10;
+  examId: string = '';
+  type: string = '';
+  sortBy: string = 'createdAt';
+  order: string = 'asc';
 
+  constructor(private http: HttpClient, private examQuestionsService: QuestionsService) {}
+
+  ngOnInit(): void {
+    this.loadQuestions();
+  }
+
+  loadQuestions(): void {
+    const params = {
+      page: this.page,
+      limit: this.limit,
+      examId: this.examId || undefined,
+      type: this.type || undefined,
+      sortBy: this.sortBy || undefined,
+      order: this.order || 'asc'
+    };
+
+    this.examQuestionsService.getExamQuestions(params).subscribe(response => {
+      this.questions = response.data;
+      console.log(this.questions);
+      this.total = response.total;
+    });
+  }
+
+  onPageChange(page: number): void {
+    this.page = page;
+    this.loadQuestions();
+  }
+
+  onFilterChange(): void {
+    this.page = 1; // Reset to first page when filters change
+    this.loadQuestions();
+  }
+
+  onSortChange(sortBy: string): void {
+    this.sortBy = sortBy;
+    this.order = this.order === 'asc' ? 'desc' : 'asc'; // Toggle order
+    this.loadQuestions();
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.total / this.limit);
+  }
 }

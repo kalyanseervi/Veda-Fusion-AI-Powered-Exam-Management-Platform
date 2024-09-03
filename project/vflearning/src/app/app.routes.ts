@@ -35,64 +35,110 @@ import { ExamQuestionsManageComponent } from './components/pages/teacher-dashboa
 import { ExamQuestionsCreateComponent } from './components/pages/teacher-dashboard/exam-questions-manage/exam-questions-create/exam-questions-create.component';
 import { ExamQuestionsListComponent } from './components/pages/teacher-dashboard/exam-questions-manage/exam-questions-list/exam-questions-list.component';
 import { ExamQuestionsGenerateComponent } from './components/pages/teacher-dashboard/exam-questions-manage/exam-questions-generate/exam-questions-generate.component';
+import { DashboardComponent } from './components/pages/student-dashboard/dashboard/dashboard.component';
+import { StudentExamsComponent } from './components/pages/student-dashboard/student-exams/student-exams.component';
+import { ExamAssignComponent } from './components/pages/teacher-dashboard/exam-manage/exam-assign/exam-assign.component';
 
 export const routes: Routes = [
-    { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
 
-    {
-        path: 'dashboard/admin', component: AdminDashboardComponent, canActivate: [AuthGuard, RoleGuard], data: { role: 'admin' },
+  {
+    path: 'dashboard/admin',
+    component: AdminDashboardComponent,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { role: 'admin' },
+    children: [
+      { path: 'home-page', component: HomepageComponent },
+      {
+        path: 'teacher-details',
+        component: TeacherDetailsComponent,
         children: [
-            { path: 'home-page', component: HomepageComponent },
-            { path: 'teacher-details', component: TeacherDetailsComponent,
-                children:[
-                    {path: 'teacher-create',component:TeacherCreateComponent},
-                    {path: 'teacher-update',component:TeacherUpdateComponent},
-                ]
-             },
-            { path: 'student-details', component: StudentDetailsManageComponent ,children:[
-                {path: 'student-create',component:StudentCreateComponent},
-                {path: 'student-list',component:StudentListComponent},
-            ]},
-            { path: 'subject-manage', component: SubjectManageComponent ,
-                children:[
-
-                    {path: 'subject-create',component:SubjectCreateComponent},
-                    {path: 'subject-update',component:SubjectUpdateComponent},
-                    {path: 'subject-list',component:SubjectListComponent},
-                ]
-            },
-            { path: 'class-manage', component: ClassManageComponent ,
-                children:[
-                    {path: 'class-create',component:ClassCreateComponent},
-                    {path: 'class-update',component:ClassUpdateComponent},
-                    {path: 'class-list',component:ClassListComponent},
-                ]
-            }
-        ]
-    },
-    { path: 'dashboard/teacher', component: TeacherDashboardComponent, canActivate: [AuthGuard, RoleGuard], data: { role: 'teacher' },
-    children:[
-        {path: 'student-details',component:StudentDetailsComponent},
-        {path:'exam-questions-manage/:selectedExamId',component:ExamQuestionsManageComponent,
-            children:[
-                {path: 'exam-questions-create/:selectedExamId',component:ExamQuestionsCreateComponent},
-                {path: 'exam-questions-list',component:ExamQuestionsListComponent},
-                {path: 'exam-questions-generate',component:ExamQuestionsGenerateComponent},
-            ]
-        },
-        {path: 'exam-manage',component:ExamManageComponent,
-            children:[
-                {path: 'exam-create',component:ExamCreateComponent},
-                {path: 'exam-list',component:ExamListComponent},
-            ]
-        },
-    ] },
-    { path: 'dashboard/student', component: StudentDashboardComponent, canActivate: [AuthGuard, RoleGuard], data: { role: 'student' } },
-    { path: 'login', component: LoginComponent },
-    { path: 'register', component: RegisterComponent },
-    { path: 'unauthorized', component: UnauthorizedComponent },
-    { path: 'verify/:token', component: VerifyEmailComponent },
-    { path: 'roles', component: RolesComponent, canActivate: [AuthGuard] },
-    { path: 'users', component: UsersComponent, canActivate: [AuthGuard] },
-    { path: '**', redirectTo: '/login' }
+          { path: 'teacher-create', component: TeacherCreateComponent },
+          { path: 'teacher-update', component: TeacherUpdateComponent },
+        ],
+      },
+      {
+        path: 'student-details',
+        component: StudentDetailsManageComponent,
+        children: [
+          { path: 'student-create', component: StudentCreateComponent },
+          { path: 'student-list', component: StudentListComponent },
+        ],
+      },
+      {
+        path: 'subject-manage',
+        component: SubjectManageComponent,
+        children: [
+          { path: 'subject-create', component: SubjectCreateComponent },
+          { path: 'subject-update', component: SubjectUpdateComponent },
+          { path: 'subject-list', component: SubjectListComponent },
+        ],
+      },
+      {
+        path: 'class-manage',
+        component: ClassManageComponent,
+        children: [
+          { path: 'class-create', component: ClassCreateComponent },
+          { path: 'class-update', component: ClassUpdateComponent },
+          { path: 'class-list', component: ClassListComponent },
+        ],
+      },
+    ],
+  },
+  {
+    path: 'dashboard/teacher',
+    component: TeacherDashboardComponent,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { role: 'teacher' },
+    children: [
+      { path: 'student-details', component: StudentDetailsComponent },
+      {
+        path: 'exam-questions-manage/:selectedExamId',
+        component: ExamQuestionsManageComponent,
+        children: [
+          {
+            path: 'exam-questions-create/:selectedExamId',
+            component: ExamQuestionsCreateComponent,
+          },
+          {
+            path: 'exam-questions-list',
+            component: ExamQuestionsListComponent,
+          },
+          {
+            path: 'exam-questions-generate',
+            component: ExamQuestionsGenerateComponent,
+          },
+        ],
+      },
+      {
+        path: 'exam-manage',
+        component: ExamManageComponent,
+        children: [
+          { path: 'exam-create', component: ExamCreateComponent },
+          { path: 'exam-list', component: ExamListComponent },
+          {
+            path: 'exam-assign/:arg0',
+            component: ExamAssignComponent,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    path: 'dashboard/student',
+    component: StudentDashboardComponent,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { role: 'student' },
+    children: [
+      { path: 'dashboard', component: DashboardComponent },
+      { path: 'exams', component: StudentExamsComponent },
+    ],
+  },
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
+  { path: 'unauthorized', component: UnauthorizedComponent },
+  { path: 'verify/:token', component: VerifyEmailComponent },
+  { path: 'roles', component: RolesComponent, canActivate: [AuthGuard] },
+  { path: 'users', component: UsersComponent, canActivate: [AuthGuard] },
+  { path: '**', redirectTo: '/login' },
 ];

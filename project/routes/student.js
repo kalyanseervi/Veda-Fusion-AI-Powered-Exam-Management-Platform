@@ -82,7 +82,7 @@ router.post("/create", auth, upload.single("photo"), async (req, res) => {
     if (req.user.role.name !== "admin") {
       return res
         .status(403)
-        .json({ msg: "Access denied. Only admins can create teachers." });
+        .json({ msg: "Access denied. Only admins can create students." });
     }
     let user
 
@@ -180,7 +180,7 @@ router.post("/create", auth, upload.single("photo"), async (req, res) => {
   }
 });
 
-// Get all teachers
+// Get all Students
 router.get("/", auth, async (req, res) => {
   console.log("requested user", req.user.school);
   try {
@@ -199,8 +199,11 @@ router.get("/", auth, async (req, res) => {
 
 // Get a single teacher by ID
 router.get("/:id", auth, async (req, res) => {
+
   try {
-    const teacher = await Teacher.findById(req.params.id)
+    console.log(req.params.id)
+
+    const teacher = await Student.findById(req.params.id)
     .populate("school", "name")
     .populate("studentsubjects", "subjectName") // Populate subjects
     .populate("studentClass", "classname"); // Populate classes;

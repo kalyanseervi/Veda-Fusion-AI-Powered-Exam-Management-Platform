@@ -1,1 +1,54 @@
-<p class="no-exams-message">exam-questions-list works!</p>
+<div class="container">
+    <h1>Exam Questions List</h1>
+
+    <!-- Sorting Section -->
+    <div class="sort-section">
+        <label for="sortBy">Sort By:</label>
+        <select id="sortBy" [(ngModel)]="sortBy" (ngModelChange)="onSortChange($event)">
+            <option value="createdAt">Date Created</option>
+            <option value="title">Title</option>
+            <!-- Add more sort options as needed -->
+        </select>
+
+        <label for="order">Order:</label>
+        <select id="order" [(ngModel)]="order" (ngModelChange)="onSortChange(sortBy)">
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+        </select>
+    </div>
+
+    <!-- Questions List -->
+    <div class="questions-list" *ngFor="let question of questions">
+        <div class="question-card" *ngFor="let question of question.questions">
+            <div class="question-header">
+                <h3>Question: {{ question.title }}</h3>
+                <span class="question-type">{{ question.type }} </span>
+                
+            </div>
+            <div class="question-body">
+                <p><strong>Marks:</strong> {{ question.marks }}</p>
+                <p><strong>Word Limit:</strong> {{ question.wordLimit || 'N/A' }}</p>
+                <p><strong>Answer:</strong> {{ question.answer }}</p>
+                <div class="question-options" *ngIf="question.options.length > 0">
+                    <strong>Options:</strong>
+                    <ul>
+                        <li *ngFor="let option of question.options">{{ option }}</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="question-footer">
+                <span class="material-icons-sharp danger">
+                    delete
+                </span>
+                <span class="material-icons-sharp primary">edit</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pagination Controls -->
+    <div class="pagination-controls">
+        <button (click)="onPageChange(page - 1)" [disabled]="page <= 1">Previous</button>
+        <span>Page {{ page }} of {{ totalPages }}</span>
+        <button (click)="onPageChange(page + 1)" [disabled]="page >= totalPages">Next</button>
+    </div>
+</div>
