@@ -101,4 +101,29 @@ router.get("/assignedExams",auth, async (req, res) => {
   }
 });
 
+router.post("/startExam",auth, async (req, res) => {
+  try {
+    const userId = req.user._id; // Assuming the student ID is stored in req.user
+    const { examId } = req.body;
+
+    const assignedExam = await AssignedExam.findOne({
+      examId,
+      studentId: userId,
+    });
+
+    if (!assignedExam) {
+      return res.status(404).json("Assigned exam not found");
+    }
+
+    if (assignedExam.status === "completed") {
+      return res.status(400).json("This exam has already been completed");
+    }
+
+    // Proceed with starting the exam (e.g., return exam details)
+    res.status(200).json("Exam can be started");
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 module.exports = router;

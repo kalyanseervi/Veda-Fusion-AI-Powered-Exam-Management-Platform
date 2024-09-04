@@ -1,0 +1,191 @@
+.exam-portal-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--padding-1);
+  background-color: var(--color-background);
+  color: var(--color-dark);
+  min-height: 100vh;
+  box-shadow: var(--box-shadow);
+  border-radius: var(--border-radius-2);
+}
+
+.exam-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 800px;
+  margin-bottom: 1.5rem;
+}
+
+.exam-header h1 {
+  color: var(--color-primary);
+  font-size: 1.8rem;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius-1);
+  cursor: pointer;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  background-color: var(--color-primary-variant);
+}
+
+.fullscreen-btn {
+  background-color: var(--color-success);
+}
+
+.fullscreen-btn:hover {
+  background-color: var(--color-primary-variant);
+}
+
+.exam-timer {
+  font-size: 1.2rem;
+  color: var(--color-danger);
+  margin-bottom: 1.5rem;
+}
+
+.exam-questions {
+  width: 100%;
+  max-width: 800px;
+  margin-bottom: 1.5rem;
+}
+
+.short-answer-textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: var(--border-radius-1);
+  border: 1px solid var(--color-info-dark);
+  resize: none;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+}
+
+.option input[type="radio"] {
+  margin-right: 0.5rem;
+  accent-color: var(
+    --color-primary
+  ); /* Apply the primary color to the radio buttons */
+}
+
+.option label {
+  background-color: var(--color-light);
+  padding: 0.75rem;
+  border-radius: var(--border-radius-1);
+  width: 100%;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.option label:hover {
+  background-color: var(
+    --color-info-dark
+  ); /* Slightly darken on hover for better visibility */
+}
+
+.selected-option {
+  background-color: aqua;
+  color: brown;
+}
+
+.question-navigation {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 800px;
+  margin-bottom: 1.5rem;
+}
+
+.nav-btn {
+  background-color: var(--color-warning);
+}
+
+.nav-btn:hover {
+  background-color: var(--color-primary-variant);
+}
+
+.submit-exam-btn {
+  background-color: var(--color-danger);
+  margin-top: 1rem;
+  align-self: center;
+}
+
+.submit-exam-btn:hover {
+  background-color: var(--color-primary-variant);
+}
+
+@media (max-width: 768px) {
+  .exam-portal-container {
+    padding: 1rem;
+  }
+
+  .exam-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .btn {
+    font-size: 0.9rem;
+  }
+
+  .exam-timer {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .exam-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .exam-header h1 {
+    margin-bottom: 1rem;
+  }
+
+  .exam-timer {
+    font-size: 0.9rem;
+  }
+}
+
+.short-answer-textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid var(--color-dark-variant);
+    border-radius: var(--border-radius-1);
+    resize: none;
+  }
+  
+  .short-answer-textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 5px var(--color-primary);
+  }
+
+  .word-left{
+    color: var(--color-danger);
+  }
+  
+  /* p {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--color-info-dark);
+  } */

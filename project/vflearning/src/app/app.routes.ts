@@ -38,6 +38,7 @@ import { ExamQuestionsGenerateComponent } from './components/pages/teacher-dashb
 import { DashboardComponent } from './components/pages/student-dashboard/dashboard/dashboard.component';
 import { StudentExamsComponent } from './components/pages/student-dashboard/student-exams/student-exams.component';
 import { ExamAssignComponent } from './components/pages/teacher-dashboard/exam-manage/exam-assign/exam-assign.component';
+import { ExamPortalComponent } from './components/pages/student-dashboard/exam-portal/exam-portal.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -132,6 +133,7 @@ export const routes: Routes = [
     children: [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'exams', component: StudentExamsComponent },
+      { path: 'exam-portal/:examId', component: ExamPortalComponent },
     ],
   },
   { path: 'login', component: LoginComponent },

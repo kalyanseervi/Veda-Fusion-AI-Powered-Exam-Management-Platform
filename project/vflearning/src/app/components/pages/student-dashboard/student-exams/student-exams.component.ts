@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AssignExamService } from '../../../../services/assignExam/assign-exam.service';
 import { CommonModule } from '@angular/common';
 
@@ -11,14 +11,13 @@ import { CommonModule } from '@angular/common';
   styleUrl: './student-exams.component.css'
 })
 export class StudentExamsComponent implements OnInit {
-startExam(arg0: any,arg1: any) {
-throw new Error('Method not implemented.');
-}
+
   stdexamdtl: any;
   errorMessage:string|undefined;
   constructor(
     private route: ActivatedRoute,
-    private assignexam: AssignExamService
+    private assignexam: AssignExamService,
+    private router: Router
   ) {}
 
 
@@ -37,6 +36,23 @@ throw new Error('Method not implemented.');
       error: (error) => {
         this.errorMessage = error.error
         console.error('Error fetching student exam details: ', error);
+      },
+    });
+  }
+
+  startExam(examId: any) {
+    const examData = { examId};
+    // Navigate to the exam page with the examId and examName as route parameters
+    this.assignexam.startExam(examData).subscribe({
+      next: (response) => {
+        console.log('This is my response: ', response);
+        this.router.navigate([
+          '/dashboard/student/exam-portal',
+          examId
+        ]);
+      },
+      error: (error) => {
+        this.errorMessage = error.error;
       },
     });
   }

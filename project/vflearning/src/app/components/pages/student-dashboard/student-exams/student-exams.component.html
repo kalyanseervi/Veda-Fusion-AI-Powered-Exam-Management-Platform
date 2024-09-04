@@ -5,8 +5,9 @@
       <tr>
         <th>Exam Name</th>
         <th>Status</th>
-        <th>Assigned At</th>
-        <th>Completed At</th>
+    
+        <th>Exam Date & Time</th>
+        <th>Exam Duration</th>
         <th>Action</th>
       </tr>
     </thead>
@@ -14,13 +15,14 @@
       <tr *ngFor="let exam of stdexamdtl.assignedExams">
         <td>{{ exam.examId.examName }}</td>
         <td>{{ exam.status }}</td>
-        <td>{{ exam.assignedAt | date: 'medium' }}</td>
-        <td>{{ exam.completedAt | date: 'medium' }}</td>
+
+        <td>{{ exam.examId.examDate | date }} || {{exam.examId.examTime}} </td>
+        <td>{{ exam.examId.examDuration  }} Minutes</td>
         <td *ngIf="exam.status =='pending'; else startexam">
-          <button (click)="startExam(exam.examId._id, exam.examId.examName)" class="action-button">Start Exam</button>
+          <button (click)="startExam(exam.examId._id)" class="action-button">Start Exam</button>
         </td>
         <ng-template #startexam>
-          <p class="completed-exam-message">You have successfully completed the Exam</p>
+          <button class="action-button">View Result</button>
         </ng-template>
       </tr>
     </tbody>

@@ -1,0 +1,54 @@
+<div class="exam-portal-container">
+    <div class="exam-header">
+        <h1>Exam Portal</h1>
+        <button class="btn fullscreen-btn" (click)="enterFullScreen()">Enter Fullscreen</button>
+        <button *ngIf="fullscreenEnabled" class="btn fullscreen-btn" (click)="exitFullScreen()">Exit Fullscreen</button>
+    </div>
+
+    <div class="exam-timer">
+        <p>Time Remaining: {{ getFormattedTime(remainingTime) }}</p>
+    </div>
+
+    <div class="exam-questions" *ngIf="currentQuestion">
+        <h2>Question {{ currentQuestionIndex !== undefined ? currentQuestionIndex + 1 : 0 }} of {{ questions.length }}
+        </h2>
+        <p>{{ currentQuestion.question }}</p>
+
+        <!-- Textarea for Short, Long, and Fill-in-the-Blank Questions -->
+        <div
+            *ngIf="currentQuestion.question_type === 'short' || currentQuestion.question_type === 'long' || currentQuestion.question_type === 'fill_blank'">
+            <textarea [(ngModel)]="selectedOptions[currentQuestionIndex || 0]" (input)="enforceWordLimit()"
+                placeholder="Write your answer here" rows="5" class="short-answer-textarea">
+    </textarea>
+            <p *ngIf="currentQuestion.word_limit">
+                Word Limit: {{ currentQuestion.word_limit }} | <span class="word-left">  Words Left: {{ wordsLeft }}</span>
+            </p>
+        </div>
+
+        <!-- Multiple-Choice Question  word_limit -->
+        <div class="options" *ngIf="currentQuestion.question_type === 'mcq'">
+            <div *ngFor="let option of currentQuestion.options; let i = index" class="option">
+                <input type="radio" [name]="'question-' + currentQuestionIndex" [id]="'option-' + i" [value]="option"
+                    [(ngModel)]="selectedOptions[currentQuestionIndex || 0]" (change)="onOptionSelected(i)" />
+                <label [for]="'option-' + i"
+                    [ngClass]="{'selected-option': selectedOptions[currentQuestionIndex || 0] === option}">
+                    {{ option }}
+                </label>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="question-navigation">
+        <button class="btn nav-btn" (click)="prevQuestion()"
+            [disabled]="currentQuestionIndex === 0 || currentQuestionIndex === undefined">
+            Previous
+        </button>
+        <button class="btn nav-btn" (click)="nextQuestion()"
+            [disabled]="currentQuestionIndex === undefined || currentQuestionIndex >= (questions.length - 1)">
+            Next
+        </button>
+    </div>
+
+    <button class="btn submit-exam-btn" (click)="submitExam()">Submit Exam</button>
+</div>

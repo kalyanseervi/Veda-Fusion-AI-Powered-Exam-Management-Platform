@@ -40,6 +40,16 @@ export class QuestionsService {
       .pipe(catchError(this.handleError));
   }
 
+  getExamPortalQuestions(examId:any):Observable<any>{
+    
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.getToken()}`,
+    });
+    return this.http.get(`${this.baseUrl}/examportalQues/${examId}`, { headers })
+ 
+
+  }
+
   // Get a single exam question by ID
   getExamQuestionById(id: string): Observable<any> {
     const headers = new HttpHeaders({

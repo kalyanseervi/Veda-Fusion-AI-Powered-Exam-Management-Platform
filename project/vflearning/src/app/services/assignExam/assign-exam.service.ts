@@ -41,6 +41,13 @@ export class AssignExamService {
     return this.http.get(`${this.baseUrl}/assignedExams`,{headers})
   }
 
+  startExam(examId: any): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.getToken()}`,
+    }); 
+    return this.http.post(`${this.baseUrl}/startExam`,examId,{headers});
+  }
+
 
   private getToken(): string | null {
     return localStorage.getItem('token'); // Adjust as per your authentication flow
