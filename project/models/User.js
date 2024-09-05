@@ -15,7 +15,6 @@ const UserSchema = new mongoose.Schema({
     emailVerificationToken: String,
     emailVerificationTokenExpiry: Date,
     school: { type: mongoose.Schema.Types.ObjectId, ref: 'School', required: true },
-    department: { type: String, required: true },
     password: { type: String, required: true },
     role: { type: mongoose.Schema.Types.ObjectId, ref: 'Role', required: true },
 });

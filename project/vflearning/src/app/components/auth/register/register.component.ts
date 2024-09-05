@@ -24,7 +24,6 @@ export class RegisterComponent {
       instituteName: ['', Validators.required],
       instituteAddress: ['', Validators.required],
       institutephoneNumber: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
-      department: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmpassword: ['', [Validators.required, Validators.minLength(6)]],
     }, );

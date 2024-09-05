@@ -1,19 +1,24 @@
 <div class="container1">
-    <aside #sideMenu *ngIf="!isFullscreen">
-        <div class="top">
-            <div class="logo">
-                <img src="assets\images\vf.jpg" alt="">
-                <h2> VF <span class="danger">Learning</span> </h2>
+    <aside #sideMenu *ngIf="!isexamportal">
+        <div *ngIf="!isFullscreen">
+            <div class="top">
+                <div class="logo">
+                    <img src="assets\images\vf.jpg" alt="">
+                    <h2> VF <span class="danger">Learning</span> </h2>
+                </div>
+                <div class="close" id="close-btn" #closeBtn>
+                    <span class="material-icons-sharp">close</span>
+                </div>
             </div>
-            <div class="close" id="close-btn" #closeBtn>
-                <span class="material-icons-sharp">close</span>
-            </div>
+            <app-sidenavbar></app-sidenavbar>
         </div>
-        <app-sidenavbar ></app-sidenavbar>
+        <div *ngIf="isFullscreen">
+            
+        </div>
     </aside>
-    
+
     <main>
-        <router-outlet (fullscreenChange)="onFullscreenChange($event)"></router-outlet>
+        <router-outlet (fullscreenChange)="onFullscreenChange($event)" (isexamPortal)="onexamportal($event)"></router-outlet>
 
     </main>
     <div class="right" *ngIf="!isFullscreen">
@@ -40,4 +45,3 @@
         <app-rightsidebar></app-rightsidebar>
     </div>
 </div>
-

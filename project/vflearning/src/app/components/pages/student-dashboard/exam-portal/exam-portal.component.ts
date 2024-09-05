@@ -4,76 +4,57 @@ import { QuestionsService } from '../../../../services/questions/questions.servi
 import { ExamService } from '../../../../services/exam/exam.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { ExamPortalService } from '../../../../services/examPortal/exam-portal.service';
+import { AuthService } from '../../../../services/auth/auth.service';
 
 @Component({
   selector: 'app-exam-portal',
   standalone: true,
-  imports: [FormsModule,CommonModule,ReactiveFormsModule],
+  imports: [FormsModule, CommonModule, ReactiveFormsModule],
   templateUrl: './exam-portal.component.html',
   styleUrl: './exam-portal.component.css'
 })
 export class ExamPortalComponent implements OnInit, OnDestroy {
 
   @Output() fullscreenChange = new EventEmitter<boolean>();
+  @Output() isExamPortal = new EventEmitter<boolean>();
+
   examId: string | undefined;
   questions: any[] = [];
   selectedOptions: string[] = [];
-  timers: number[] = [];
   currentQuestionIndex: number | undefined;
   currentQuestion: any;
   @Input() totalTime: number | undefined;
 
-  isRunning: boolean = true;
+  isRunning = true;
   fullscreenEnabled = false;
+  isExamPortalEnabled = false;
   canLeavePage = false;
-  userId: any;
   timerInterval: any;
-  singleIndex: number | undefined;
-  timerDuration: any;
-  remainingTime: number = 0;
-  errorMessage: string | undefined;
+  remainingTime = 0;
   wordsLeft: number | undefined;
 
   constructor(
-    private examservice: ExamService,
+    private examService: ExamService,
     private route: ActivatedRoute,
-    private examQuestionsService: QuestionsService
+    private examQuestionsService: QuestionsService,
+    private examPortalService:ExamPortalService,
+    private authservice:AuthService
   ) {}
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
       this.examId = params['examId'];
-      console.log(this.examId);
-
       if (this.examId) {
         this.fetchQuestions(this.examId);
-        this.examservice.getExamById(this.examId).subscribe(
-          (response: any) => {
-            console.log(response);
-            this.totalTime = response.examDuration;
-            this.remainingTime = response.examDuration;
-
-            if (this.remainingTime > 0 && this.totalTime) {
-              this.totalTime *= 60;
-              this.remainingTime *= 60;
-            }
-            this.startCountdown();
-          },
-          (error) => {
-            console.error('Error fetching exam details:', error);
-          }
-        );
+        this.loadExamDetails(this.examId);
       }
     });
 
-    if (this.currentQuestion?.wordLimit) {
-      this.enforceWordLimit();
-    }
-
-    // Start in fullscreen mode
     this.enterFullScreen();
+    this.isExamPortalEnabled = true;
+    this.isExamPortal.emit(this.isExamPortalEnabled);
 
-    // Disable keyboard and context menu events
     window.addEventListener('keydown', this.handleKeyDown.bind(this));
     window.addEventListener('contextmenu', this.handleContextMenu.bind(this));
     window.addEventListener('beforeunload', this.handleBeforeUnload.bind(this));
@@ -88,29 +69,27 @@ export class ExamPortalComponent implements OnInit, OnDestroy {
     window.removeEventListener('beforeunload', this.handleBeforeUnload.bind(this));
   }
 
-  startCountdown(): void {
-    if (this.timerInterval) {
-      clearInterval(this.timerInterval);
-    }
-
-    this.timerInterval = setInterval(() => {
-      if (this.remainingTime > 0 && this.isRunning) {
-        this.remainingTime--;
-      } else {
-        clearInterval(this.timerInterval);
-        this.submitExam(); // Submit the exam if time is up
+  loadExamDetails(examId: string): void {
+    this.examService.getExamById(examId).subscribe(
+      (response: any) => {
+        this.totalTime = response.examDuration * 60;
+        this.remainingTime = this.totalTime;
+        this.startCountdown();
+      },
+      (error) => {
+        console.error('Error fetching exam details:', error);
       }
-    }, 1000);
+    );
   }
 
   fetchQuestions(examId: string): void {
     this.examQuestionsService.getExamPortalQuestions(examId).subscribe(
       (questions: any[]) => {
         this.questions = questions;
-        console.log(questions);
         this.currentQuestionIndex = 0;
         this.currentQuestion = this.questions[0];
         this.selectedOptions = new Array(this.questions.length).fill('');
+        this.enforceWordLimit();
       },
       (error: any) => {
         console.error('Error fetching questions:', error);
@@ -118,37 +97,23 @@ export class ExamPortalComponent implements OnInit, OnDestroy {
     );
   }
 
-  startTimer(): void {
-    if (this.timerInterval) {
-      clearInterval(this.timerInterval);
-    }
-
-    this.isRunning = true;
+  startCountdown(): void {
+    this.clearTimer();
     this.timerInterval = setInterval(() => {
-      if (this.remainingTime > 0) {
+      if (this.remainingTime > 0 && this.isRunning) {
         this.remainingTime--;
       } else {
-        clearInterval(this.timerInterval);
-        this.isRunning = false;
+        this.clearTimer();
+        this.submitExam();
       }
     }, 1000);
   }
 
-  enforceWordLimit() {
-    const currentText = this.selectedOptions[this.currentQuestionIndex || 0] || '';
-    const wordLimit = this.currentQuestion?.word_limit || 0;
-    const wordsArray = currentText.split(/\s+/).filter(word => word.length > 0);
-    const wordsTyped = wordsArray.length;
-
-    if (wordsTyped > wordLimit) {
-      // If the word limit is exceeded, truncate the text to the allowed number of words
-      this.selectedOptions[this.currentQuestionIndex || 0] = wordsArray.slice(0, wordLimit).join(' ');
-      this.wordsLeft = 0;
-    } else {
-      this.wordsLeft = wordLimit - wordsTyped;
+  clearTimer(): void {
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
     }
   }
-  
 
   getFormattedTime(remainingTime: number): string {
     const hours = Math.floor(remainingTime / 3600);
@@ -160,35 +125,37 @@ export class ExamPortalComponent implements OnInit, OnDestroy {
   goToQuestion(index: number): void {
     this.currentQuestionIndex = index;
     this.currentQuestion = this.questions[index];
-    this.startTimer();
     this.enforceWordLimit();
+    
+    
   }
 
   prevQuestion(): void {
     if (this.currentQuestionIndex && this.currentQuestionIndex > 0) {
-      this.currentQuestionIndex--;
-      this.currentQuestion = this.questions[this.currentQuestionIndex];
-      this.startTimer();
-      
+      this.saveResponse(this.currentQuestionIndex);
+      this.goToQuestion(this.currentQuestionIndex - 1);
     }
-    this.enforceWordLimit();
   }
 
   nextQuestion(): void {
-    if (
-      this.currentQuestionIndex !== undefined &&
-      this.currentQuestionIndex < this.questions.length - 1
-    ) {
-      this.currentQuestionIndex++;
-      this.currentQuestion = this.questions[this.currentQuestionIndex];
-      this.startTimer();
+    if (this.currentQuestionIndex !== undefined && this.currentQuestionIndex < this.questions.length - 1) {
+      this.saveResponse(this.currentQuestionIndex);
+      this.goToQuestion(this.currentQuestionIndex + 1);
+      
     }
-    this.enforceWordLimit();
   }
 
-  onOptionSelected(index: number) {
-    console.log(`Option ${index} selected for question ${this.currentQuestionIndex}`);
-    // Additional logic can be added here if needed
+  enforceWordLimit(): void {
+    const currentText = this.selectedOptions[this.currentQuestionIndex || 0] || '';
+    const wordLimit = this.currentQuestion?.word_limit || 0;
+    const wordsTyped = currentText.split(/\s+/).filter(word => word.length > 0).length;
+
+    if (wordsTyped > wordLimit) {
+      this.selectedOptions[this.currentQuestionIndex || 0] = currentText.split(/\s+/).slice(0, wordLimit).join(' ');
+      this.wordsLeft = 0;
+    } else {
+      this.wordsLeft = wordLimit - wordsTyped;
+    }
   }
 
   shuffleOptions(): void {
@@ -201,62 +168,115 @@ export class ExamPortalComponent implements OnInit, OnDestroy {
     }
   }
 
-  submitExam(): void {
-    console.log('exam submitted successfully');
+  saveResponse(index: number): void {
+    const question = this.questions[index];
+    const singleOption = this.selectedOptions[index];
+    console.log(index)
+
+    // console.log(question)
+    if (question && singleOption) {
+      // Save the response for the current question
+      if (!this.examId) {
+        console.log('exam id not found in single response save');
+      } else {
+        this.examPortalService
+          .submitResponseSingleId(
+            this.examId,
+            question._id,            
+            singleOption
+          )
+          .subscribe(
+            (response:any) => {
+              console.log('Response submitted successfully:', response);
+              // Optionally, navigate to a confirmation page or display a success message
+            },
+            (error:any) => {
+              console.error('Error submitting response:', error);
+              // Handle error (e.g., display an error message to the user)
+            }
+          );
+      }
+    }
   }
 
-  toggleFullScreen(): void {
-    const docEl = document.documentElement as HTMLElement;
+  submitExam(): void {
+    if (!this.examId) {
+      console.error('Exam ID is undefined');
+      return; // Exit the function if examId is undefined
+    }
+    const responses = [];
+    for (let i = 0; i < this.questions.length; i++) {
+      responses.push({
+        questionId: this.questions[i]._id,
+        selectedOption: this.selectedOptions[i], // Assuming selectedOptions is an array corresponding to each question
+      });
+    }
 
+    this.examPortalService
+      .submitResponses(this.examId, responses)
+      .subscribe(
+        (response) => {
+          console.log('Responses submitted successfully:', response);
+          this.authservice.logout();
+          // Optionally, navigate to a confirmation page or display a success message
+        },
+        (error) => {
+          console.error('Error submitting responses:', error);
+          // Handle error (e.g., display an error message to the user)
+        }
+      );
+  }
+
+
+  // Fullscreen handling
+  toggleFullScreen(): void {
     if (!document.fullscreenElement) {
-      if (docEl.requestFullscreen) {
-        docEl.requestFullscreen();
-      } else if ((docEl as any).mozRequestFullScreen) {
-        (docEl as any).mozRequestFullScreen();
-      } else if ((docEl as any).webkitRequestFullscreen) {
-        (docEl as any).webkitRequestFullscreen();
-      } else if ((docEl as any).msRequestFullscreen) {
-        (docEl as any).msRequestFullscreen();
-      }
+      document.documentElement.requestFullscreen();
     } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      }
+      document.exitFullscreen();
     }
   }
 
   @HostListener('document:fullscreenchange')
-  @HostListener('document:webkitfullscreenchange')
-  @HostListener('document:mozfullscreenchange')
-  @HostListener('document:MSFullscreenChange')
-  handleFullscreenChange() {
+  handleFullscreenChange(): void {
     this.fullscreenEnabled = !!document.fullscreenElement;
     this.fullscreenChange.emit(this.fullscreenEnabled);
-    // Re-enter fullscreen if the user exits it
+
     if (!this.fullscreenEnabled) {
-      this.enterFullScreen();
+      const confirmExit = confirm("You exited fullscreen. Do you want to continue the exam?");
+      if (!confirmExit) {
+        this.submitExam();
+      } else {
+        this.enterFullScreen();
+      }
     }
   }
 
-  handleKeyDown(event: KeyboardEvent) {
+  // Handle selection of options and save the selected option
+  onOptionSelected(option: string, index: number): void {
+    this.selectedOptions[this.currentQuestionIndex || 0] = option;
+    console.log(`Selected option for question ${this.currentQuestionIndex}: ${option}`);
+  }
+
+  // Event handlers
+  handleKeyDown(event: KeyboardEvent): void {
     const forbiddenKeys = ['F12', 'F5', 'Control', 'Alt'];
     if (forbiddenKeys.includes(event.key)) {
       event.preventDefault();
     }
   }
 
-  handleContextMenu(event: MouseEvent) {
+  handleContextMenu(event: MouseEvent): void {
     event.preventDefault();
   }
 
-  handleBeforeUnload(event: BeforeUnloadEvent) {
+  handleBeforeUnload(event: BeforeUnloadEvent): void {
     if (!this.canLeavePage) {
-      event.preventDefault();
-      event.returnValue =
-        'Are you sure you want to leave this page? Your progress may be lost.';
+      event.returnValue = 'Are you sure you want to leave this page? Your progress may be lost.';
     }
   }
 
+  // Fullscreen control
   enterFullScreen(): void {
     this.toggleFullScreen();
   }

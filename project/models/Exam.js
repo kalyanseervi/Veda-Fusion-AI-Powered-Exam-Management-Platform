@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const moment = require("moment"); // For handling date and time
 
 const ExamSchema = new mongoose.Schema(
   {
@@ -10,7 +11,8 @@ const ExamSchema = new mongoose.Schema(
     examStatus: { 
         type: String, 
         required: true, 
-        enum: ['Ongoing', 'Cancelled', 'On Hold', 'Completed','Incoming'] // Define Exam status
+        enum: ['Ongoing', 'Cancelled', 'On Hold', 'Completed', 'Incoming'], // Define Exam status
+        default: 'Incoming' // Default status
     },
     difficultyLevel: { 
       type: String, 
@@ -52,5 +54,8 @@ const ExamSchema = new mongoose.Schema(
     timestamps: true // Automatically add createdAt and updatedAt fields
   }
 );
+
+
+
 
 module.exports = mongoose.model("Exam", ExamSchema);

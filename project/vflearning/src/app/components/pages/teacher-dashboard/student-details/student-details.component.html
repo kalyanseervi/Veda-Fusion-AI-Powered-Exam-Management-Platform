@@ -10,10 +10,6 @@
                     <p><strong>Enrolment ID : {{student.enrollmentId}}</strong></p>
                 </div>
             </div>
-            <div class="student-card-body">
-                <p><strong>Contact:</strong> {{ student.contactNumber }}</p>
-                <p><strong>School:</strong> {{ student.school.name }}</p>
-            </div>
             <div class="student-card-footer">
                 <button (click)="viewStudentDetail(student._id)">View</button>
             </div>

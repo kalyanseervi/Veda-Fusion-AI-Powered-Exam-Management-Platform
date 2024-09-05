@@ -5,10 +5,7 @@
         <label for="subjectName">Subject Name:</label>
         <input type="text" id="subjectName" formControlName="subjectName" required />
       </div>
-      <div class="form-group">
-        <label for="subjectCode">Subject Code:</label>
-        <input type="text" id="subjectCode" formControlName="subjectCode" required />
-      </div>
+      
       <div class="form-group">
         <label for="classId">Class:</label>
         <select id="classId" formControlName="classId" required>
@@ -16,14 +13,6 @@
             {{ classItem.classname }}
           </option>
         </select>
-      </div>
-      <div class="form-group">
-        <label for="description">Description:</label>
-        <input type="text" id="description" formControlName="description" />
-      </div>
-      <div class="form-group">
-        <label for="academicYear">Academic Year:</label>
-        <input type="text" id="academicYear" formControlName="academicYear" required />
       </div>
       <button type="submit">Save</button>
     </form>

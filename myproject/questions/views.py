@@ -20,7 +20,6 @@ class GenerateMCQView(APIView):
         genai.configure(api_key=api_key)
         self.model = genai.GenerativeModel("gemini-1.5-flash")
 
-
     def generate_with_modified_first_chunk(self, generator):
         first_chunk = True
         buffer = ""
@@ -30,7 +29,9 @@ class GenerateMCQView(APIView):
                 # Process the first chunk to remove the first 6 characters
                 buffer += chunk
                 if len(buffer) > 7:
-                    yield buffer[7:]  # Yield the modified chunk without the first 6 characters
+                    yield buffer[
+                        7:
+                    ]  # Yield the modified chunk without the first 6 characters
                     buffer = ""  # Reset buffer after yielding
                     first_chunk = False
             else:
@@ -47,7 +48,7 @@ class GenerateMCQView(APIView):
         time_constraints,
     ):
         prompt = (
-            f"Generate multiple-choice questions based on the following details:\n"
+            f"Generate Questions based on the following details you must follow my question types(if there is count greater then 0) :\n"
             f"Topics: {topic}\n"  # No need to use json.dumps if topic is already a string
             f"Question Types: {json.dumps(question_types)}\n"
             f"Difficulty Level: {difficulty_levels}\n"  # Assuming difficulty_levels is a string like 'easy'
@@ -55,8 +56,9 @@ class GenerateMCQView(APIView):
             f"Real World Relevance: {'Yes' if real_world_relevance else 'No'}\n"
             f"Visual Aids: {'Yes' if visual_aids else 'No'}\n"
             f"Time Constraints: {time_constraints} minutes\n"
-            f"Ensure that each question is unique, appropriately challenging, and formatted correctly. "
-            f"Return the response in JSON format with fields for 'question', 'options' (for MCQs), and 'answer'."
+            f"response format: {'json format in well structured without any other symbols and other text'}\n"
+            f"Ensure that each question is unique and formatted correctly. Return the response in JSON data "
+            f"with fields for Questions('question', 'options','answer','marks''questins type(according to given prompt question type)'.)"
         )
         try:
             response = self.model.generate_content(prompt, stream=True)
@@ -113,48 +115,39 @@ class GenerateMCQView(APIView):
         prompt_data = {
             "class": request.data.get("class", "").strip(),
             "subject": request.data.get("subject", "").strip(),
-            "topics": request.data.get(
-                "topics", ""
-            ),  # Ensure topics is treated as a string if it comes as a string
-            "pdf_input": request.data.get(
-                "pdfInput", None
-            ),  # Use camelCase to match the form control name
+            "topics": request.data.get("topics", ""),
+            "pdf_input": request.data.get("pdfInput", None),
             "question_types": {
                 "mcq": {
-                    "count": request.data.get("questionTypes[mcq][count]", {}),
-                    "marks": request.data.get("questionTypes[mcq][marks]", {}),
+                    "count": request.data.get("questionTypes[mcq][count]",0),
+                    "marks": request.data.get("questionTypes[mcq][marks]",0),
                 },
                 "short_answer": {
-                    "count": request.data.get("questionTypes[short_answer][count]", {}),
-                    "marks": request.data.get("questionTypes[short_answer][marks]", {}),
-                    "word_count":30
+                    "count": request.data.get("questionTypes[short_answer][count]",0),
+                    "marks": request.data.get("questionTypes[short_answer][marks]",0),
+                    "word_count": 30
                 },
                 "long_answer": {
-                    "count": request.data.get("questionTypes[long_answer][count]", {}),
-                    "marks": request.data.get("questionTypes[long_answer][marks]", {}),
-                     "word_count":500
+                    "count": request.data.get("questionTypes[long_answer][count]",0),
+                    "marks": request.data.get("questionTypes[long_answer][marks]",0),
+                    "word_count": 500
                 },
                 "yes_no": {
-                    "count": request.data.get("questionTypes[yes_no][count]", {}),
-                    "marks": request.data.get("questionTypes[yes_no][marks]", {}),
+                    "count": request.data.get("questionTypes[yes_no][count]",0),
+                    "marks": request.data.get("questionTypes[yes_no][marks]",0),
                 },
                 "fill_in_the_blanks": {
-                    "count": request.data.get("questionTypes[fill_in_the_blanks][count]", {}),
-                    "marks": request.data.get("questionTypes[fill_in_the_blanks][marks]", {}),
+                    "count": request.data.get("questionTypes[fill_in_the_blanks][count]",0),
+                    "marks": request.data.get("questionTypes[fill_in_the_blanks][marks]",0),
                 },
             },
-            "difficulty_levels": request.data.get(
-                "difficulty_levels", "easy"
-            ).strip(),  # Default value matches form
+            "difficulty_levels": request.data.get("difficulty_levels", "easy").strip(),
             "total_marks": request.data.get("total_marks", 0),
-            "curriculum_alignment": request.data.get(
-                "curriculum_alignment", ""
-            ).strip(),
+            "curriculum_alignment": request.data.get("curriculum_alignment", "").strip(),
             "real_world_relevance": request.data.get("real_world_relevance", True),
             "visual_aids": request.data.get("visual_aids", True),
             "question_bank": request.data.get("question_bank", True),
             "time_constraints": request.data.get("time_constraints", "120").strip(),
-
         }
 
         print(prompt_data)
@@ -186,13 +179,13 @@ class GenerateMCQView(APIView):
         # Determine the generator function to use
         if prompt_data["topics"]:
             generator = self.create_mcq_from_topic(
-                prompt_data["topics"],
-                prompt_data["question_types"],
-                prompt_data["difficulty_levels"],
-                prompt_data["curriculum_alignment"],
-                prompt_data["real_world_relevance"],
-                prompt_data["visual_aids"],
-                prompt_data["time_constraints"],
+                prompt_data["topics"],  # topic
+                prompt_data["question_types"],  # question_types
+                prompt_data["difficulty_levels"],  # difficulty_levels
+                prompt_data["curriculum_alignment"],  # curriculum_alignment
+                prompt_data["real_world_relevance"],  # real_world_relevance
+                prompt_data["visual_aids"],  # visual_aids
+                prompt_data["time_constraints"],  # time_constraints
             )
         elif chapter_text:
             generator = self.create_mcq_from_text(
@@ -203,6 +196,7 @@ class GenerateMCQView(APIView):
                 prompt_data["real_world_relevance"],
                 prompt_data["visual_aids"],
                 prompt_data["time_constraints"],
+                prompt_data["question_bank"],
             )
         else:
             return Response(
@@ -210,9 +204,41 @@ class GenerateMCQView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        response_generator = self.generate_with_modified_first_chunk(generator)
-        response = StreamingHttpResponse(response_generator, content_type="application/json")
+        def response_stream():
+            chunks = []
+            try:
+                # Collect all chunks first without cleaning
+                for chunk in generator:
+                    chunks.append(chunk)  # Collect all chunks into a list
+                    yield chunk  # Stream the raw chunk to the client progressively
+                
+                # Combine all chunks into a single response
+                full_response = "".join(chunks)
+
+                # Clean the final combined response once (remove backticks, etc.)
+                cleaned_full_response = full_response.replace("```json", "").replace("```", "").strip()
+
+                try:
+                    # Parse the cleaned response as JSON to ensure it's valid
+                    json_response = json.loads(cleaned_full_response)
+
+                    # Stream the final structured JSON response
+                    # yield json.dumps({
+                    #     "status": "completed",
+                    #     "questions": json_response
+                    # })
+                except json.JSONDecodeError as e:
+                    logger.error(f"Error parsing generated response: {e}")
+                    yield json.dumps({"error": "Error generating structured JSON"})
+
+            except Exception as e:
+                logger.error(f"Error generating MCQs: {e}")
+                yield json.dumps({"error": str(e)})
+
+        # Stream the chunks followed by the final cleaned JSON response
+        response = StreamingHttpResponse(response_stream(), content_type="application/json")
         response["Cache-Control"] = "no-cache"
         response["Content-Disposition"] = 'inline; filename="mcqs.json"'
 
         return response
+

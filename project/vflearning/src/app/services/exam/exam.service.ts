@@ -58,30 +58,33 @@ export class ExamService {
       xhr.open('POST', this.pyUrl, true);
       // Do not set Content-Type header when sending FormData
       xhr.responseType = 'text';
-
+  
       let accumulatedResponse = '';
-
+  
       xhr.onprogress = () => {
         if (xhr.readyState === XMLHttpRequest.LOADING) {
-          // Only push new chunk data
-          const newChunk = xhr.responseText.substring(
-            accumulatedResponse.length
-          );
+          // Handle chunks while loading
+          const newChunk = xhr.responseText.substring(accumulatedResponse.length);
           accumulatedResponse += newChunk;
-          observer.next(newChunk);
+          observer.next(newChunk); // Send the new chunk to the observer
         }
       };
-
+  
       xhr.onload = () => {
         if (xhr.status === 200) {
-          observer.complete();
+          // Check if there are any remaining chunks
+          if (xhr.responseText.length > accumulatedResponse.length) {
+            const finalChunk = xhr.responseText.substring(accumulatedResponse.length);
+            observer.next(finalChunk); // Send the final chunk
+          }
+          observer.complete(); // Mark the observable as complete
         } else {
-          observer.error(xhr.statusText);
+          observer.error(xhr.statusText); // Handle any error response
         }
       };
-
+  
       xhr.onerror = () => observer.error(xhr.statusText);
-
+  
       xhr.send(formData);
     });
   }

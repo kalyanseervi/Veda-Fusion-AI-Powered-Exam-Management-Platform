@@ -49,18 +49,18 @@ export class StudentCreateComponent implements OnInit {
   ) {
     this.studentForm = this.fb.group({
       name: ['', [Validators.required]],
-      contactNumber: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
-      dob: ['', [Validators.required]],
+      // contactNumber: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
+      // dob: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
-      city: ['', [Validators.required]],
-      district: ['', [Validators.required]],
-      state: ['', [Validators.required]],
-      country: ['', [Validators.required]],
-      school: ['', [Validators.required]],
+      // city: ['', [Validators.required]],
+      // district: ['', [Validators.required]],
+      // state: ['', [Validators.required]],
+      // country: ['', [Validators.required]],
+      // school: ['', [Validators.required]],
       studentClass: ['', [Validators.required]],
       studentsubjects: ['', [Validators.required]],
-      address: ['', [Validators.required]],
-      photo: [null]
+      // address: ['', [Validators.required]],
+      // photo: [null]
     });
   }
 

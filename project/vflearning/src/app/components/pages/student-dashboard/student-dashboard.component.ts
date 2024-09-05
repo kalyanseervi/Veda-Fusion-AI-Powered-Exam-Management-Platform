@@ -20,6 +20,7 @@ export class StudentDashboardComponent implements AfterViewInit,OnInit {
   username:String | null = null
   userrole:String | null = null
   isFullscreen = false;
+  isexamportal = false;
 
   @ViewChild('sideMenu') sideMenu!: ElementRef;
   @ViewChild('menuBtn') menuBtn!: ElementRef;
@@ -64,6 +65,15 @@ export class StudentDashboardComponent implements AfterViewInit,OnInit {
   }
   onFullscreenChange(event: Event): void {
     this.isFullscreen = !!document.fullscreenElement;
+  }
+
+
+  onexamportalchange(event:Event):void{
+    this.isexamportal = true
+  }
+
+  onexamportal(event: Event): void {
+    this.onexamportalchange(event);
   }
 
   @HostListener('document:fullscreenchange', ['$event'])

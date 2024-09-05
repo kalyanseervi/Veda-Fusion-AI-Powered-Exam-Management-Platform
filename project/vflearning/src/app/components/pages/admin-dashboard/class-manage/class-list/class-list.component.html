@@ -5,8 +5,7 @@
       <div class="class-item" *ngFor="let classItem of classes">
         <div class="class-details">
           <h3>{{ classItem.classname }}</h3>
-          <p *ngIf="classItem.description">{{ classItem.description }}</p>
-          <p><strong>Academic Year:</strong> {{ classItem.academicYear }}</p>
+          <p *ngIf="classItem.section">Section: {{ classItem.section }}</p>
         </div>
         <div class="class-actions">
           <button (click)="deleteClass(classItem._id)" class="delete-button">Delete</button>

@@ -50,19 +50,19 @@ export class TeacherCreateComponent implements OnInit {
   ) {
     this.teacherForm = this.fb.group({
       name: ['', [Validators.required]],
-      contactNumber: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
+      // contactNumber: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
       email: ['', [Validators.required, Validators.email]],
-      city: ['', [Validators.required]],
-      district: ['', [Validators.required]],
-      state: ['', [Validators.required]],
-      country: ['', [Validators.required]],
-      school: ['', [Validators.required]],
+      // city: ['', [Validators.required]],
+      // district: ['', [Validators.required]],
+      // state: ['', [Validators.required]],
+      // country: ['', [Validators.required]],
+      // school: ['', [Validators.required]],
       teachingClasses: ['', [Validators.required]],
       teachingSubjects: ['', [Validators.required]],
-      qualification: ['', [Validators.required]],
-      experience: ['', [Validators.required, Validators.min(0)]],
-      address: ['', [Validators.required]],
-      photo: [null]
+      // qualification: ['', [Validators.required]],
+      // experience: ['', [Validators.required, Validators.min(0)]],
+      // address: ['', [Validators.required]],
+      // photo: [null]
     });
   }
 

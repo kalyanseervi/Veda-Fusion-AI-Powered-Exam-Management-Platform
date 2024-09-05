@@ -1,0 +1,22 @@
+
+<h1 class="assigned-exam-title">Exam Result</h1>
+
+
+<table class="assigned-exam-table">
+    <thead>
+    <tr>
+        <th>Sr.No.</th>
+        <th>Student Name</th>
+        <th>Attempted Ques</th>
+        <th>Action</th>
+    </tr>
+</thead>
+<tbody>
+    <tr *ngFor="let stdlist of studentResponseList; let i = index">
+        <td>{{i+1}}</td>
+        <td>{{stdlist.userId.name}}</td>
+        <td>{{stdlist.responses.length}}</td>
+        <td><button class="action-button">Show Response</button></td>
+    </tr>
+</tbody>
+</table>

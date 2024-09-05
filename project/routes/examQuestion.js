@@ -23,13 +23,19 @@ router.post("/exam-questions", auth, async (req, res) => {
     }
 
     console.log(req.body);
-
+    // type: question.question_type,
+    // title: question.question,
+    // marks: question.marks,
+    // wordLimit: question.word_limit,
+    // answer: question.answer,
+    // options: Array.isArray(question.options) ? question.options : [], // Ensure options is an array
+    // imageUrl: question.imageUrl,
     // Prepare the questions data
     const newQuestions = req.body.questions.map((question) => ({
-      type: question.type,
-      title: question.title,
+      type: question.question_type,
+      title: question.question,
       marks: question.marks,
-      wordLimit: question.wordLimit,
+      wordLimit: question.word_limit,
       answer: question.answer,
       options: question.options,
       imageUrl: question.imageUrl,

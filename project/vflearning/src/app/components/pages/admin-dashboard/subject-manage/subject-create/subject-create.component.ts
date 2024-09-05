@@ -26,10 +26,9 @@ export class SubjectCreateComponent {
   ) {
     this.subjectForm = this.fb.group({
       subjectName: ['', Validators.required],
-      subjectCode: ['', Validators.required],
+     
       classId: ['', Validators.required], 
-      description: [''],
-      academicYear: ['', Validators.required]
+      
     });
   }
 

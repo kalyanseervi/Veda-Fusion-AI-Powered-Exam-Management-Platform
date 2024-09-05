@@ -13,6 +13,7 @@ import { FormsModule } from '@angular/forms'; // Import FormsModule
 })
 export class ExamQuestionsListComponent implements OnInit {
   questions: any[] = [];
+  isEditing: { [key: string]: boolean } = {}; 
   total: number = 0;
   page: number = 1;
   limit: number = 10;
@@ -42,6 +43,29 @@ export class ExamQuestionsListComponent implements OnInit {
       console.log(this.questions);
       this.total = response.total;
     });
+  }
+
+  // Enable edit mode for a specific question
+  enableEditMode(questionId: string): void {
+    this.isEditing[questionId] = true;
+  }
+
+  // Cancel edit mode
+  cancelEdit(questionId: string): void {
+    
+    this.isEditing[questionId] = false;
+  }
+
+  examQuestionsEdit(question:any){
+    this.examQuestionsService.updateExamQuestion(question._id, question).subscribe(
+      (response) => {
+        console.log('Question updated successfully:', response);
+        this.isEditing[question._id] = false; // Exit edit mode
+      },
+      (error) => {
+        console.error('Error updating question:', error);
+      }
+    );
   }
 
   onPageChange(page: number): void {

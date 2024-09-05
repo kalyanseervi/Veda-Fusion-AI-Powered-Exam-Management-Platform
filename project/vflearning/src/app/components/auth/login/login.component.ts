@@ -14,6 +14,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 })
 export class LoginComponent {
   loginForm: FormGroup;
+  errorMessage: string = '';
 
   constructor(private authService: AuthService, private router: Router, private fb: FormBuilder) {
     this.loginForm = this.fb.group({
@@ -42,6 +43,7 @@ export class LoginComponent {
                 this.router.navigate(['/dashboard/student']);
               } else {
                 // Handle unexpected roles or errors
+                this.errorMessage = `'Unexpected role:', role`;
                 console.error('Unexpected role:', role);
                 this.router.navigate(['/unauthorized']);
               }
@@ -52,7 +54,9 @@ export class LoginComponent {
             }
           });
         },
-        error: (err) => console.error('Login failed:', err),
+        error: (err) => {
+          this.errorMessage = `Login failed, ${err.error['msg']}`
+          console.error('Login failed:', err)}
       });
     }
   }

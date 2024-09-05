@@ -11,15 +11,28 @@
                         <label for="name">Name</label>
                         <input id="name" formControlName="name" type="text" placeholder="Enter username" />
                     </div>
-                    <div class="input-field">
+                    <!-- <div class="input-field">
                         <label for="contactNumber">Contact Number</label>
                         <input id="contactNumber" formControlName="contactNumber" type="tel" placeholder="Enter contact number" />
-                    </div>
+                    </div> -->
                     <div class="input-field">
                         <label for="email">Email</label>
                         <input id="email" formControlName="email" type="email" placeholder="Enter email" />
                     </div>
+
                     <div class="input-field">
+                        <label for="teachingClasses">Teaching Classes</label>
+                        <select id="teachingClasses" formControlName="teachingClasses" multiple>
+                            <option *ngFor="let classItem of availableClasses" [value]="classItem._id">{{ classItem.classname }}</option>
+                        </select>
+                    </div>
+                    <div class="input-field">
+                        <label for="teachingSubjects">Teaching Subjects</label>
+                        <select id="teachingSubjects" formControlName="teachingSubjects" multiple>
+                            <option *ngFor="let subject of availableSubjects" [value]="subject._id">{{ subject.subjectName }}</option>
+                        </select>
+                    </div>
+                    <!-- <div class="input-field">
                         <label for="city">City</label>
                         <input id="city" formControlName="city" type="text" placeholder="Enter city" />
                     </div>
@@ -40,31 +53,20 @@
                         <select id="school" formControlName="school">
                             <option *ngFor="let school of availableSchools" [value]="school._id">{{ school.name }}</option>
                         </select>
-                    </div>
+                    </div> -->
                 </div>
-                <button type="button" class="nextBtn" (click)="next()">
+                <!-- <button type="button" class="nextBtn" (click)="next()">
                     <span class="btnText">Next</span>
                     <i class="uil uil-navigator"></i>
-                </button>
+                </button> -->
             </div>
 
             <!-- Second Section: Professional Details -->
-            <div class="details address" *ngIf="isSecondSectionActive">
+            <!-- <div class="details address" *ngIf="isSecondSectionActive">
                 <span class="title">Professional Details</span>
-                <div class="fields">
-                    <div class="input-field">
-                        <label for="teachingClasses">Teaching Classes</label>
-                        <select id="teachingClasses" formControlName="teachingClasses" multiple>
-                            <option *ngFor="let classItem of availableClasses" [value]="classItem._id">{{ classItem.classname }}</option>
-                        </select>
-                    </div>
-                    <div class="input-field">
-                        <label for="teachingSubjects">Teaching Subjects</label>
-                        <select id="teachingSubjects" formControlName="teachingSubjects" multiple>
-                            <option *ngFor="let subject of availableSubjects" [value]="subject._id">{{ subject.subjectName }}</option>
-                        </select>
-                    </div>
-                    <div class="input-field">
+                <div class="fields"> -->
+                    
+                    <!-- <div class="input-field">
                         <label for="qualification">Qualification</label>
                         <input id="qualification" formControlName="qualification" type="text" placeholder="Enter qualification" />
                     </div>
@@ -79,19 +81,19 @@
                     <div class="input-field">
                         <label for="photo">Photo</label>
                         <input id="photo" formControlName="photo" type="file" (change)="onFileSelect($event)" />
-                    </div>
-                </div>
+                    </div> -->
+                <!-- </div> -->
                 <div class="buttons">
-                    <button type="button" class="backBtn" (click)="back()">
+                    <!-- <button type="button" class="backBtn" (click)="back()">
                         <i class="uil uil-navigator"></i>
                         <span class="btnText">Back</span>
-                    </button>
+                    </button> -->
                     <button type="submit" class="submit">
                         <span class="btnText">Submit</span>
                         <i class="uil uil-navigator"></i>
                     </button>
                 </div>
             </div>
-        </div>
+        
     </form>
 </div>

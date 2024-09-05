@@ -103,8 +103,8 @@
 }
 
 .selected-option {
-  background-color: aqua;
-  color: brown;
+  background-color: var(--color-success) !important;
+  color: var(--color-white) !important;
 }
 
 .question-navigation {

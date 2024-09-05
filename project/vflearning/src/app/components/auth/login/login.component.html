@@ -1,5 +1,18 @@
 <div class="container">
 
+
+  <div *ngIf="errorMessage" class="modal-overlay">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3 class="modal-title">Error</h3>
+        <button class="modal-close-button" (click)="errorMessage = ''">Close</button>
+      </div>
+      <div class="modal-body">
+        <p>{{ errorMessage }}</p>
+      </div>
+    </div>
+  </div>
+
   <div class="login-form">
     <h2>Login</h2>
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">

@@ -36,11 +36,20 @@ export class ExamListComponent implements OnInit {
     this.isPopupVisible = false;
   }
 
+
+ 
+
   examQuestionsManage(selectedExamId: string) {
     this.router.navigate([
       `/dashboard/teacher/exam-questions-manage/${selectedExamId}`,
     ]);
   }
+  generateResult(selectedExamId:string){
+    this.router.navigate([
+      `/dashboard/teacher/exam-generate-result/${selectedExamId}`,
+    ]);
+  }
+
   examAssign(arg0:string){
     this.selectedExamId = arg0
     this.isPopupVisible = true;

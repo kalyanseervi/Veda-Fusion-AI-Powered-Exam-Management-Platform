@@ -1,8 +1,7 @@
 <div class="exam-portal-container">
     <div class="exam-header">
         <h1>Exam Portal</h1>
-        <button class="btn fullscreen-btn" (click)="enterFullScreen()">Enter Fullscreen</button>
-        <button *ngIf="fullscreenEnabled" class="btn fullscreen-btn" (click)="exitFullScreen()">Exit Fullscreen</button>
+
     </div>
 
     <div class="exam-timer">
@@ -26,16 +25,15 @@
         </div>
 
         <!-- Multiple-Choice Question  word_limit -->
-        <div class="options" *ngIf="currentQuestion.question_type === 'mcq'">
-            <div *ngFor="let option of currentQuestion.options; let i = index" class="option">
-                <input type="radio" [name]="'question-' + currentQuestionIndex" [id]="'option-' + i" [value]="option"
-                    [(ngModel)]="selectedOptions[currentQuestionIndex || 0]" (change)="onOptionSelected(i)" />
-                <label [for]="'option-' + i"
-                    [ngClass]="{'selected-option': selectedOptions[currentQuestionIndex || 0] === option}">
-                    {{ option }}
-                </label>
-            </div>
-        </div>
+        <div *ngFor="let option of currentQuestion.options; let i = index" class="option">
+            <input type="radio" [name]="'question-' + currentQuestionIndex" [id]="'option-' + i" [value]="option"
+              [(ngModel)]="selectedOptions[currentQuestionIndex || 0]" (change)="onOptionSelected(option, i)" />
+            <label [for]="'option-' + i"
+              [ngClass]="{'selected-option': selectedOptions[currentQuestionIndex || 0] === option}">
+              {{ option }}
+            </label>
+          </div>
+          
 
     </div>
 

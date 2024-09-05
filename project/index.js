@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/db'); // Assume there's a config/db.js for MongoDB connection
+
+require('./services/scheduler'); 
 const app = express();
 
 // Connect Database
@@ -20,9 +22,11 @@ app.use('/api/class',require('./routes/class'));
 app.use('/api/exam',require('./routes/exam'));
 app.use('/api/exam-questions',require('./routes/examQuestion'));
 app.use('/api/assignExam',require('./routes/assignExam'));
+app.use('/api/examResult',require('./routes/examResult'));
 app.use('/api/student',require('./routes/student'));
 app.use('/api/protected', require('./routes/protected')); // Example of protected routes
 
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+

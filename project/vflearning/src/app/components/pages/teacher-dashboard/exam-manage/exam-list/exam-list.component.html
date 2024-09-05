@@ -5,16 +5,17 @@
         <span class="difficulty-badge">{{ exam.examStatus | uppercase }}</span>
       </div>
       <div class="card-body">
-        <p><strong>Date:</strong> {{ exam.examDate }}</p>
+        <p><strong>Date:</strong> {{ exam.examDate | date }}</p>
         <p><strong>Time:</strong> {{ exam.examTime }}</p>
         <p><strong>Duration:</strong> {{ exam.examDuration }} minutes</p>
         <p><strong>Negative Marking:</strong> {{ exam.negativeMarking }}</p>
-        <p><button class="action-btn view-btn" (click)="examAssign(exam._id)">Assign Exam</button></p>
+        <p><button class="action-btn view-btn" (click)="examAssign(exam._id)">Assign Exam</button> <button class="action-btn view-btn" (click)="generateResult(exam._id)">Generate Result</button></p>
+
       </div>
       <div class="card-footer">
         <button class="action-btn view-btn">View Details</button>
         
-        <button class="action-btn edit-btn">Edit Exam</button>
+        <button class="action-btn edit-btn" >Edit Exam</button>
         <button class="action-btn edit-btn" (click)="examQuestionsManage(exam._id)">Add Questions</button>
       </div>
     </div>

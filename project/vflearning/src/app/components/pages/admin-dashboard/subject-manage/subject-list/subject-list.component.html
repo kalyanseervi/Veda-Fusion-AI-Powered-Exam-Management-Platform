@@ -4,10 +4,7 @@
     <div class="subject-list">
       <div class="subject-item" *ngFor="let subject of subjects">
         <div class="subject-details">
-          <h3>{{ subject.subjectName }}</h3>
-          <p><strong>Subject Code:</strong> {{ subject.subjectCode }}</p>
-          <p *ngIf="subject.description"><strong>Description:</strong> {{ subject.description }}</p>
-          <p><strong>Academic Year:</strong> {{ subject.academicYear }}</p>
+          <h3>{{ subject.subjectName }} --- {{subject.classId.classname}}</h3>
         </div>
         <div class="subject-actions">
           <button (click)="deleteSubject(subject._id)" class="delete-button">Delete</button>

@@ -6,9 +6,7 @@ import { TeacherService } from '../../../../../services/teacher/teacher.service'
 interface Teacher {
   _id: string;
   name: string;
-  contactNumber: string;
   email: string;
-  city: string;
   school: { name: string };
   teachingClasses: { classname: string }[];
   teachingSubjects: { subjectName: string }[];

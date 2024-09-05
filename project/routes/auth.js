@@ -41,13 +41,13 @@ router.post('/register', async (req, res) => {
         instituteName,
         instituteAddress,
         institutephoneNumber,
-        department,
+
         password,
         confirmpassword
     } = req.body;
 
     // Check if all required fields are present
-    if (!name || !email  || !instituteName || !instituteAddress || !institutephoneNumber || !department || !password || !confirmpassword) {
+    if (!name || !email  || !instituteName || !instituteAddress || !institutephoneNumber || !password || !confirmpassword) {
         return res.status(400).json({ msg: 'Please fill all the required fields.' });
     }
 
@@ -85,7 +85,6 @@ router.post('/register', async (req, res) => {
             school: schoolRecord._id,
             instituteAddress,
             institutephoneNumber,
-            department,
             password,
             role: userRole._id
         });

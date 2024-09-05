@@ -1,59 +1,57 @@
-<div class="container">
-    <div class="card">
-        <div class="card-header">
-            <h2>Create Exam</h2>
-        </div>
-        <div class="card-body">
-            <form [formGroup]="examForm" (ngSubmit)="onSubmit()">
-                <div class="form-group">
+<div class="form-container">
+    <h3>Create Exam</h3>
+    <form [formGroup]="examForm" (ngSubmit)="onSubmit()" class="form">
+        <div class=" details personal">
+            <div class="fields">
+                <!-- Exam Name -->
+                <div class="input-field">
                     <label for="examName">Exam Name:</label>
-                    <input id="examName" formControlName="examName" type="text" class="form-control" />
+                    <input id="examName" formControlName="examName" type="text" />
                     <div *ngIf="examForm.get('examName')?.invalid && examForm.get('examName')?.touched" class="error">
                         Exam name is required.
                     </div>
                 </div>
 
-                <div class="form-group">
+                <!-- Exam Date -->
+                <div class="input-field">
                     <label for="examDate">Exam Date:</label>
-                    <input 
-                        id="examDate" 
-                        formControlName="examDate" 
-                        type="date" 
-                        class="form-control" 
-                        [attr.min]="minDate" 
-                    />
+                    <input id="examDate" formControlName="examDate" type="date" [attr.min]="minDate" />
                     <div *ngIf="examForm.get('examDate')?.invalid && examForm.get('examDate')?.touched" class="error">
                         Exam date is required.
                     </div>
                 </div>
 
-                <div class="form-group">
+                <!-- Exam Time -->
+                <div class="input-field">
                     <label for="examTime">Exam Time:</label>
-                    <input id="examTime" formControlName="examTime" type="time" class="form-control" />
+                    <input id="examTime" formControlName="examTime" type="time" />
                     <div *ngIf="examForm.get('examTime')?.invalid && examForm.get('examTime')?.touched" class="error">
                         Exam time is required.
                     </div>
                 </div>
 
-                <div class="form-group">
+                <!-- Exam Duration -->
+                <div class="input-field">
                     <label for="examDuration">Exam Duration (minutes):</label>
-                    <input id="examDuration" formControlName="examDuration" type="number" class="form-control" />
+                    <input id="examDuration" formControlName="examDuration" type="number" />
                     <div *ngIf="examForm.get('examDuration')?.invalid && examForm.get('examDuration')?.touched" class="error">
                         Exam duration is required and must be a positive number.
                     </div>
                 </div>
 
-                <div class="form-group">
+                <!-- Exam Description -->
+                <div class="input-field">
                     <label for="examDescription">Exam Description:</label>
-                    <textarea id="examDescription" formControlName="examDescription" class="form-control"></textarea>
+                    <textarea id="examDescription" formControlName="examDescription"></textarea>
                     <div *ngIf="examForm.get('examDescription')?.invalid && examForm.get('examDescription')?.touched" class="error">
                         Exam description is required.
                     </div>
                 </div>
 
-                <div class="form-group">
+                <!-- Difficulty Level -->
+                <div class="input-field">
                     <label for="difficultyLevel">Difficulty Level:</label>
-                    <select id="difficultyLevel" formControlName="difficultyLevel" class="form-control">
+                    <select id="difficultyLevel" formControlName="difficultyLevel">
                         <option *ngFor="let level of difficultyLevels" [value]="level">{{ level }}</option>
                     </select>
                     <div *ngIf="examForm.get('difficultyLevel')?.invalid && examForm.get('difficultyLevel')?.touched" class="error">
@@ -61,9 +59,10 @@
                     </div>
                 </div>
 
-                <div class="form-group">
+                <!-- Negative Marking -->
+                <div class="radio-group">
                     <label>Negative Marking:</label>
-                    <div class="radio-group">
+                    <div class="">
                         <label class="radio-label">
                             <input type="radio" formControlName="negativeMarking" [value]="true" class="radio-input" />
                             Yes
@@ -73,18 +72,21 @@
                             No
                         </label>
                     </div>
-                    <div *ngIf="examForm.get('negativeMarking')?.value === true">
-                        <label for="negativeMarks">Negative Marks:</label>
-                        <input id="negativeMarks" formControlName="negativeMarks" type="number" class="form-control" />
-                        <div *ngIf="examForm.get('negativeMarks')?.invalid && examForm.get('negativeMarks')?.touched" class="error">
-                            Negative marks must be a positive number.
-                        </div>
+                </div>
+
+                <!-- Negative Marks (Conditional) -->
+                <div *ngIf="examForm.get('negativeMarking')?.value === true" class="input-field">
+                    <label for="negativeMarks">Negative Marks:</label>
+                    <input id="negativeMarks" formControlName="negativeMarks" type="number" />
+                    <div *ngIf="examForm.get('negativeMarks')?.invalid && examForm.get('negativeMarks')?.touched" class="error">
+                        Negative marks must be a positive number.
                     </div>
                 </div>
 
-                <div class="form-group">
+                <!-- Exam Type -->
+                <div class="input-field">
                     <label for="examType">Exam Type:</label>
-                    <select id="examType" formControlName="examType" class="form-control">
+                    <select id="examType" formControlName="examType">
                         <option *ngFor="let type of examTypes" [value]="type">{{ type }}</option>
                     </select>
                     <div *ngIf="examForm.get('examType')?.invalid && examForm.get('examType')?.touched" class="error">
@@ -92,30 +94,37 @@
                     </div>
                 </div>
 
-                <div class="form-group">
+                <!-- Capture Screen During Exam -->
+                <div class="radio-group">
                     <label>Capture Screen During Exam:</label>
-                    <div class="radio-group">
-                        <label class="radio-container">
-                            Yes
+                    <div class="">
+                        <label class="radio-label">
                             <input type="radio" formControlName="captureScreenDuringExam" value="true" class="radio-input" />
-                            <span class="radio-custom"></span>
+                            Yes
                         </label>
-                        <label class="radio-container">
-                            No
+                        <label class="radio-label">
                             <input type="radio" formControlName="captureScreenDuringExam" value="false" class="radio-input" />
-                            <span class="radio-custom"></span>
+                            No
                         </label>
-                    </div>
-                    <div *ngIf="examForm.get('captureScreenDuringExam')?.value === 'true'">
-                        <label for="screenCaptureInterval">Screen Capture Interval (seconds):</label>
-                        <input id="screenCaptureInterval" formControlName="screenCaptureInterval" type="number" class="form-control" />
-                        <div *ngIf="examForm.get('screenCaptureInterval')?.invalid && examForm.get('screenCaptureInterval')?.touched" class="error">
-                            Capture interval must be a positive number.
-                        </div>
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary" [disabled]="examForm.invalid">Create Exam</button>
-            </form>
+                <!-- Screen Capture Interval (Conditional) -->
+                <div *ngIf="examForm.get('captureScreenDuringExam')?.value === 'true'" class="input-field">
+                    <label for="screenCaptureInterval">Screen Capture Interval (seconds):</label>
+                    <input id="screenCaptureInterval" formControlName="screenCaptureInterval" type="number" />
+                    <div *ngIf="examForm.get('screenCaptureInterval')?.invalid && examForm.get('screenCaptureInterval')?.touched" class="error">
+                        Capture interval must be a positive number.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="buttons">
+                <button type="submit" [disabled]="examForm.invalid">
+                    <span class="btnText">Create Exam</span>
+                </button>
+            </div>
         </div>
+    </form>
 </div>

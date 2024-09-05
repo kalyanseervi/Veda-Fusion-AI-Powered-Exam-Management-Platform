@@ -107,8 +107,10 @@
 .popup-container{
     margin: auto;
     display: flex;
-    
+    background: var(--color-light);
     box-sizing: border-box; /* Ensures padding and border are included in the container's total width and height */
   }
-
+  .popup-content{
+    color: var(--color-white);
+  }
 

@@ -16,8 +16,7 @@ export class ClassCreateComponent {
   constructor(private classService: ClassService, private router: Router,private fb: FormBuilder) {
     this.classForm = this.fb.group({
       classname: ['', Validators.required],
-      description: [''],
-      academicYear: ['', Validators.required]
+      section: [''],
     });
   }
 
