@@ -1,0 +1,67 @@
+/* Basic Reset and Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    appearance: none;
+    border: 0;
+    text-decoration: none;
+    list-style: none;
+    box-sizing: border-box;
+  }
+  
+  /* Page Container */
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: var(--color-background);
+    color: var(--color-dark);
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  /* Content Styling */
+  .content {
+    text-align: center;
+    padding: 2rem;
+    border-radius: var(--border-radius-2);
+    background: var(--color-white);
+    box-shadow: var(--box-shadow);
+  }
+  
+  /* Heading */
+  h1 {
+    font-size: 6rem;
+    color: var(--color-primary);
+    margin-bottom: 1rem;
+  }
+  
+  /* Text */
+  p {
+    font-size: 1.2rem;
+    color: var(--color-info-dark);
+    margin-bottom: 1rem;
+  }
+  
+  /* Link */
+  a {
+    font-size: 1rem;
+    color: var(--color-primary);
+    text-decoration: underline;
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      padding: 1rem;
+    }
+    
+    h1 {
+      font-size: 4rem;
+    }
+    
+    p {
+      font-size: 1rem;
+    }
+  }
+  

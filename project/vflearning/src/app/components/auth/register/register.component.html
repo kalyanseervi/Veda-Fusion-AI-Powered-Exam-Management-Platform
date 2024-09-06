@@ -1,7 +1,8 @@
-<div class="container">
+<div class="container main-banner">
+    <div class="reg-heading">Registration</div>
   <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" class="form-container">
       <div *ngIf="stepIndex === 0">
-          <h3 >Step 1: Personal Information</h3>
+          
           <div class="form-group">
               <label for="name">Name</label>
               <input id="name" formControlName="name" type="text" />
@@ -22,7 +23,7 @@
 
 
       <div *ngIf="stepIndex === 1">
-          <h3>Step 3: Academic Information</h3>
+          
 
           <div class="form-group">
               <label for="instituteName">School/Institute Name</label>
@@ -39,7 +40,7 @@
       </div>
 
       <div *ngIf="stepIndex === 2">
-          <h3>Step 4: Department</h3>
+         
          
           <div class="form-group">
             <label for="password">Password:</label>

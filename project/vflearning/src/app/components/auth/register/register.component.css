@@ -5,6 +5,20 @@
     justify-content: center;
     height: 100vh;
   }
+  .main-banner {
+    background-image: url(/assets/images/banner-bg.jpg);
+    background-position: right bottom;
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding: 170px 0px 120px 0px;
+  }
+  .reg-heading{
+    color: var(--color-white);
+    word-spacing:50px;
+    font-size: 36px;
+    font-weight: 800;
+  }
+  
   
   .form-container {
     background: var(--color-white);

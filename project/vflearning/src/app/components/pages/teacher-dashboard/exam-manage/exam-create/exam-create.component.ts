@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ExamService } from '../../../../../services/exam/exam.service';
 import {
   FormBuilder,
@@ -7,20 +7,36 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { FlatpickrModule } from 'angularx-flatpickr';
 import { CommonModule } from '@angular/common';
+import flatpickr from 'flatpickr';
+import moment from 'moment';
+
+
 
 @Component({
   selector: 'app-exam-create',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink,FlatpickrModule],
   templateUrl: './exam-create.component.html',
   styleUrls: ['./exam-create.component.css'], // Fix: Use styleUrls instead of styleUrl
 })
 export class ExamCreateComponent implements OnInit {
+  @ViewChild('examDateInput') examDateInput!: ElementRef;
   examForm: FormGroup;
   examTypes: string[] = ['multiple choice', 'subjective', 'both'];
   difficultyLevels: string[] = ['easy', 'medium', 'hard'];
   minDate: string | undefined;
+
+  // Define a list of holidays (Add as required)
+  holidays = [
+    '2024-01-26',  // Republic Day
+    '2024-08-15',  // Independence Day
+    '2024-10-02',  // Gandhi Jayanti
+    // Add more holidays as needed
+  ];
+
+
 
   constructor(
     private fb: FormBuilder,
@@ -52,6 +68,8 @@ export class ExamCreateComponent implements OnInit {
       }
     });
 
+
+
     // Enable/Disable screenCaptureInterval based on captureScreenDuringExam
     this.examForm
       .get('captureScreenDuringExam')
@@ -73,6 +91,8 @@ export class ExamCreateComponent implements OnInit {
     this.minDate = today.toISOString().split('T')[0];
   }
 
+
+
   onSubmit(): void {
     if (this.examForm.valid) {
       // Create FormData and append the form values
@@ -83,12 +103,12 @@ export class ExamCreateComponent implements OnInit {
           formData.append(key, control.value);
         }
       });
-  
+
       // Log FormData entries
       formData.forEach((value, key) => {
         console.log(`${key}: ${value}`);
       });
-  
+
       // Call the service to create the exam
       this.examService.createExam(formData).subscribe(
         (response) => {

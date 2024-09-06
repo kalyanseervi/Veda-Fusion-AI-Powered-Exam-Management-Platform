@@ -39,4 +39,8 @@ export class ExamGenerateResultComponent implements OnInit {
       }
     );
   }
+
+  showresponse():void{
+    console.log(this.studentResponseList)
+  }
 }

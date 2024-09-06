@@ -1,7 +1,5 @@
 
 <h1 class="assigned-exam-title">Exam Result</h1>
-
-
 <table class="assigned-exam-table">
     <thead>
     <tr>
@@ -16,7 +14,7 @@
         <td>{{i+1}}</td>
         <td>{{stdlist.userId.name}}</td>
         <td>{{stdlist.responses.length}}</td>
-        <td><button class="action-button">Show Response</button></td>
+        <td><button class="action-button" (click)="showresponse()">Show Response</button></td>
     </tr>
 </tbody>
 </table>

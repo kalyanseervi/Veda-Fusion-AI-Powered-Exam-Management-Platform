@@ -23,17 +23,13 @@ export class ExamPortalService {
 
   submitResponses(
     examId: string,
-
     responses: any[]
   ): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.getToken()}`,
     });
-    return this.http.post<any>(`${this.baseUrl}/quesresponseAll`, {
-      examId,
-      responses,
-      headers,
-    });
+    const body = {examId:examId,responses:responses}
+    return this.http.post<any>(`${this.baseUrl}/quesresponseAll`,body, {headers});
   }
 
   submitResponseSingleId(

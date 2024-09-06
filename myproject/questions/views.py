@@ -80,7 +80,8 @@ class GenerateMCQView(APIView):
         question_bank,
     ):
         prompt = (
-            f"Generate questions based on the provided text '{text}' with the following details:\n"
+            f"Generate questions based on the provided text with the following details you must follow my question types(if there is count greater then 0 thne dont generate questions on that type)\n"
+            f"Text: {text}\n"
             f"Question Types: {json.dumps(question_types)}\n"
             f"Difficulty Levels: {json.dumps(difficulty_levels)}\n"
             f"Curriculum Alignment: {curriculum_alignment}\n"
@@ -90,8 +91,9 @@ class GenerateMCQView(APIView):
             f"question bank: {question_bank}\n"
             f"response format: {'json format in well structured without any other symbols and other text'}\n"
             f"Ensure that each question is unique and formatted correctly. Return the response in JSON data "
-            f"with fields for 'question', 'options', and 'answer'."
+            f"with fields for json is  Questions('question', 'options','answer','marks''questins type(according to given prompt question type)'.)"
         )
+       
         try:
             response = self.model.generate_content(prompt, stream=True)
             for chunk in response:
@@ -154,7 +156,9 @@ class GenerateMCQView(APIView):
         logger.info(f"Received prompt data: {prompt_data}")
 
         if prompt_data["pdf_input"]:
-            pdf_file = request.FILES.get("pdfFile")
+            print(prompt_data["pdf_input"])
+            pdf_file = request.FILES.get("pdfInput")
+            print(pdf_file)
             if not pdf_file:
                 return Response(
                     {"error": "PDF file is required"},

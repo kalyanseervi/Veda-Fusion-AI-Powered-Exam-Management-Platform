@@ -1,5 +1,5 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { QuestionsService } from '../../../../../services/questions/questions.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; // Import FormsModule
@@ -12,6 +12,9 @@ import { FormsModule } from '@angular/forms'; // Import FormsModule
   styleUrls: ['./exam-questions-list.component.css'] // Ensure correct spelling here
 })
 export class ExamQuestionsListComponent implements OnInit {
+
+
+  @Input() selectedExamID!: string;
   questions: any[] = [];
   isEditing: { [key: string]: boolean } = {}; 
   total: number = 0;
@@ -26,13 +29,14 @@ export class ExamQuestionsListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadQuestions();
+    console.log("my exam id is now here",this.selectedExamID)
   }
 
   loadQuestions(): void {
     const params = {
       page: this.page,
       limit: this.limit,
-      examId: this.examId || undefined,
+      examId: this.selectedExamID || undefined,
       type: this.type || undefined,
       sortBy: this.sortBy || undefined,
       order: this.order || 'asc'
@@ -57,7 +61,7 @@ export class ExamQuestionsListComponent implements OnInit {
   }
 
   examQuestionsEdit(question:any){
-    this.examQuestionsService.updateExamQuestion(question._id, question).subscribe(
+    this.examQuestionsService.updateExamQuestion(question._id, question,this.selectedExamID).subscribe(
       (response) => {
         console.log('Question updated successfully:', response);
         this.isEditing[question._id] = false; // Exit edit mode

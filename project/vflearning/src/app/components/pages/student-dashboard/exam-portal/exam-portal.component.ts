@@ -25,7 +25,7 @@ export class ExamPortalComponent implements OnInit, OnDestroy {
   currentQuestionIndex: number | undefined;
   currentQuestion: any;
   @Input() totalTime: number | undefined;
-
+  Message: string = '';
   isRunning = true;
   fullscreenEnabled = false;
   isExamPortalEnabled = false;
@@ -216,6 +216,7 @@ export class ExamPortalComponent implements OnInit, OnDestroy {
       .submitResponses(this.examId, responses)
       .subscribe(
         (response) => {
+          this.Message = `Congratulations! You have successfully Submited your Exam`;
           console.log('Responses submitted successfully:', response);
           this.authservice.logout();
           // Optionally, navigate to a confirmation page or display a success message

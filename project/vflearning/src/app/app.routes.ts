@@ -40,9 +40,11 @@ import { StudentExamsComponent } from './components/pages/student-dashboard/stud
 import { ExamAssignComponent } from './components/pages/teacher-dashboard/exam-manage/exam-assign/exam-assign.component';
 import { ExamPortalComponent } from './components/pages/student-dashboard/exam-portal/exam-portal.component';
 import { ExamGenerateResultComponent } from './components/pages/teacher-dashboard/exam-generate-result/exam-generate-result.component';
+import { VflearningComponent } from './components/vflearning/vflearning.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: '', redirectTo: '/vflearning', pathMatch: 'full' },
+  { path: 'vflearning', component: VflearningComponent },
 
   {
     path: 'dashboard/admin',
@@ -145,5 +147,5 @@ export const routes: Routes = [
   { path: 'verify/:token', component: VerifyEmailComponent },
   { path: 'roles', component: RolesComponent, canActivate: [AuthGuard] },
   { path: 'users', component: UsersComponent, canActivate: [AuthGuard] },
-  { path: '**', redirectTo: '/login' },
+  { path: '**', redirectTo: '/unauthorized' },
 ];

@@ -13,7 +13,7 @@ const {decodeTokenFromParams} =require('../middleware/auth');
 const router = express.Router();
 
 const JWT_SECRET = process.env.JWT_SECRET;
-const JWT_EXPIRES_IN = '1h';
+const JWT_EXPIRES_IN = '4h';
 
 const sendVerificationEmail = async (user, token) => {
     const verificationUrl = `http://localhost:4200/verify/${token}`;

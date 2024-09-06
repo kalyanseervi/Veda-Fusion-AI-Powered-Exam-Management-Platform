@@ -7,6 +7,10 @@ const ExamSchema = new mongoose.Schema(
     examDate: { type: Date, required: true }, // Use Date type to store both date and time
     examTime: { type: String, required: true }, // Ensure consistent time format
     examDuration: { type: Number, required: true }, // Duration in minutes
+
+    // Add examEndTime to store when the exam will end
+    examEndTime: { type: Date },
+
     examDescription: { type: String, required: true },
     examStatus: { 
         type: String, 
@@ -55,7 +59,13 @@ const ExamSchema = new mongoose.Schema(
   }
 );
 
+// Hook to calculate examEndTime before saving the exam
+ExamSchema.pre('save', function (next) {
+  // Combine examDate and examTime and calculate the end time
+  const examStart = moment(`${this.examDate} ${this.examTime}`, "YYYY-MM-DD HH:mm");
+  this.examEndTime = examStart.add(this.examDuration, 'minutes').toDate();
 
-
+  next();
+});
 
 module.exports = mongoose.model("Exam", ExamSchema);

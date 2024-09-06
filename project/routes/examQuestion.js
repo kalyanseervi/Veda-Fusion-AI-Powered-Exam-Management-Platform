@@ -169,34 +169,31 @@ router.get("/exam-questions/:id", auth, async (req, res) => {
   }
 });
 // Update an existing ExamQuestions document by ID
-router.put("/exam-questions/:id", auth, async (req, res) => {
+router.put("/exam-questions/:examId/question/:id", auth, async (req, res) => {
   try {
     // Retrieve the existing document
-    const examQuestion = await ExamQuestions.findById(req.params.id);
+    const { examId, id } = req.params;
+    const updateData = req.body;
 
-    if (!examQuestion) {
-      return res.status(404).json({ msg: "Exam question not found" });
+    // Find the exam and update the specific question by its ID
+    const updatedExam = await ExamQuestions.findOneAndUpdate(
+      {
+        examId: examId,
+        "questions._id": id,  // Match the specific question in the array
+      },
+      {
+        $set: {
+          "questions.$": updateData  // Update the matched question
+        }
+      },
+      { new: true }
+    );
+
+    if (!updatedExam) {
+      return res.status(404).json({ msg: "Question or exam not found" });
     }
 
-    // Merge the updates with the existing document
-    // You can selectively update fields or handle nested updates here
-    const updatedFields = req.body;
-
-    // Ensure only allowed fields are updated
-    Object.keys(updatedFields).forEach((key) => {
-      if (key !== "examId" && key !== "questions") {
-        examQuestion[key] = updatedFields[key];
-      }
-    });
-
-    // Handle updates for nested fields (e.g., questions)
-    if (updatedFields.questions) {
-      examQuestion.questions = updatedFields.questions;
-    }
-
-    // Validate and save the updated document
-    await examQuestion.save();
-    res.status(200).json(examQuestion);
+    res.status(200).json(updatedExam);
   } catch (err) {
     res.status(400).json({ msg: err.message });
   }

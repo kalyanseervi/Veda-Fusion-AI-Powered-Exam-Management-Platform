@@ -34,6 +34,9 @@ export class ExamQuestionsManageComponent implements OnInit {
   completeMcqOutput:any
   isProcessing = false;
   errorMessage: string | null = null;
+  examId: string='';
+  pdfFile: File | null = null;
+  
 
   constructor(
     private route: ActivatedRoute,
@@ -48,6 +51,7 @@ export class ExamQuestionsManageComponent implements OnInit {
     this.selectedExamId = this.route.snapshot.paramMap.get('selectedExamId');
     this.initializeForm();
     // You can now use the selectedExamId in your component logic
+    
     console.log('Selected Exam ID:', this.selectedExamId);
   }
 
@@ -65,6 +69,14 @@ export class ExamQuestionsManageComponent implements OnInit {
 
   closePopup(): void {
     this.isPopupVisible = false;
+  }
+
+  // Method to handle file selection and update the form with selected file
+  onFileChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length) {
+      this.pdfFile = input.files[0]; // Store the selected file in pdfFile variable
+    }
   }
 
   initializeForm() {
@@ -143,11 +155,12 @@ export class ExamQuestionsManageComponent implements OnInit {
         }
       });
 
-      // Append PDF input if available
-      const pdfInput = this.examForm.get('pdfInput')?.value;
-      if (pdfInput) {
-        formData.append('pdfInput', pdfInput);
-      }
+      // Append PDF file if available
+    if (this.pdfFile instanceof File) {  // Check if pdfFile is a File object
+      formData.append('pdfInput', this.pdfFile, this.pdfFile.name);  // Append file
+    } else {
+      console.error('PDF file is not valid');
+    }
 
       // Subscribe to the response stream
       this.examService.genQuestions(formData).subscribe({
@@ -168,6 +181,10 @@ export class ExamQuestionsManageComponent implements OnInit {
             this.iscompleteMcqOutput =true
 
             this.completeMcqOutput =parsedResponse.questions;
+            if(!this.completeMcqOutput){
+              this.completeMcqOutput =parsedResponse;
+
+            }
           } catch (e) {
             console.error('Error parsing final response:', e);
             this.errorMessage = 'Error parsing final response';

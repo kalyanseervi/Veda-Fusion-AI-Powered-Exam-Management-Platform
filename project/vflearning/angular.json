@@ -28,7 +28,10 @@
               }
             ],
             "styles": [
-              "src/styles.css"
+              "src/custom-theme.scss",
+              "src/styles.css",
+              "node_modules/flatpickr/dist/flatpickr.min.css"
+              
             ],
             "scripts": [],
             "server": "src/main.server.ts",

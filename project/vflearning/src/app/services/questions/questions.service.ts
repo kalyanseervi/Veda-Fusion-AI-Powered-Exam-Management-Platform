@@ -15,6 +15,7 @@ export class QuestionsService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.getToken()}`,
     });
+    console.log("this is my data ",data)
     return this.http
       .post(`${this.baseUrl}/exam-questions`, data, { headers })
       .pipe(catchError(this.handleError));
@@ -34,7 +35,7 @@ export class QuestionsService {
         }
       });
     }
-
+    console.log("some of us0,",params)
     return this.http
       .get(`${this.baseUrl}/exam-questions`, { params: httpParams, headers })
       .pipe(catchError(this.handleError));
@@ -61,12 +62,12 @@ export class QuestionsService {
   }
 
   // Update an existing exam question by ID
-  updateExamQuestion(id: string, data: any): Observable<any> {
+  updateExamQuestion(id: string, data: any,examId:string): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.getToken()}`,
     });
     return this.http
-      .put(`${this.baseUrl}/exam-questions/${id}`, data, { headers })
+      .put(`${this.baseUrl}/exam-questions/${examId}/question/${id}`, data, { headers })
       .pipe(catchError(this.handleError));
   }
 

@@ -15,7 +15,7 @@
                 <!-- Exam Date -->
                 <div class="input-field">
                     <label for="examDate">Exam Date:</label>
-                    <input id="examDate" formControlName="examDate" type="date" [attr.min]="minDate" />
+                    <input id="examDate" formControlName="examDate" type="date" [attr.min]="minDate"   />
                     <div *ngIf="examForm.get('examDate')?.invalid && examForm.get('examDate')?.touched" class="error">
                         Exam date is required.
                     </div>

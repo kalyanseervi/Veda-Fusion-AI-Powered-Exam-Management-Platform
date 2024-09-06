@@ -132,7 +132,7 @@ router.post("/quesresponseAll", auth, async (req, res) => {
   try {
     const userId = req.user._id;
     const { examId, responses } = req.body;
-    console.log(responses);
+    console.log("thos what comming",responses);
 
     if (examId && userId) {
       // Create a new QuesResponse document or update the existing one
