@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="04d91824-7737-46eb-bf89-f37866b365a8" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/project/combined.log" beforeDir="false" afterPath="$PROJECT_DIR$/project/combined.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/routes/examResult.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/routes/examResult.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/routes/school.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/routes/school.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/routes/student.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/routes/student.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/routes/teacher.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/routes/teacher.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/vflearning/src/app/app.routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/vflearning/src/app/app.routes.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/vflearning/src/app/components/pages/admin-dashboard/admin-dashboard.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/project/vflearning/src/app/components/pages/admin-dashboard/admin-dashboard.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/vflearning/src/app/components/pages/student-dashboard/student-dashboard.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/project/vflearning/src/app/components/pages/student-dashboard/student-dashboard.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/vflearning/src/app/components/pages/teacher-dashboard/exam-generate-result/exam-generate-result.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/project/vflearning/src/app/components/pages/teacher-dashboard/exam-generate-result/exam-generate-result.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/vflearning/src/app/components/pages/teacher-dashboard/exam-generate-result/exam-generate-result.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/vflearning/src/app/components/pages/teacher-dashboard/exam-generate-result/exam-generate-result.component.ts" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": -1
+}]]></component>
+  <component name="ProjectId" id="2lp9CgvnxKC9BVjtMwmKNp2vkYy" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="04d91824-7737-46eb-bf89-f37866b365a8" name="Changes" comment="" />
+      <created>1725866025802</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1725866025802</updated>
+    </task>
+    <servers />
+  </component>
+</project>

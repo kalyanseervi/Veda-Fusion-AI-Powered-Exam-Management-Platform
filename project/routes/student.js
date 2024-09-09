@@ -197,7 +197,7 @@ router.put("/:id", auth, async (req, res) => {
     } = req.body;
 
     // Ensure the user is an admin
-    if (req.user.role !== "admin") {
+    if (req.user.role.name !== "admin") {
       return res
         .status(403)
         .json({ msg: "Access denied. Only admins can update student." });
@@ -238,8 +238,9 @@ router.put("/:id", auth, async (req, res) => {
 // Delete a teacher
 router.delete("/:id", auth, async (req, res) => {
   try {
+    console.log('stidemt ',req.user)
     // Ensure the user is an admin
-    if (req.user.role !== "admin") {
+    if (req.user.role.name !== "admin") {
       return res
         .status(403)
         .json({ msg: "Access denied. Only admins can delete students." });

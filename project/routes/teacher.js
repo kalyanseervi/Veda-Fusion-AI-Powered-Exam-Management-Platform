@@ -202,7 +202,7 @@ router.put("/:id", auth, async (req, res) => {
     } = req.body;
 
     // Ensure the user is an admin
-    if (req.user.role !== "admin") {
+    if (req.user.role.name !== "admin") {
       return res
         .status(403)
         .json({ msg: "Access denied. Only admins can update teachers." });
@@ -239,7 +239,7 @@ router.put("/:id", auth, async (req, res) => {
 router.delete("/:id", auth, async (req, res) => {
   try {
     // Ensure the user is an admin
-    if (req.user.role !== "admin") {
+    if (req.user.role.name !== "admin") {
       return res
         .status(403)
         .json({ msg: "Access denied. Only admins can delete teachers." });
@@ -262,6 +262,8 @@ router.delete("/:id", auth, async (req, res) => {
 
 router.get("/studentByClassSubjects", auth, async (req, res) => {
     try {
+
+      console.log('studnet by class teacher',req.user)
         if (req.user.role.name !== "teacher") { // Assuming `role` is populated
             return res.status(403).json({ msg: "Access denied. Only teachers can access students." });
         }
@@ -281,6 +283,7 @@ router.get("/studentByClassSubjects", auth, async (req, res) => {
         const students = await Student.find({
             studentClass: { $in: classIds },
             studentsubjects: { $in: subjectIds },
+            school:{$in:req.user.school}
         })
             .populate("studentClass")
             .populate("studentsubjects")

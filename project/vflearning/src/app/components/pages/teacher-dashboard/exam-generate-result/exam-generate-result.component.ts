@@ -31,8 +31,8 @@ export class ExamGenerateResultComponent implements OnInit {
   loadStudents(): void {
     this.genResult.studnetOfResult(this.selectedExamId).subscribe(
       (response: any) => {
-        console.log(response);
-        this.studentResponseList = response;
+        console.log(response.results);
+        this.studentResponseList = response.results;
       },
       (error) => {
         console.log(error);
@@ -40,7 +40,7 @@ export class ExamGenerateResultComponent implements OnInit {
     );
   }
 
-  showresponse():void{
-    console.log(this.studentResponseList)
+  showresponse(arg:string):void{
+    console.log(arg)
   }
 }

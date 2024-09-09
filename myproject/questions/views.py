@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
-from django.http import StreamingHttpResponse
+from django.http import JsonResponse, StreamingHttpResponse
 import fitz  # PyMuPDF
 import logging
 import google.generativeai as genai
@@ -13,12 +13,16 @@ import json
 logger = logging.getLogger(__name__)
 
 
+api_key = "AIzaSyCwzeQSB_vybOUwMvF_GBIDujIGIv_TXKI"  # Replace with the actual secure method for API keys
+model = genai.GenerativeModel("gemini-1.5-flash")
+# genai.configure(api_key=api_key)
+
+
 class GenerateMCQView(APIView):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        api_key = "AIzaSyCwzeQSB_vybOUwMvF_GBIDujIGIv_TXKI"  # Replace with the actual secure method for API keys
         genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel("gemini-1.5-flash")
+        self.model = model
 
     def generate_with_modified_first_chunk(self, generator):
         first_chunk = True
@@ -93,7 +97,7 @@ class GenerateMCQView(APIView):
             f"Ensure that each question is unique and formatted correctly. Return the response in JSON data "
             f"with fields for json is  Questions('question', 'options','answer','marks''questins type(according to given prompt question type)'.)"
         )
-       
+
         try:
             response = self.model.generate_content(prompt, stream=True)
             for chunk in response:
@@ -121,31 +125,37 @@ class GenerateMCQView(APIView):
             "pdf_input": request.data.get("pdfInput", None),
             "question_types": {
                 "mcq": {
-                    "count": request.data.get("questionTypes[mcq][count]",0),
-                    "marks": request.data.get("questionTypes[mcq][marks]",0),
+                    "count": request.data.get("questionTypes[mcq][count]", 0),
+                    "marks": request.data.get("questionTypes[mcq][marks]", 0),
                 },
                 "short_answer": {
-                    "count": request.data.get("questionTypes[short_answer][count]",0),
-                    "marks": request.data.get("questionTypes[short_answer][marks]",0),
-                    "word_count": 30
+                    "count": request.data.get("questionTypes[short_answer][count]", 0),
+                    "marks": request.data.get("questionTypes[short_answer][marks]", 0),
+                    "word_count": 30,
                 },
                 "long_answer": {
-                    "count": request.data.get("questionTypes[long_answer][count]",0),
-                    "marks": request.data.get("questionTypes[long_answer][marks]",0),
-                    "word_count": 500
+                    "count": request.data.get("questionTypes[long_answer][count]", 0),
+                    "marks": request.data.get("questionTypes[long_answer][marks]", 0),
+                    "word_count": 500,
                 },
                 "yes_no": {
-                    "count": request.data.get("questionTypes[yes_no][count]",0),
-                    "marks": request.data.get("questionTypes[yes_no][marks]",0),
+                    "count": request.data.get("questionTypes[yes_no][count]", 0),
+                    "marks": request.data.get("questionTypes[yes_no][marks]", 0),
                 },
                 "fill_in_the_blanks": {
-                    "count": request.data.get("questionTypes[fill_in_the_blanks][count]",0),
-                    "marks": request.data.get("questionTypes[fill_in_the_blanks][marks]",0),
+                    "count": request.data.get(
+                        "questionTypes[fill_in_the_blanks][count]", 0
+                    ),
+                    "marks": request.data.get(
+                        "questionTypes[fill_in_the_blanks][marks]", 0
+                    ),
                 },
             },
             "difficulty_levels": request.data.get("difficulty_levels", "easy").strip(),
             "total_marks": request.data.get("total_marks", 0),
-            "curriculum_alignment": request.data.get("curriculum_alignment", "").strip(),
+            "curriculum_alignment": request.data.get(
+                "curriculum_alignment", ""
+            ).strip(),
             "real_world_relevance": request.data.get("real_world_relevance", True),
             "visual_aids": request.data.get("visual_aids", True),
             "question_bank": request.data.get("question_bank", True),
@@ -215,12 +225,14 @@ class GenerateMCQView(APIView):
                 for chunk in generator:
                     chunks.append(chunk)  # Collect all chunks into a list
                     yield chunk  # Stream the raw chunk to the client progressively
-                
+
                 # Combine all chunks into a single response
                 full_response = "".join(chunks)
 
                 # Clean the final combined response once (remove backticks, etc.)
-                cleaned_full_response = full_response.replace("```json", "").replace("```", "").strip()
+                cleaned_full_response = (
+                    full_response.replace("```json", "").replace("```", "").strip()
+                )
 
                 try:
                     # Parse the cleaned response as JSON to ensure it's valid
@@ -240,9 +252,62 @@ class GenerateMCQView(APIView):
                 yield json.dumps({"error": str(e)})
 
         # Stream the chunks followed by the final cleaned JSON response
-        response = StreamingHttpResponse(response_stream(), content_type="application/json")
+        response = StreamingHttpResponse(
+            response_stream(), content_type="application/json"
+        )
         response["Cache-Control"] = "no-cache"
         response["Content-Disposition"] = 'inline; filename="mcqs.json"'
 
         return response
 
+
+class Evaluate(APIView):
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        genai.configure(api_key=api_key)
+        self.model = model
+
+        
+    def post(self, request, *args, **kwargs):
+        # Parse the JSON request body
+        try:
+            data = json.loads(request.body)
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Invalid JSON"}, status=400)
+
+        question = data.get("question")
+        user_answer = data.get("answer")
+        max_marks = data.get("max_marks", 0)
+
+        if not question or not user_answer:
+            return JsonResponse(
+                {"error": "Question and answer are required"}, status=400
+            )
+
+        # Validate the answer
+        is_correct = self.validate_answer(question, user_answer, max_marks)
+        print(is_correct)
+
+        return JsonResponse({"isCorrect": is_correct})
+
+    def validate_answer(self, question, user_answer, max_marks):
+        # Create the prompt for the model
+        prompt = (
+            f"Question: {question['title']}\n"
+            f"User Answer: {user_answer}\n"
+            f"Correct Answer: {question['answer']}\n"
+            f"Evaluate if the user's answer is correct. Respond with 'true' if the answer is correct, otherwise 'false' and give me marks out of my max_marks {max_marks}."
+        )
+
+        try:
+            # Use the model to evaluate the answer
+            response = model.generate_content(prompt, stream=False)
+            # Assuming the model response is directly in the form of 'true' or 'false'
+
+            print(response)
+            is_correct = response.strip().lower() == "true"
+            return is_correct
+        except Exception as e:
+            print(f"Error using Gemini API: {e}")
+            return False

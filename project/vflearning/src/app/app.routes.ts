@@ -53,6 +53,7 @@ export const routes: Routes = [
     data: { role: 'admin' },
     children: [
       { path: 'home-page', component: HomepageComponent },
+      { path: '', component: HomepageComponent },
       {
         path: 'teacher-details',
         component: TeacherDetailsComponent,
@@ -95,6 +96,7 @@ export const routes: Routes = [
     canActivate: [AuthGuard, RoleGuard],
     data: { role: 'teacher' },
     children: [
+      { path: '', component: StudentDetailsComponent },
       { path: 'student-details', component: StudentDetailsComponent },
       {
         path: 'exam-questions-manage/:selectedExamId',
@@ -136,6 +138,7 @@ export const routes: Routes = [
     canActivate: [AuthGuard, RoleGuard],
     data: { role: 'student' },
     children: [
+      { path: '', component: DashboardComponent },
       { path: 'dashboard', component: DashboardComponent },
       { path: 'exams', component: StudentExamsComponent },
       { path: 'exam-portal/:examId', component: ExamPortalComponent },

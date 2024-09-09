@@ -5,16 +5,26 @@
     <tr>
         <th>Sr.No.</th>
         <th>Student Name</th>
-        <th>Attempted Ques</th>
+        <th>Total Questions</th>
+        <th>Attempted Questions</th>
+        <th>Total Marks</th>
+        <th>Marks Obtained</th>
+        <th>Percentage</th>
+        <th>Rank</th>
         <th>Action</th>
     </tr>
 </thead>
 <tbody>
     <tr *ngFor="let stdlist of studentResponseList; let i = index">
         <td>{{i+1}}</td>
-        <td>{{stdlist.userId.name}}</td>
-        <td>{{stdlist.responses.length}}</td>
-        <td><button class="action-button" (click)="showresponse()">Show Response</button></td>
+        <td>{{stdlist.user.name}}</td>
+        <td>{{stdlist.result.totalQuestions}}</td>
+        <td>{{stdlist.result.attemptedQuestions}}</td>
+        <td>{{stdlist.result.totalMarks}}</td>
+        <td>{{stdlist.result.obtainedMarks}}</td>
+        <td>{{stdlist.result.percentage}}</td>
+        <td>{{stdlist.rank}}</td>
+        <td><button class="action-button" (click)="showresponse(stdlist.user.id)">Show Response</button></td>
     </tr>
 </tbody>
 </table>
