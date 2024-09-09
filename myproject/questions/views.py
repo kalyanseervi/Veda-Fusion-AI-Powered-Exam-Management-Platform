@@ -14,14 +14,16 @@ logger = logging.getLogger(__name__)
 
 
 api_key = "AIzaSyCwzeQSB_vybOUwMvF_GBIDujIGIv_TXKI"  # Replace with the actual secure method for API keys
-model = genai.GenerativeModel("gemini-1.5-flash")
-# genai.configure(api_key=api_key)
+
+
+
 
 
 class GenerateMCQView(APIView):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         genai.configure(api_key=api_key)
+        model = genai.GenerativeModel("gemini-1.5-flash")
         self.model = model
 
     def generate_with_modified_first_chunk(self, generator):
@@ -261,18 +263,20 @@ class GenerateMCQView(APIView):
         return response
 
 
+
 class Evaluate(APIView):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         genai.configure(api_key=api_key)
+        model = genai.GenerativeModel("gemini-1.5-flash")
         self.model = model
 
-        
     def post(self, request, *args, **kwargs):
         # Parse the JSON request body
         try:
             data = json.loads(request.body)
+           
         except json.JSONDecodeError:
             return JsonResponse({"error": "Invalid JSON"}, status=400)
 
@@ -281,33 +285,68 @@ class Evaluate(APIView):
         max_marks = data.get("max_marks", 0)
 
         if not question or not user_answer:
-            return JsonResponse(
-                {"error": "Question and answer are required"}, status=400
-            )
+            return JsonResponse({"error": "Question and answer are required"}, status=400)
 
         # Validate the answer
-        is_correct = self.validate_answer(question, user_answer, max_marks)
-        print(is_correct)
+        is_correct, awarded_marks, explanation = self.validate_answer(question, user_answer, max_marks)
+        
 
-        return JsonResponse({"isCorrect": is_correct})
+        return JsonResponse({
+            "isCorrect": is_correct,
+            "awardedMarks": awarded_marks,
+            "explanation": explanation
+        })
 
     def validate_answer(self, question, user_answer, max_marks):
-        # Create the prompt for the model
+        # Create a more detailed prompt for evaluating the answer
         prompt = (
-            f"Question: {question['title']}\n"
+            f"Question: {question}\n"
             f"User Answer: {user_answer}\n"
-            f"Correct Answer: {question['answer']}\n"
-            f"Evaluate if the user's answer is correct. Respond with 'true' if the answer is correct, otherwise 'false' and give me marks out of my max_marks {max_marks}."
+            f"Max Marks: {max_marks}\n"
+            f"my reponse is must in json format and field is result(is_correct, awarded_marks, explanation) follow this format"
+            f"Evaluate the answer. Respond with 'true' if the answer is correct or 'false' if incorrect, "
+            f"along with the awarded marks out of {max_marks}. also check answer according to my mar_marks weightage"
+            f"Also provide a detailed explanation of why the marks were awarded and why not."
         )
 
         try:
             # Use the model to evaluate the answer
-            response = model.generate_content(prompt, stream=False)
-            # Assuming the model response is directly in the form of 'true' or 'false'
+            response = self.model.generate_content(prompt, stream=False)
 
-            print(response)
-            is_correct = response.strip().lower() == "true"
-            return is_correct
+            # Clean the response text by removing backticks and any other unwanted characters
+            if response.text:
+                cleaned_text = response.text.strip().replace("```", "")  # Remove backticks
+
+                # Remove 'json' string if it appears in the response
+                if cleaned_text.startswith('json'):
+                    cleaned_text = cleaned_text[4:].strip()  # Remove the 'json' keyword
+
+                print(cleaned_text)
+                # Try to parse the cleaned response as JSON
+                try:
+                    json_response = json.loads(cleaned_text)
+                    
+                    # Extract correctness, marks, and explanation from the JSON result
+                    result = json_response.get("result", {})
+                    correctness = result.get("is_correct", False)
+                    awarded_marks = result.get("awarded_marks", 0)
+                    explanation = result.get("explanation", "No explanation available")
+
+                    # Return the extracted values
+                    return correctness, awarded_marks, explanation
+                except json.JSONDecodeError:
+                    # Handle the case where the API response is not valid JSON
+                    print("Invalid JSON received from Gemini API.")
+                    return False, 0, "No explanation available."
+
+            else:
+                print("No valid response found from the API.")
+                return False, 0, "No explanation available."
+
         except Exception as e:
             print(f"Error using Gemini API: {e}")
-            return False
+            return False, 0, "Error evaluating the answer."
+
+
+
+
