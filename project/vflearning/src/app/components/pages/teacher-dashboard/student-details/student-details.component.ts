@@ -28,7 +28,7 @@ export class StudentDetailsComponent implements OnInit {
   classStudents(): void {
     this.teacherservice.studdentBySubjects().subscribe(
       (students) => {
-        console.log('Students fetched: ', students);
+       
         this.students = students; // Store the students data
       },
       (error) => {
@@ -57,12 +57,12 @@ export class StudentDetailsComponent implements OnInit {
         } else {
           console.error('Invalid student data');
         }
-        console.log('Student details fetched: ', student);
+       
       },
       (error) => {
         console.error('Error fetching student details: ', error);
       }
     );
-    console.log('my argument ', arg0);
+    
   }
 }

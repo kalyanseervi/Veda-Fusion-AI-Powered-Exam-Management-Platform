@@ -22,7 +22,7 @@ export class SubjectListComponent implements OnInit {
   loadSubjects(): void {
     this.subjectService.getSubjects().subscribe(data => {
       this.subjects = data;
-      console.log("subjects", data)
+     
     });
   }
 

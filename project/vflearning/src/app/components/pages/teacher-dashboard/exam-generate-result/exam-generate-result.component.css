@@ -1,60 +1,119 @@
-.assigned-exam-title {
-    font-size: 2rem;
-    font-weight: 500;
-    margin-bottom: 2rem;
-    color: var(--color-dark);
-  }
-  
-  .assigned-exam-table {
-    width: 100%;
-    border-collapse: collapse;
-    border: 1px solid var(--color-info-light);
-    background-color: var(--color-white);
-    box-shadow: var(--box-shadow);
-  }
-  
-  .assigned-exam-table th,
-  .assigned-exam-table td {
-    border: 1px solid var(--color-info-light);
-    padding: 1rem;
-    text-align: center;
-    color: var(--color-dark-variant);
-  }
-  
-  .assigned-exam-table th {
-    background-color: var(--color-primary);
-    color: var(--color-white);
-    font-weight: 600;
-  }
-  
-  .assigned-exam-table tbody tr:nth-child(even) {
-    background-color: var(--color-info-light);
-  }
-  
-  .action-button {
-    background-color: var(--color-primary);
-    color: var(--color-white);
-    padding: 0.5rem 1rem;
-    border-radius: var(--border-radius-1);
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .action-button:hover {
-    background-color: var(--color-primary-variant);
-  }
-  
-  .completed-exam-message {
-    text-align: center;
-    color: var(--color-success);
-    font-weight: 500;
-  }
-  
-  .no-data-message {
-    text-align: center;
-    color: var(--color-danger);
-    font-weight: 500;
-    margin-top: 2rem;
-  }
-  
+/* DataTable Custom Styles */
+
+/* Basic styling for the DataTable */
+.assigned-exam-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  background-color: var(--color-white);
+  border-radius: var(--border-radius-2);
+  box-shadow: var(--box-shadow);
+}
+
+.assigned-exam-table th,
+.assigned-exam-table td {
+  padding: 1rem;
+  border: 1px solid var(--color-info-light);
+  text-align: left;
+}
+
+.assigned-exam-table thead th {
+  /* background-color: var(--color-primary); */
+  color: var(--color-dark-variant);
+  font-weight: bold;
+}
+
+.assigned-exam-table tbody tr:nth-child(odd) {
+  background-color: var(--color-background);
+}
+
+.assigned-exam-table tbody tr:nth-child(even) {
+  background-color: var(--color-white);
+}
+
+.assigned-exam-table tbody tr:hover {
+  background-color: var(--color-light);
+}
+
+.action-button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: var(--border-radius-1);
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.action-button:hover {
+  background-color: var(--color-primary-variant);
+}
+
+/* DataTable Pagination and Filter */
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius-1);
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  font-size: 0.9rem;
+  margin: 0 0.2rem;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+  background-color: var(--color-primary-variant);
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+  background-color: var(--color-primary-variant);
+}
+
+.dataTables_wrapper .dataTables_filter input {
+  border: 1px solid var(--color-info-light);
+  border-radius: var(--border-radius-1);
+  padding: 0.6rem;
+  font-size: 1rem;
+  box-shadow: 0 0 0 0.2rem var(--color-light);
+}
+
+.dataTables_wrapper .dataTables_length select {
+  border: 1px solid var(--color-info-light);
+  border-radius: var(--border-radius-1);
+  padding: 0.6rem;
+  font-size: 1rem;
+  box-shadow: 0 0 0 0.2rem var(--color-light);
+}
+
+.dataTables_wrapper .dataTables_info {
+  font-size: 0.9rem;
+  color: var(--color-dark-variant);
+}
+
+
+/* Loading Indicator Styles */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left: 4px solid var(--color-primary);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

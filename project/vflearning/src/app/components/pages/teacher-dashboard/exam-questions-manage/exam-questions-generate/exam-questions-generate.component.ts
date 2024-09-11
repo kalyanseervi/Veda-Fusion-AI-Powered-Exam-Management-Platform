@@ -111,7 +111,7 @@ export class ExamQuestionsGenerateComponent implements OnInit {
         },
         complete: () => {
           this.isProcessing = false;
-          console.log('Streaming complete');
+         
         }
       });
     }

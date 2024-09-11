@@ -52,7 +52,7 @@ export class ExamQuestionsManageComponent implements OnInit {
     this.initializeForm();
     // You can now use the selectedExamId in your component logic
     
-    console.log('Selected Exam ID:', this.selectedExamId);
+  
   }
 
   examQuestionsCreate() {
@@ -174,7 +174,7 @@ export class ExamQuestionsManageComponent implements OnInit {
         },
         complete: () => {
           this.isProcessing = false;
-          console.log('Streaming complete', this.mcqOutput);
+          
 
           try {
             const parsedResponse = this.cleanAndParseResponse(this.mcqOutput);
@@ -206,7 +206,7 @@ export class ExamQuestionsManageComponent implements OnInit {
         .trim(); // Trim whitespace
 
       // Log cleaned response for debugging
-      console.log('Cleaned response:', cleanedResponse);
+     
 
       // Parse JSON
       const parsedResponse = JSON.parse(cleanedResponse);
@@ -220,7 +220,7 @@ export class ExamQuestionsManageComponent implements OnInit {
 
   saveResponse():void{
     const response = this.completeMcqOutput;
-    console.log(response)
+   
 
     const submittedQuestions = response.map(
       (question: {

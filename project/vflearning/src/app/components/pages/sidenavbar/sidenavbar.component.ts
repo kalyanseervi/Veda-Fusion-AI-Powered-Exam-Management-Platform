@@ -20,7 +20,7 @@ export class SidenavbarComponent implements OnInit{
   ngOnInit(): void {
     this.authService.getRole().subscribe({
       next: (role) => {
-        console.log('User role in login:', role);
+       
         this.userRole = role;
       },
       error: (err) => {

@@ -151,7 +151,7 @@ router.post("/create", auth, upload.single("photo"), async (req, res) => {
 
 // Get all Students
 router.get("/", auth, async (req, res) => {
-  console.log("requested user", req.user.school);
+ 
   try {
     const teachers = await Student.find({ school: req.user.school })
       .populate("school", "name")
@@ -170,7 +170,7 @@ router.get("/", auth, async (req, res) => {
 router.get("/:id", auth, async (req, res) => {
 
   try {
-    console.log(req.params.id)
+   
 
     const teacher = await Student.findById(req.params.id)
     .populate("school", "name")
@@ -238,7 +238,7 @@ router.put("/:id", auth, async (req, res) => {
 // Delete a teacher
 router.delete("/:id", auth, async (req, res) => {
   try {
-    console.log('stidemt ',req.user)
+  
     // Ensure the user is an admin
     if (req.user.role.name !== "admin") {
       return res

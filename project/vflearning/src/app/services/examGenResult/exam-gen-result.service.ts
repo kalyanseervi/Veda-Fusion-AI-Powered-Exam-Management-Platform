@@ -18,6 +18,20 @@ export class ExamGenResultService {
     });
     return this.http.get(`${this.baseUrl}/studentResponse/${id}`, { headers });
   }
+  viewResultOfStudent(id: string): Observable<any> {
+    console.log("my id view",id)
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.getToken()}`,
+    });
+    return this.http.get(`${this.baseUrl}/viewResultOfStd/${id}`, { headers });
+  }
+  publishResult(id: string): Observable<any> {
+    console.log('my id ',id)
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.getToken()}`,
+    });
+    return this.http.post(`${this.baseUrl}/publishResult/${id}`, { headers });
+  }
 
 
 

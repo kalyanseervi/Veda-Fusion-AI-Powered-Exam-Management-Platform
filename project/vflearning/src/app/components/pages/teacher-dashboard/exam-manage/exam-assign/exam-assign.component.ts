@@ -30,13 +30,13 @@ export class ExamAssignComponent implements OnInit {
     this.selectedExamId = this.examId;
     this.classStudents();
     // You can now use the selectedExamId in your component logic
-    console.log('Selected Exam ID:', this.selectedExamId);
+    
   }
 
   classStudents(): void {
     this.teacherservice.studdentBySubjects().subscribe(
       (students) => {
-        console.log('Students fetched: ', students);
+        
         this.totalStudents = students; // Store the students data
       },
       (error) => {
@@ -47,7 +47,7 @@ export class ExamAssignComponent implements OnInit {
 
   selectAll(): void {
     this.selectedStudents = this.selectedStudents.map(() => true);
-    console.log(this.selectedStudents);
+    
   }
 
   clearSelection(): void {
@@ -65,7 +65,7 @@ export class ExamAssignComponent implements OnInit {
 
     if (selectedStudentIds.length === 0) {
       this.errorMessage = 'No students selected.';
-      console.log('No students selected.');
+      
       return;
     }
 
@@ -79,10 +79,7 @@ export class ExamAssignComponent implements OnInit {
         next: (response) => {
           this.errorMessage =
             'Exam assigned and notifications sent successfully:';
-          console.log(
-            'Exam assigned and notifications sent successfully:',
-            response
-          );
+         
           // Optionally, handle success response
         },
         error: (error) => {
@@ -98,6 +95,6 @@ export class ExamAssignComponent implements OnInit {
 
   toggleSelection(event: any, index: number): void {
     this.selectedStudents[index] = event.target.checked;
-    console.log(this.selectedStudents[index]);
+    
   }
 }

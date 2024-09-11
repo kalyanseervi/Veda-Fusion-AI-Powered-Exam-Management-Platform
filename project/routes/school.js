@@ -32,10 +32,10 @@ router.post('/schools/create', async (req, res) => {
 
 // Get all schools
 router.get('/schools', async (req, res) => {
-    console.log('about this ')
+   
     try {
         const schools = await School.find();
-        console.log('i am here ',schools)
+       
         res.status(200).json(schools);
     } catch (error) {
         console.error(`Error fetching schools: ${error.message}`);

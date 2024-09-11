@@ -118,7 +118,7 @@ router.post('/login', async (req, res) => {
 
         // If not found in Teacher, check in Student collection
         if (!user) {
-            console.log('i am here')
+           
             user = await Student.findOne({ email }).populate('role').populate('school').exec();
         }
 
@@ -126,7 +126,7 @@ router.post('/login', async (req, res) => {
         if (!user) {
             return res.status(400).json({ msg: 'Invalid Credentials' });
         }
-        console.log('i am new student user',user.emailVerified)
+       
 
         // Check if the email is verified
         if (!user.emailVerified) {
@@ -134,9 +134,9 @@ router.post('/login', async (req, res) => {
         }
 
         // Check password match
-        console.log(password)
+      
         const isMatch = await user.matchPassword(password);
-        console.log(isMatch)
+     
         if (!isMatch) {
             return res.status(400).json({ msg: 'Invalid Credentials' });
         }
@@ -162,7 +162,7 @@ router.get('/verify/:token', async (req, res) => {
     try {
         // Create the hashed token from the request parameter
         const emailVerificationToken = crypto.createHash('sha256').update(req.params.token).digest('hex');
-        console.log("this is my token",emailVerificationToken)
+       
 
         // Check for a user with the verification token
         let user = await User.findOne({
@@ -229,7 +229,7 @@ router.post('/resend-verification', async (req, res) => {
 router.get('/userDecodeDetail/:token', decodeTokenFromParams, async (req, res) => {
     try {
         const user = req.user;
-        console.log(user);
+       
         res.status(200).json({ success: true, user });
     } catch (err) {
         console.error(err.message);

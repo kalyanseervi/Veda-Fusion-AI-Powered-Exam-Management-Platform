@@ -22,7 +22,7 @@ router.post("/exam-questions", auth, async (req, res) => {
       return res.status(403).json({ msg: "Unauthorized" });
     }
 
-    console.log(req.body);
+   
     // type: question.question_type,
     // title: question.question,
     // marks: question.marks,
@@ -122,7 +122,7 @@ router.get("/exam-questions", auth, async (req, res) => {
 });
 router.get("/examportalQues/:id", auth, async (req, res) => {
   try {
-    console.log(req.params.id);
+   
 
     // Find the exam by examId and only return the 'questions' field
     const examQuestions = await ExamQuestions.find({ examId: req.params.id }, "questions");
@@ -135,7 +135,7 @@ router.get("/examportalQues/:id", auth, async (req, res) => {
     // Since find returns an array, access the first element
     const questions = examQuestions[0].questions;
 
-    console.log("I am here ", questions);
+   
 
     // Format the questions if needed
     const formattedQuestions = questions.map((question) => ({

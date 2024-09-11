@@ -29,7 +29,7 @@ export class ExamQuestionsListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadQuestions();
-    console.log("my exam id is now here",this.selectedExamID)
+    
   }
 
   loadQuestions(): void {
@@ -44,7 +44,7 @@ export class ExamQuestionsListComponent implements OnInit {
 
     this.examQuestionsService.getExamQuestions(params).subscribe(response => {
       this.questions = response.data;
-      console.log(this.questions);
+     
       this.total = response.total;
     });
   }
@@ -63,7 +63,7 @@ export class ExamQuestionsListComponent implements OnInit {
   examQuestionsEdit(question:any){
     this.examQuestionsService.updateExamQuestion(question._id, question,this.selectedExamID).subscribe(
       (response) => {
-        console.log('Question updated successfully:', response);
+     
         this.isEditing[question._id] = false; // Exit edit mode
       },
       (error) => {

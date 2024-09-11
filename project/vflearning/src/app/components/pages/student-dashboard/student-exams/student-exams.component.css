@@ -58,3 +58,55 @@
     margin-top: 2rem;
   }
   
+
+  /* .popup-container{
+    margin: auto;
+    display: flex;
+    
+    box-sizing: border-box; 
+    
+    
+  } */
+  
+  .popup-dtl{
+    
+    width: 900px;
+    box-shadow: var(--box-shadow);
+    background-color: var(--color-white);
+    color: var(--color-dark);
+    padding: 2rem;
+    border-radius: var(--border-radius-2);
+    
+  }
+
+  .popup-title{
+   
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+
+  }
+  .popup-body{
+    padding: 1rem;
+    font-size: 1rem;
+    font-weight: 400;
+
+  }
+  .popup-body-value{
+    display: flex;
+    border: 1px groove rgb(187, 182, 182);
+    
+  }
+  .popup-body-head{
+    padding: 1rem 5rem;
+    border-right: 1px groove rgb(187, 182, 182);
+    
+  }
+  .popup-body-info{
+    
+   text-align: center;
+    
+  }
+
+
+  

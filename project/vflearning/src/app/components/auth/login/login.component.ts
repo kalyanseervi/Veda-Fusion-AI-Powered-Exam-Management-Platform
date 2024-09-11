@@ -33,7 +33,7 @@ export class LoginComponent {
           // Now we use the getRole() observable
           this.authService.getRole().subscribe({
             next: (role) => {
-              console.log('User role in login:', role);
+              
               
               if (role === 'admin') {
                 this.router.navigate(['/dashboard/admin/home-page']);
@@ -49,6 +49,7 @@ export class LoginComponent {
               }
             },
             error: (err) => {
+              this.errorMessage = `Login failed, ${err.error['msg']}`
               console.error('Failed to retrieve role:', err);
               this.router.navigate(['/unauthorized']);
             }

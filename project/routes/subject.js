@@ -11,7 +11,7 @@ router.post('/subjects', async (req, res) => {
         classId: req.body.classId,
         
     });
-    console.log(newSubject)
+  
 
     await newSubject.save();
     res.status(201).json(newSubject);

@@ -45,26 +45,30 @@ class GenerateMCQView(APIView):
 
     def create_mcq_from_topic(
         self,
+        School_class,
+        subject,
         topic,
         question_types,
         difficulty_levels,
         curriculum_alignment,
         real_world_relevance,
         visual_aids,
-        time_constraints,
+        
     ):
         prompt = (
             f"Generate Questions based on the following details you must follow my question types(if there is count greater then 0) :\n"
+            f"School class: {School_class} th\n"
             f"Topics: {topic}\n"  # No need to use json.dumps if topic is already a string
+            f"Subject: {subject}\n"
             f"Question Types: {json.dumps(question_types)}\n"
             f"Difficulty Level: {difficulty_levels}\n"  # Assuming difficulty_levels is a string like 'easy'
             f"Curriculum Alignment: {curriculum_alignment}\n"
             f"Real World Relevance: {'Yes' if real_world_relevance else 'No'}\n"
             f"Visual Aids: {'Yes' if visual_aids else 'No'}\n"
-            f"Time Constraints: {time_constraints} minutes\n"
+          
             f"response format: {'json format in well structured without any other symbols and other text'}\n"
             f"Ensure that each question is unique and formatted correctly. Return the response in JSON data "
-            f"with fields for Questions('question', 'options','answer','marks''questins type(according to given prompt question type)'.)"
+            f"with fields for Questions('question', 'options','answer','marks''questions type(according to given prompt question type)'.)"
         )
         try:
             response = self.model.generate_content(prompt, stream=True)
@@ -76,24 +80,28 @@ class GenerateMCQView(APIView):
 
     def create_mcq_from_text(
         self,
+        School_class,
+        subject,
         text,
         question_types,
         difficulty_levels,
         curriculum_alignment,
         real_world_relevance,
         visual_aids,
-        time_constraints,
+      
         question_bank,
     ):
         prompt = (
             f"Generate questions based on the provided text with the following details you must follow my question types(if there is count greater then 0 thne dont generate questions on that type)\n"
+            f"School class: {School_class} th\n"
             f"Text: {text}\n"
+            f"Subject: {subject}\n"
             f"Question Types: {json.dumps(question_types)}\n"
             f"Difficulty Levels: {json.dumps(difficulty_levels)}\n"
             f"Curriculum Alignment: {curriculum_alignment}\n"
             f"Real World Relevance: {'Yes' if real_world_relevance else 'No'}\n"
             f"Visual Aids: {'Yes' if visual_aids else 'No'}\n"
-            f"Time Constraints: {time_constraints}\n"
+          
             f"question bank: {question_bank}\n"
             f"response format: {'json format in well structured without any other symbols and other text'}\n"
             f"Ensure that each question is unique and formatted correctly. Return the response in JSON data "
@@ -119,9 +127,9 @@ class GenerateMCQView(APIView):
 
     def post(self, request):
         # Extract data from request
-        print(request.data)
+        
         prompt_data = {
-            "class": request.data.get("class", "").strip(),
+            "School_class": request.data.get("class", "").strip(),
             "subject": request.data.get("subject", "").strip(),
             "topics": request.data.get("topics", ""),
             "pdf_input": request.data.get("pdfInput", None),
@@ -161,16 +169,16 @@ class GenerateMCQView(APIView):
             "real_world_relevance": request.data.get("real_world_relevance", True),
             "visual_aids": request.data.get("visual_aids", True),
             "question_bank": request.data.get("question_bank", True),
-            "time_constraints": request.data.get("time_constraints", "120").strip(),
+            
         }
+        
 
-        print(prompt_data)
+        
         logger.info(f"Received prompt data: {prompt_data}")
 
         if prompt_data["pdf_input"]:
-            print(prompt_data["pdf_input"])
             pdf_file = request.FILES.get("pdfInput")
-            print(pdf_file)
+           
             if not pdf_file:
                 return Response(
                     {"error": "PDF file is required"},
@@ -195,23 +203,27 @@ class GenerateMCQView(APIView):
         # Determine the generator function to use
         if prompt_data["topics"]:
             generator = self.create_mcq_from_topic(
+                prompt_data["School_class"],  # class
+                prompt_data["subject"],  # subject
                 prompt_data["topics"],  # topic
                 prompt_data["question_types"],  # question_types
                 prompt_data["difficulty_levels"],  # difficulty_levels
                 prompt_data["curriculum_alignment"],  # curriculum_alignment
                 prompt_data["real_world_relevance"],  # real_world_relevance
                 prompt_data["visual_aids"],  # visual_aids
-                prompt_data["time_constraints"],  # time_constraints
+               
             )
         elif chapter_text:
             generator = self.create_mcq_from_text(
                 chapter_text,
+                prompt_data["School_class"],  # class
+                prompt_data["subject"],  # subject
                 prompt_data["question_types"],
                 prompt_data["difficulty_levels"],
                 prompt_data["curriculum_alignment"],
                 prompt_data["real_world_relevance"],
                 prompt_data["visual_aids"],
-                prompt_data["time_constraints"],
+               
                 prompt_data["question_bank"],
             )
         else:
@@ -284,7 +296,7 @@ class Evaluate(APIView):
         user_answer = data.get("answer")
         max_marks = data.get("max_marks", 0)
 
-        if not question or not user_answer:
+        if not question:
             return JsonResponse({"error": "Question and answer are required"}, status=400)
 
         # Validate the answer
@@ -321,7 +333,7 @@ class Evaluate(APIView):
                 if cleaned_text.startswith('json'):
                     cleaned_text = cleaned_text[4:].strip()  # Remove the 'json' keyword
 
-                print(cleaned_text)
+                
                 # Try to parse the cleaned response as JSON
                 try:
                     json_response = json.loads(cleaned_text)
@@ -331,6 +343,7 @@ class Evaluate(APIView):
                     correctness = result.get("is_correct", False)
                     awarded_marks = result.get("awarded_marks", 0)
                     explanation = result.get("explanation", "No explanation available")
+                    
 
                     # Return the extracted values
                     return correctness, awarded_marks, explanation

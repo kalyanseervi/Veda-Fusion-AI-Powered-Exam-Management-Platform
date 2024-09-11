@@ -106,15 +106,15 @@ export class ExamCreateComponent implements OnInit {
 
       // Log FormData entries
       formData.forEach((value, key) => {
-        console.log(`${key}: ${value}`);
+       
       });
 
       // Call the service to create the exam
       this.examService.createExam(formData).subscribe(
         (response) => {
-          console.log(response);
+         
           alert('Exam created successfully!');
-          this.router.navigate(['/dashboard/admin']);
+          this.router.navigate(['/dashboard/teacher']);
         },
         (error: any) => {
           console.error('Error creating exam:', error);

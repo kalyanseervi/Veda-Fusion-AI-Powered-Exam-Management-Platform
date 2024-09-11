@@ -15,7 +15,7 @@ import { Router } from '@angular/router';
 export class RegisterComponent {
   stepIndex = 0;
   registrationForm: FormGroup;
-  errorMessage: string = '';
+  message: string = '';
 
   constructor(private authService: AuthService, private router: Router, private fb: FormBuilder) {
     this.registrationForm = this.fb.group({
@@ -60,8 +60,11 @@ export class RegisterComponent {
 
     if (this.registrationForm.valid) {
       this.authService.register(this.registrationForm.value).subscribe({
-        next: () => this.router.navigate(['/login']),
+        next: () => {
+          this.message = 'Registration successful!';
+          this.router.navigate(['/login'])},
         error: (err) => {
+          this.message = `${err.error['msg']}`;
           console.error(err)
         },
       });

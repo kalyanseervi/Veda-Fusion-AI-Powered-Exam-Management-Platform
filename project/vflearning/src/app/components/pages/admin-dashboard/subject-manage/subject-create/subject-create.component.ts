@@ -43,7 +43,7 @@ export class SubjectCreateComponent {
   loadClasses(): void {
     this.classService.getClasses().subscribe((classes: any[]) => {
       this.classes = classes; // Populate the classes array
-      console.log("my classs",this.classes)
+      
     });
   }
 

@@ -21,7 +21,7 @@ export class ExamListComponent implements OnInit {
   }
   loadAllExams(): void {
     this.examservice.getAllExam().subscribe((exams) => {
-      console.log(exams);
+
       this.allExams = exams;
     });
   }

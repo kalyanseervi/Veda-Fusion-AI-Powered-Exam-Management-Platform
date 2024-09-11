@@ -65,10 +65,10 @@ const validate = (req, res, next) => {
 // Create a new exam
 router.post("/create",[auth,validate,...examValidationRules()],upload.none(),async (req, res) => {
     try {
-        console.log("my whole data",req.body)
+      
         const { examName, examDate, examTime, examDuration, examDescription, difficultyLevel, negativeMarking, negativeMarks, examType, captureScreenDuringExam, screenCaptureInterval } = req.body;
         // Validate input
-        console.log(req.user)
+    
         if (!examName || !examDate || !examTime || !examDuration || !examDescription || !difficultyLevel || !examType ) {
           return res.status(400).json({ message: 'Please provide all required fields.' });
         }

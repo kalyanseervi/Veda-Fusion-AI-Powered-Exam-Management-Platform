@@ -1,10 +1,21 @@
+<div *ngIf="message" class="modal-overlay">
+  <div class="modal-container">
+
+    <div class="modal-body">
+      <p>{{ message }}</p>
+      <button class="modal-close-button" (click)="message = ''">Close</button>
+    </div>
+  </div>
+</div>
+
+
 <h1 class="assigned-exam-title">Assigned Exam Details</h1>
 <div *ngIf="stdexamdtl && stdexamdtl.assignedExams.length > 0; else noData">
   <table class="assigned-exam-table">
     <thead>
       <tr>
         <th>Exam Name</th>
-        <th>Status</th>    
+        <th>Status</th>
         <th>Exam Date & Time</th>
         <th>Exam Duration</th>
         <th>Action</th>
@@ -16,12 +27,12 @@
         <td>{{ exam.status }}</td>
 
         <td>{{ exam.examId.examDate | date }} || {{exam.examId.examTime}} </td>
-        <td>{{ exam.examId.examDuration  }} Minutes</td>
+        <td>{{ exam.examId.examDuration }} Minutes</td>
         <td *ngIf="exam.status =='pending'; else startexam">
           <button (click)="startExam(exam.examId._id)" class="action-button">Start Exam</button>
         </td>
         <ng-template #startexam>
-          <button class="action-button">View Result</button>
+          <button class="action-button" (click)="viewResult(exam.examId._id)">View Result</button>
         </ng-template>
       </tr>
     </tbody>
@@ -30,3 +41,43 @@
 <ng-template #noData>
   <p class="no-data-message">No assigned exams found.</p>
 </ng-template>
+
+
+<div class="popup-container" *ngIf="isPopupVisible">
+  <div class="popup-dtl" *ngIf="resultDtl">
+    <h2 class="popup-title">Your Exam Result</h2>
+    <div class="popup-body">
+      <div class="popup-body-value">
+        <div class="popup-body-head">Total Questions</div>
+        <div class="popup-body-info">{{ resultDtl.totalQuestions }}</div>
+      </div>
+      <div class="popup-body-value">
+        <div class="popup-body-head">Total Marks</div>
+        <div class="popup-body-info">{{ resultDtl.totalMarks }}</div>
+      </div>
+      <div class="popup-body-value">
+        <div class="popup-body-head">Attempted Questions</div>
+        <div class="popup-body-info">{{ resultDtl.attemptedQuestions }}</div>
+      </div>
+      <div class="popup-body-value">
+        <div class="popup-body-head">Obtained Marks</div>
+        <div class="popup-body-info">{{ resultDtl.obtainedMarks }}</div>
+      </div>
+      <div class="popup-body-value">
+        <div class="popup-body-head">Percentage %</div>
+        <div class="popup-body-info">{{ resultDtl.percentage }}</div>
+      </div>
+      <div class="popup-body-value">
+        <div class="popup-body-head">Rank</div>
+        <div class="popup-body-info">{{ resultDtl.rank }}</div>
+      </div>
+    </div>
+  </div>
+
+  <button class="close-popup" (click)="closePopup()">Close</button>
+</div>
+
+
+
+
+

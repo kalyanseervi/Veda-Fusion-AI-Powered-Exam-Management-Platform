@@ -159,7 +159,7 @@ router.post("/create", auth, upload.single("photo"), async (req, res) => {
 });
 // Get all teachers
 router.get("/", auth, async (req, res) => {
-  console.log("requested user", req.user.school);
+ 
   try {
     const teachers = await Teacher.find({ school: req.user.school })
 
@@ -177,7 +177,7 @@ router.get("/", auth, async (req, res) => {
 
 // Get a single teacher by ID
 router.get("/singleTeacher/:id", auth, async (req, res) => {
-  console.log('i am getting here')
+
   try {
     const teacher = await Teacher.findById(req.params.id)
     .populate("school", "name");
@@ -263,7 +263,7 @@ router.delete("/:id", auth, async (req, res) => {
 router.get("/studentByClassSubjects", auth, async (req, res) => {
     try {
 
-      console.log('studnet by class teacher',req.user)
+
         if (req.user.role.name !== "teacher") { // Assuming `role` is populated
             return res.status(403).json({ msg: "Access denied. Only teachers can access students." });
         }

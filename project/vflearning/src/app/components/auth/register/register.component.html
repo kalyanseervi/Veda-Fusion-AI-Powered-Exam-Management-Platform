@@ -1,4 +1,16 @@
 <div class="container main-banner">
+    <div *ngIf="message" class="modal-overlay">
+        <div class="modal-container">
+          <div class="modal-header">
+            <h3 class="modal-title">Error</h3>
+            <button class="modal-close-button" (click)="message = ''">Close</button>
+          </div>
+          <div class="modal-body">
+            <p>{{ message }}</p>
+          </div>
+        </div>
+      </div>
+
     <div class="reg-heading">Registration</div>
   <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" class="form-container">
       <div *ngIf="stepIndex === 0">

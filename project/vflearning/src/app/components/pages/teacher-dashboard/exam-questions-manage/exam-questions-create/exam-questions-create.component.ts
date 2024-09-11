@@ -34,7 +34,7 @@ export class ExamQuestionsCreateComponent implements OnInit {
   ngOnInit(): void {
     // Retrieve the selectedExamId from the route parameters
     this.selectedExamId = this.route.snapshot.paramMap.get('selectedExamId');
-    console.log('Selected Exam ID:', this.selectedExamId);
+   
   }
 
   createQuestionFormGroup(): FormGroup {
@@ -136,14 +136,13 @@ export class ExamQuestionsCreateComponent implements OnInit {
         })
       );
 
-      console.log('Submitted Questions:', submittedQuestions);
 
       // Assuming you have a service method to handle the POST request
       this.examQuestionsService
         .createExamQuestion({ examId, questions: submittedQuestions })
         .subscribe({
           next: (response) => {
-            console.log('Questions successfully submitted:', response);
+           
             // Reset the form and clear fields after successful submission
             this.questionsForm.reset();
             this.questions.clear();

@@ -187,7 +187,7 @@ export class ExamPortalComponent implements OnInit, OnDestroy {
           )
           .subscribe(
             (response:any) => {
-              console.log('Response submitted successfully:', response);
+             
               // Optionally, navigate to a confirmation page or display a success message
             },
             (error:any) => {
@@ -217,7 +217,7 @@ export class ExamPortalComponent implements OnInit, OnDestroy {
       .subscribe(
         (response) => {
           this.Message = `Congratulations! You have successfully Submited your Exam`;
-          console.log('Responses submitted successfully:', response);
+         
           this.authservice.logout();
           // Optionally, navigate to a confirmation page or display a success message
         },
@@ -256,7 +256,7 @@ export class ExamPortalComponent implements OnInit, OnDestroy {
   // Handle selection of options and save the selected option
   onOptionSelected(option: string, index: number): void {
     this.selectedOptions[this.currentQuestionIndex || 0] = option;
-    console.log(`Selected option for question ${this.currentQuestionIndex}: ${option}`);
+ 
   }
 
   // Event handlers

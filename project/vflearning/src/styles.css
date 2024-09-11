@@ -259,6 +259,7 @@ aside .sidebar .message-count {
   justify-content: center;
   align-items: center;
   z-index: 1000; /* Ensure it's on top of other content */
+  
 }
 
 .add_teacher {
