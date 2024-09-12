@@ -2,10 +2,12 @@ const express = require("express");
 const axios = require("axios");
 const router = express.Router();
 const Exam = require("../models/Exam");
-const Result = require("../models/Result")
+const Result = require("../models/Result");
 const QuesResponse = require("../models/Ques_response");
 const ExamQuestions = require("../models/ExamQuestion");
 const { auth } = require("../middleware/auth");
+const Student = require("../models/Student");
+const exceljs = require('exceljs'); // Import exceljs
 
 const pyUrl = "http://localhost:8000/api/questions/evaluate/";
 
@@ -220,7 +222,7 @@ router.get("/studentResponse/:id", auth, async (req, res) => {
 router.post("/publishResult/:id", async (req, res) => {
   try {
     const examId = req.params.id;
-    console.log('result examID',examId)
+    console.log("result examID", examId);
 
     // Find the exam result
     const examResult = await Result.findOne({ examId: examId });
@@ -278,7 +280,7 @@ router.get("/viewResultOfStd/:id", auth, async (req, res) => {
         obtainedMarks: userResult.obtainedMarks,
         percentage: userResult.percentage,
         rank: userResult.rank,
-      }
+      },
     });
   } catch (err) {
     console.error("Error:", err.message);
@@ -286,5 +288,118 @@ router.get("/viewResultOfStd/:id", auth, async (req, res) => {
   }
 });
 
+router.get("/listOfResults", auth, async (req, res) => {
+  try {
+    // Fetch published exam results
+    const examResults = await Result.find({ published: true }).populate({
+      path: "examId", // Path to the field you want to populate
+      select: "examName", // Only include the examName field from the Exam model
+    });
+
+    // Prepare an array to hold results with user details
+    const resultsWithUserDetails = [];
+
+    for (const examResult of examResults) {
+      // Extract user IDs from userResults
+      const userIds = examResult.userResults.map((result) => result.user);
+
+      // Fetch user details
+      const users = await Student.find(
+        { _id: { $in: userIds } },
+        "name enrollmentId studentClass studentsubjects"
+      )
+        .populate({ path: "studentClass", select: "classname" })
+        .populate({ path: "studentsubjects", select: "subjectName" });
+
+      // Create a map of user details
+      const userMap = new Map(users.map((user) => [user._id.toString(), user]));
+
+      // Append user details to each user result
+      const userResultsWithDetails = examResult.userResults.map((result) => {
+        const user = userMap.get(result.user.toString());
+
+        return {
+          date: result.date,
+          user: user, // Add user details
+          percentage: result.percentage,
+          rank: result.rank,
+          
+          // Exclude percentage and rank
+        };
+      });
+
+      resultsWithUserDetails.push({
+        examId: examResult.examId,
+        published: examResult.published,
+        userResults: userResultsWithDetails,
+      });
+    }
+
+    res.status(200).json({ examResults: resultsWithUserDetails });
+  } catch (err) {
+    console.error("Error in getting results:", err);
+    res.status(500).json({ msg: "Error fetching results" });
+  }
+});
+
+
+router.get('/results/download/:examId', async (req, res) => {
+  try {
+    const { examId } = req.params;
+
+    // Fetch the published exam results
+    const examResult = await Result.findOne({ examId: examId, published: true });
+    if (!examResult) {
+      return res.status(404).json({ msg: "Results not found or not published." });
+    }
+
+    // Extract user IDs from userResults
+    const userIds = examResult.userResults.map(result => result.user);
+
+    // Fetch user details
+    const users = await Student.find({ _id: { $in: userIds } }, "name enrollmentId");
+
+    // Create a map of user details
+    const userMap = new Map(users.map(user => [user._id.toString(), user]));
+
+    // Prepare user results with details
+    const userResultsWithDetails = examResult.userResults.map(result => {
+      const user = userMap.get(result.user.toString());
+      return {
+        name: user ? user.name : 'Unknown',
+        enrollmentId: user ? user.enrollmentId : 'Unknown',
+        percentage: result.percentage,
+        rank: result.rank,
+      };
+    });
+
+    // Create an Excel workbook and worksheet
+    const workbook = new exceljs.Workbook();
+    const worksheet = workbook.addWorksheet('Results');
+
+    // Define columns
+    worksheet.columns = [
+      { header: 'Name', key: 'name', width: 30 },
+      { header: 'Enrollment ID', key: 'enrollmentId', width: 20 },
+      { header: 'Percentage', key: 'percentage', width: 15 },
+      { header: 'Rank', key: 'rank', width: 10 },
+    ];
+
+    // Add rows to the worksheet
+    userResultsWithDetails.forEach(userResult => {
+      worksheet.addRow(userResult);
+    });
+
+    // Set response headers and send the file
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', 'attachment; filename=results.xlsx');
+
+    await workbook.xlsx.write(res);
+    res.end();
+  } catch (err) {
+    console.error("Error in downloading results:", err);
+    res.status(500).json({ msg: "Error downloading results" });
+  }
+});
 
 module.exports = router;

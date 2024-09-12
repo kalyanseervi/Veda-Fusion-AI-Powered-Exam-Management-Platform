@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const UserResultSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
-    ref: 'User', // Assuming there's a User model for students
+    ref: 'Student', // Assuming there's a User model for students
     required: true
   },
   totalQuestions: {

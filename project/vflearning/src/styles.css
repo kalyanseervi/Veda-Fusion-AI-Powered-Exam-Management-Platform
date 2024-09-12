@@ -543,7 +543,7 @@ main .recent-exams a {
 
 .right .results .result-col .right {
   display: flex;
-  justify-content: space-between;
+  justify-content:left;
   align-items: start;
   margin: 0;
   /* width: 100%; */

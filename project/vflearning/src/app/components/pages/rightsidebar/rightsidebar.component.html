@@ -33,52 +33,17 @@
 </div>
 <div class="results">
     <h2>Results</h2>
-    <div class="result-col">
+    <div class="result-col" *ngFor="let item of resultDtl">
         <div class="icon">
             <span class="material-icons-sharp active">task</span>
         </div>
         <div class="right">
             <div class="info">
-                <h3>Statistics</h3>
-                <small class="text-muted">Last 24 Hours</small>
+                <h3>{{item.examId.examName}}</h3>
+                <small class="text-muted">{{item.userResults[0].user.studentClass[0].classname}} </small>
+                <small class="text-muted"> {{item.userResults[0].user.studentsubjects[0].subjectName}}</small>
             </div>
-            <h5 class="success">Click here</h5>
-        </div>
-    </div>
-    <div class="result-col">
-        <div class="icon">
-            <span class="material-icons-sharp active">task</span>
-        </div>
-        <div class="right">
-            <div class="info">
-                <h3>Statistics</h3>
-                <small class="text-muted">Last 24 Hours</small>
-            </div>
-            <h5 class="success">Click here</h5>
-        </div>
-    </div>
-    <div class="result-col">
-        <div class="icon">
-            <span class="material-icons-sharp active">task</span>
-        </div>
-        <div class="right">
-            <div class="info">
-                <h3>Statistics</h3>
-                <small class="text-muted">Last 24 Hours</small>
-            </div>
-            <h5 class="success">Click here</h5>
-        </div>
-    </div>
-    <div class="result-col">
-        <div class="icon">
-            <span class="material-icons-sharp active">task</span>
-        </div>
-        <div class="right">
-            <div class="info">
-                <h3>Statistics</h3>
-                <small class="text-muted">Last 24 Hours</small>
-            </div>
-            <h5 class="success">Click here</h5>
+            <h5 class="success" (click)="downloadExcel(item.examId._id)">Click here</h5>
         </div>
     </div>
 </div>
