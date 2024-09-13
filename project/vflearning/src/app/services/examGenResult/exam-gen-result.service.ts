@@ -57,6 +57,13 @@ export class ExamGenResultService {
     );
   }
 
+  examData():Observable<any>{
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.getToken()}`,
+    })
+    return this.http.get(`${this.baseUrl}/examData/`, {headers});
+  }
+
   private getToken(): string | null {
     return localStorage.getItem('token'); // Adjust as per your authentication flow
   }

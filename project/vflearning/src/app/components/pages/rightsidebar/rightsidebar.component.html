@@ -1,28 +1,10 @@
 
 <div class="recent-updates">
-    <h2>Recent Updates</h2>
+    <h2>Profile</h2>
     <div class="updates">
         <div class="update">
             <div class="profile-photo">
-                <img src="" alt="">
-            </div>
-            <div class="message">
-                <p><b>Kalyan</b>exam begins in 50 minutes</p>
-                <small class="text-muted">2 Minutes Ago</small>
-            </div>
-        </div>
-        <div class="update">
-            <div class="profile-photo">
-                <img src="" alt="">
-            </div>
-            <div class="message">
-                <p><b>Kalyan</b>exam begins in 50 minutes</p>
-                <small class="text-muted">2 Minutes Ago</small>
-            </div>
-        </div>
-        <div class="update">
-            <div class="profile-photo">
-                <img src="" alt="">
+                <img src="/assets\images\profile-avatar.png" alt="">
             </div>
             <div class="message">
                 <p><b>Kalyan</b>exam begins in 50 minutes</p>
@@ -43,7 +25,7 @@
                 <small class="text-muted">{{item.userResults[0].user.studentClass[0].classname}} </small>
                 <small class="text-muted"> {{item.userResults[0].user.studentsubjects[0].subjectName}}</small>
             </div>
-            <h5 class="success" (click)="downloadExcel(item.examId._id)">Click here</h5>
+            <button class="success material-icons-sharp download-btn" (click)="downloadExcel(item.examId._id)">download</button>
         </div>
     </div>
 </div>

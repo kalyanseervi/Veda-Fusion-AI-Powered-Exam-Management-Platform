@@ -41,6 +41,9 @@ import { ExamAssignComponent } from './components/pages/teacher-dashboard/exam-m
 import { ExamPortalComponent } from './components/pages/student-dashboard/exam-portal/exam-portal.component';
 import { ExamGenerateResultComponent } from './components/pages/teacher-dashboard/exam-generate-result/exam-generate-result.component';
 import { VflearningComponent } from './components/vflearning/vflearning.component';
+import { SettingsComponent } from './components/pages/settings/settings.component';
+import { ForgotPasswordComponent } from './components/auth/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/vflearning', pathMatch: 'full' },
@@ -88,6 +91,7 @@ export const routes: Routes = [
           { path: 'class-list', component: ClassListComponent },
         ],
       },
+      
     ],
   },
   {
@@ -146,6 +150,9 @@ export const routes: Routes = [
   },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'forgot-password', component: ForgotPasswordComponent },
+  { path: 'reset-password/:token', component: ResetPasswordComponent },
+  {path:'settings',component:SettingsComponent},
   { path: 'unauthorized', component: UnauthorizedComponent },
   { path: 'verify/:token', component: VerifyEmailComponent },
   { path: 'roles', component: RolesComponent, canActivate: [AuthGuard] },

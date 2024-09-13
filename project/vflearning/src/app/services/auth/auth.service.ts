@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
@@ -47,5 +47,40 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('token');
     this.router.navigate(['/login']); // Redirect to login page
+  }
+  getUserDtl(): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.getToken()}`,
+    });
+    console.log('i am here')
+    return this.http.get<any>(`${this.apiUrl}/getUserDtl`,{headers});
+  }
+
+  updatePassword(
+    currentPassword: string,
+    newPassword: string,
+    confirmPassword: string
+  ): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.getToken()}`,
+    });
+    const payload = {
+      currentPassword,
+      newPassword,
+      confirmPassword,
+    };
+    return this.http.post(`${this.apiUrl}/update-password`, payload, {
+      headers,
+    });
+  }
+
+  forgotPassword(email: string) {
+    return this.http.post(`${this.apiUrl}/forgot-password`, { email });
+  }
+
+  resetPassword(token: string, newPassword: string) {
+    return this.http.post(`${this.apiUrl}/reset-password/${token}`, {
+      password: newPassword,
+    });
   }
 }

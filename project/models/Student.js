@@ -9,6 +9,8 @@ const StudentSchema = new mongoose.Schema({
     emailVerified: { type: Boolean, default: false },
     emailVerificationToken: String,
     emailVerificationTokenExpiry: Date,
+    resetPasswordToken: String,
+    resetPasswordTokenExpiry: Date,
     // dob: { type: Date, required: true }, // Use Date type for date of birth
     // address: { type: String, required: true },
     // city: { type: String, required: true },
@@ -64,6 +66,27 @@ StudentSchema.methods.createEmailVerificationToken = function () {
     this.emailVerificationToken = crypto.createHash('sha256').update(token).digest('hex');
     this.emailVerificationTokenExpiry = Date.now() + 3600000; // 1 hour
     return token;
+};
+
+// Method to create/reset password token
+StudentSchema.methods.createResetPasswordToken = function () {
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    this.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+    this.resetPasswordTokenExpiry = Date.now() + 3600000; // Token valid for 1 hour
+    return resetToken;
+};
+
+// Method to update the password
+StudentSchema.methods.updatePassword = async function (currentPassword, newPassword) {
+    // Check if current password matches
+    const isMatch = await this.matchPassword(currentPassword);
+    if (!isMatch) {
+        throw new Error('Current password is incorrect');
+    }
+
+   
+    this.password = newPassword;
+    await this.save();
 };
 
 module.exports = mongoose.model('Student', StudentSchema);

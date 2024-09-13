@@ -1,0 +1,81 @@
+.settings-container {
+    background-color: var(--color-background);
+    padding: 2rem;
+    border-radius: var(--border-radius-2);
+    box-shadow: var(--box-shadow);
+    max-width: 500px;
+    margin: 2rem auto;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  h2 {
+    color: var(--color-dark);
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-group label {
+    color: var(--color-dark-variant);
+    font-weight: 500;
+  }
+  
+  .form-control {
+    width: 100%;
+    padding: var(--padding-1);
+    border: 1px solid var(--color-info-light);
+    border-radius: var(--border-radius-1);
+    transition: all 0.3s ease;
+  }
+  
+  .form-control:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 5px var(--color-primary);
+    outline: none;
+  }
+  
+  .btn {
+    width: 100%;
+    padding: var(--padding-1);
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    border: none;
+    border-radius: var(--border-radius-2);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn:hover {
+    background-color: var(--color-primary-variant);
+  }
+  
+  .alert {
+    padding: var(--padding-1);
+    border-radius: var(--border-radius-1);
+    margin-top: 1rem;
+    text-align: center;
+  }
+  
+  .alert-success {
+    background-color: var(--color-success);
+    color: var(--color-white);
+  }
+  
+  .alert-danger {
+    background-color: var(--color-danger);
+    color: var(--color-white);
+  }
+  
+  @media (max-width: 768px) {
+    .settings-container {
+      padding: 1rem;
+    }
+  
+    .form-control, .btn {
+      font-size: 0.9rem;
+    }
+  }
+  

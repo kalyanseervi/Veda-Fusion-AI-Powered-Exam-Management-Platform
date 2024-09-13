@@ -402,4 +402,34 @@ router.get('/results/download/:examId', async (req, res) => {
   }
 });
 
+router.get('/examData', auth, async (req, res) => {
+  try {
+    const studentId = req.user.id; // Assuming the student ID is available in req.user.id
+
+    // Fetch student's previous exams and results
+    const student = await Student.findById(studentId).populate('studentsubjects');
+    if (!student) {
+      return res.status(404).json({ msg: "Student not found" });
+    }
+
+    const subjects = student.studentsubjects.map(subject => subject.subjectName);
+
+    // Fetch results for the student's subjects
+    const results = await Result.find({
+      'userResults.user': studentId,
+      published: true
+    }).populate('examId', 'examName');
+
+    const formattedResults = results.map(result => ({
+      examName: result.examId.examName,
+      userResults: result.userResults.find(userResult => userResult.user.toString() === studentId.toString())
+    }));
+
+    res.status(200).json({ results: formattedResults });
+  } catch (err) {
+    console.error("Error fetching exam data:", err);
+    res.status(500).json({ msg: "Error fetching exam data" });
+  }
+});
+
 module.exports = router;
