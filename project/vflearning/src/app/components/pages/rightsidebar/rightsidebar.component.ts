@@ -15,6 +15,7 @@ import { AuthService } from '../../../services/auth/auth.service';
 export class RightsidebarComponent implements OnInit {
   resultDtl: any;
   message: any;
+  currentUserDtl:any;
   private baseUrl = 'http://localhost:5000/api/examResult';
 
   constructor(
@@ -36,7 +37,8 @@ export class RightsidebarComponent implements OnInit {
     });
     this.authservice.getUserDtl().subscribe({
       next: (response) => {
-        console.log(response);
+        console.log("my response",response);
+        this.currentUserDtl = response
       },
       error: (error) => {
         this.message = error.error.msg;

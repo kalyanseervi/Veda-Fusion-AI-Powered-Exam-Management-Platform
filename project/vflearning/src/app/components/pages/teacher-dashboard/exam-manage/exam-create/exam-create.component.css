@@ -205,3 +205,53 @@ form .buttons button , .backBtn{
       width: 100%;
   }
 }
+
+/* Textarea Styling */
+.input-field textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 1rem;
+  font-size: 1rem;
+  border: 1px solid var(--color-light);
+  border-radius: var(--border-radius-1);
+  resize: vertical; /* Allows users to resize vertically only */
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  background-color: var(--color-white);
+  color: var(--color-dark);
+}
+
+/* Textarea Focus State */
+.input-field textarea:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 5px rgba(115, 128, 236, 0.2); /* Subtle shadow for focus */
+}
+
+/* Error Message Styling */
+.error {
+  color: var(--color-danger);
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+/* Adjust padding and margin for input field */
+.input-field {
+  margin-bottom: var(--padding-1);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Textarea disabled styling */
+.input-field textarea:disabled {
+  background-color: var(--color-light);
+  color: var(--color-info-dark);
+  border-color: var(--color-info-light);
+}
+
+/* Responsive textarea for mobile */
+@media (max-width: 768px) {
+  .input-field textarea {
+      font-size: 0.9rem;
+      padding: 0.8rem;
+  }
+}

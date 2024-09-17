@@ -8,8 +8,8 @@ interface Teacher {
   name: string;
   email: string;
   school: { name: string };
-  teachingClasses: { classname: string }[];
-  teachingSubjects: { subjectName: string }[];
+  teachingClasses: { classname: string };
+  teachingSubjects: { subjectName: string };
 }
 
 @Component({
@@ -20,7 +20,7 @@ interface Teacher {
   styleUrls: ['./teacher-list.component.css']
 })
 export class TeacherListComponent implements OnInit {
-  teachers: Teacher[] = [];
+  teachers: any[] = [];
 
   constructor(private teacherService: TeacherService, private router: Router) {}
 
@@ -29,8 +29,9 @@ export class TeacherListComponent implements OnInit {
   }
 
   loadTeachers(): void {
-    this.teacherService.getAllTeachers().subscribe((teachers: Teacher[]) => {
+    this.teacherService.getAllTeachers().subscribe((teachers: any[]) => {
       this.teachers = teachers;
+      console.log(teachers)
     });
   }
 

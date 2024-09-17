@@ -1,15 +1,21 @@
-
 <div class="recent-updates">
     <h2>Profile</h2>
-    <div class="updates">
-        <div class="update">
+    <div class="profile-card" *ngIf="currentUserDtl">
+        <div class="profile-header">
             <div class="profile-photo">
-                <img src="/assets\images\profile-avatar.png" alt="">
+                <img src="/assets/images/profile-avatar.png" alt="Profile Photo">
             </div>
-            <div class="message">
-                <p><b>Kalyan</b>exam begins in 50 minutes</p>
-                <small class="text-muted">2 Minutes Ago</small>
+            <div class="profile-details">
+                <h2>{{currentUserDtl.name}}</h2>
+                <p>{{currentUserDtl.email}}</p>
             </div>
+        </div>
+        <div class="profile-body">
+            <p *ngIf="currentUserDtl.enrollmentId"><b>Enrollment ID:</b> {{currentUserDtl.enrollmentId}}</p>
+            <p *ngIf="currentUserDtl.studentClass"><b>Class:</b> <span *ngFor="let class of currentUserDtl.studentClass">{{class.classname}} </span></p>
+            <p *ngIf="currentUserDtl.teachingClasses"><b>Class:</b> <span *ngFor="let class of currentUserDtl.teachingClasses">{{class.classname}} </span></p>
+            <p *ngIf="currentUserDtl.studentsubjects"><b>Subjects:</b><span *ngFor="let subject of currentUserDtl.studentsubjects"> {{subject.subjectName}} </span></p>
+            <p *ngIf="currentUserDtl.teachingSubjects"><b>Subjects:</b><span *ngFor="let subject of currentUserDtl.teachingSubjects">{{subject.subjectName}} </span></p>
         </div>
     </div>
 </div>
@@ -25,7 +31,8 @@
                 <small class="text-muted">{{item.userResults[0].user.studentClass[0].classname}} </small>
                 <small class="text-muted"> {{item.userResults[0].user.studentsubjects[0].subjectName}}</small>
             </div>
-            <button class="success material-icons-sharp download-btn" (click)="downloadExcel(item.examId._id)">download</button>
+            <button class="success material-icons-sharp download-btn"
+                (click)="downloadExcel(item.examId._id)">download</button>
         </div>
     </div>
 </div>

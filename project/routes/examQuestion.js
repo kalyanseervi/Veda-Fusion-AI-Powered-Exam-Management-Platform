@@ -31,15 +31,20 @@ router.post("/exam-questions", auth, async (req, res) => {
     // options: Array.isArray(question.options) ? question.options : [], // Ensure options is an array
     // imageUrl: question.imageUrl,
     // Prepare the questions data
+
+   
     const newQuestions = req.body.questions.map((question) => ({
-      type: question.question_type,
-      title: question.question,
+      type: question.type || question.question_type,
+      title: question.title || question.question,
       marks: question.marks,
-      wordLimit: question.word_limit,
+      wordLimit: question.wordLimit || question.word_limit,
       answer: question.answer,
-      options: question.options,
+      options: question.options || Array.isArray(question.options) ? question.options : [],
       imageUrl: question.imageUrl,
     }));
+
+    
+    
 
     // Find the existing document by examId
     let examQuestion = await ExamQuestions.findOne({ examId: req.body.examId });
@@ -47,6 +52,7 @@ router.post("/exam-questions", auth, async (req, res) => {
     if (examQuestion) {
       // Merge new questions with existing ones
       examQuestion.questions = [...examQuestion.questions, ...newQuestions];
+      
       examQuestion = await examQuestion.save();
       res.status(200).json(examQuestion);
     } else {
@@ -200,18 +206,24 @@ router.put("/exam-questions/:examId/question/:id", auth, async (req, res) => {
 });
 
 // Delete an existing ExamQuestions document by ID
-router.delete("/exam-questions/:id", auth, async (req, res) => {
+router.delete("/exam-questions/:examId/question/:id", auth, async (req, res) => {
   try {
-    // Attempt to delete the document by ID
-    const examQuestion = await ExamQuestions.findByIdAndDelete(req.params.id);
+    const { examId, id } = req.params;
 
-    // Check if the document was found and deleted
+    // Find the ExamQuestions document and pull (remove) the specific question from the array
+    const examQuestion = await ExamQuestions.findOneAndUpdate(
+      { examId: examId },
+      { $pull: { questions: { _id: id } } },  // Use $pull to remove the question with the matching _id
+      { new: true }  // Return the updated document after the deletion
+    );
+
+    // Check if the document was found and updated
     if (!examQuestion) {
       return res.status(404).json({ msg: "Exam question not found" });
     }
 
-    // Return success message if the document was deleted
-    res.status(200).json({ msg: "Exam question deleted successfully" });
+    // Return success message if the question was deleted
+    res.status(200).json({ msg: "Exam question deleted successfully"});
   } catch (err) {
     // Return an error message if something goes wrong
     res.status(500).json({ msg: "Server error", error: err.message });

@@ -6,6 +6,7 @@ const AssignedExam = require("../models/AssignedExam");
 const QuesResponse = require("../models/Ques_response")
 const { decodeTokenFromParams, auth } = require("../middleware/auth"); //
 const transporter = require("../config/nodemailer");
+const examMiddleware = require("../middleware/examMiddleware");
 
 const sendVerificationEmail = async (email, code) => {
   const mailOptions = {
@@ -83,7 +84,7 @@ router.get("/assignedExams",auth, async (req, res) => {
     // Find all assigned exams for the authenticated student
     const assignedExams = await AssignedExam.find({
       studentId: studentId,
-    }).populate("examId");
+    }).populate("examId").populate('assignedBy');
 
     if (!assignedExams) {
       return res.status(404).json({
@@ -100,26 +101,23 @@ router.get("/assignedExams",auth, async (req, res) => {
   }
 });
 
-router.post("/startExam",auth, async (req, res) => {
+router.post("/startExam", auth, examMiddleware, async (req, res) => {
   try {
-    const userId = req.user._id; // Assuming the student ID is stored in req.user
+    const userId = req.user._id; // Student's ID from auth middleware
     const { examId } = req.body;
 
+    // Fetch assigned exam
     const assignedExam = await AssignedExam.findOne({
       examId,
       studentId: userId,
     });
 
     if (!assignedExam) {
-      return res.status(404).json("Assigned exam not found");
+      return res.status(404).json({ error: "Assigned exam not found" });
     }
 
-    if (assignedExam.status === "completed") {
-      return res.status(400).json("This exam has already been completed");
-    }
-
-    // Proceed with starting the exam (e.g., return exam details)
-    res.status(200).json("Exam can be started");
+    // At this point, the middleware has already validated the timing and status
+    res.status(200).json({ message: "Exam can be started", examDetails: assignedExam });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

@@ -1,12 +1,9 @@
-
-
 <button (click)="openPopup()" style="padding: 10px 20px; cursor: pointer;">Add Student</button>
 <app-student-list></app-student-list>
 
-<div class="popup-container" *ngIf="isPopupVisible">
-    <div class="add_teacher">
-      <app-student-create></app-student-create>
-    </div>
+<div class="popup-container" [ngClass]="{'hidden': !isPopupVisible}">
+  <div class="add_teacher">
+    <app-student-create></app-student-create>
     <button class="close-popup" (click)="closePopup()">Close</button>
   </div>
-<!-- <router-outlet></router-outlet> -->
+</div>

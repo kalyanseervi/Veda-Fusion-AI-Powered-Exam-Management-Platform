@@ -39,6 +39,7 @@ export class StudentCreateComponent implements OnInit {
   availableSubjects: Subject[] = [];
   isSecondSectionActive = false;
   selectedFile: File | null = null;
+  loading: boolean = false;
   constructor(
     private fb: FormBuilder,
     private studentService: StudentService,
@@ -110,6 +111,7 @@ export class StudentCreateComponent implements OnInit {
   }
 
   onSubmit(): void {
+    this.loading = true;
     if (this.studentForm.valid) {
       const formData = new FormData();
       Object.keys(this.studentForm.controls).forEach(key => {
@@ -120,16 +122,19 @@ export class StudentCreateComponent implements OnInit {
         }
       });
 
-      this.studentService.createStudent(formData).subscribe(
-        () => {
+      this.studentService.createStudent(formData).subscribe({
+        next:(response) => {
+          this.loading = false;
+          console.log(response)
           alert('Student registered successfully!');
           this.router.navigate(['/dashboard/admin']);
         },
-        (error: any) => {
+        error:(error) => {
+          this.loading = false;
           console.error('Error registering student:', error);
           alert('Failed to register student. Please try again.');
         }
-      );
+    });
     } else {
       alert('Please fill in all required fields correctly.');
     }

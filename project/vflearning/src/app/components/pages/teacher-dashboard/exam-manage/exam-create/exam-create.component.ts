@@ -11,6 +11,7 @@ import { FlatpickrModule } from 'angularx-flatpickr';
 import { CommonModule } from '@angular/common';
 import flatpickr from 'flatpickr';
 import moment from 'moment';
+import { AuthService } from '../../../../../services/auth/auth.service';
 
 
 
@@ -27,6 +28,7 @@ export class ExamCreateComponent implements OnInit {
   examTypes: string[] = ['multiple choice', 'subjective', 'both'];
   difficultyLevels: string[] = ['easy', 'medium', 'hard'];
   minDate: string | undefined;
+  currentUserDtl:any
 
   // Define a list of holidays (Add as required)
   holidays = [
@@ -35,13 +37,15 @@ export class ExamCreateComponent implements OnInit {
     '2024-10-02',  // Gandhi Jayanti
     // Add more holidays as needed
   ];
+  message: any;
 
 
 
   constructor(
     private fb: FormBuilder,
     private examService: ExamService,
-    private router: Router
+    private router: Router,
+    private authservice:AuthService
   ) {
     this.examForm = this.fb.group({
       examName: ['', [Validators.required]],
@@ -49,12 +53,13 @@ export class ExamCreateComponent implements OnInit {
       examTime: ['', [Validators.required]],
       examDuration: [0, [Validators.required, Validators.min(1)]],
       examDescription: ['', [Validators.required]],
-      difficultyLevel: ['', [Validators.required]],
+      class: ['', [Validators.required]], // Class field
+      subject: ['', [Validators.required]], // Subject field
       negativeMarking: [false],
-      negativeMarks: [{ value: '', disabled: true }],
-      examType: ['', [Validators.required]],
+      negativeMarks: [{ value: '', disabled: true }, Validators.min(0)],
+      
       captureScreenDuringExam: [false],
-      screenCaptureInterval: [{ value: '', disabled: true }],
+      screenCaptureInterval: [{ value: '', disabled: true }, Validators.min(1)],
     });
 
     // Enable/Disable negativeMarks based on negativeMarking
@@ -89,6 +94,17 @@ export class ExamCreateComponent implements OnInit {
   ngOnInit(): void {
     const today = new Date();
     this.minDate = today.toISOString().split('T')[0];
+
+
+    this.authservice.getUserDtl().subscribe({
+      next: (response) => {
+        console.log("my response",response);
+        this.currentUserDtl = response
+      },
+      error: (error) => {
+        this.message = error.error.msg;
+      },
+    });
   }
 
 
@@ -97,22 +113,25 @@ export class ExamCreateComponent implements OnInit {
     if (this.examForm.valid) {
       // Create FormData and append the form values
       const formData = new FormData();
+  
+      // Manually append each form control value
       Object.keys(this.examForm.controls).forEach(key => {
         const control = this.examForm.get(key);
-        if (control) {
+        if (control && control.enabled) { // Only include enabled fields
           formData.append(key, control.value);
+        } else if (!control?.enabled) {
+          formData.append(key, ''); // Append empty string for disabled fields
         }
       });
-
-      // Log FormData entries
+  
+      // Log FormData entries for debugging
       formData.forEach((value, key) => {
-       
+        console.log(key, value);
       });
-
+  
       // Call the service to create the exam
       this.examService.createExam(formData).subscribe(
         (response) => {
-         
           alert('Exam created successfully!');
           this.router.navigate(['/dashboard/teacher']);
         },
@@ -125,4 +144,5 @@ export class ExamCreateComponent implements OnInit {
       alert('Please fill in all required fields correctly.');
     }
   }
+  
 }

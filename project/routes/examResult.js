@@ -8,12 +8,15 @@ const ExamQuestions = require("../models/ExamQuestion");
 const { auth } = require("../middleware/auth");
 const Student = require("../models/Student");
 const exceljs = require('exceljs'); // Import exceljs
+const moment = require('moment'); // Import moment.js for date manipulation
 
 const pyUrl = "http://localhost:8000/api/questions/evaluate/";
 
 // Function to validate answers using Gemini API or direct comparison
 const validateAnswer = async (question, userAnswer) => {
   if (question.type === "mcq") {
+    console.log('validateAnswer', userAnswer)
+    console.log('correct answer', question.answer)
     return {
       isCorrect: userAnswer === question.answer,
       awardedMarks: userAnswer === question.answer ? question.marks : 0,
@@ -47,11 +50,12 @@ router.get("/studentResponse/:id", auth, async (req, res) => {
   try {
     const examId = req.params.id;
 
-    // Fetch exam responses
+    // Fetch exam responses and populate userId and examId
     const examResponses = await QuesResponse.find({ examId: examId })
       .populate("userId", "name email enrollmentId")
       .populate("examId");
 
+    // Fetch the exam details including questions
     const examDtl = await Exam.findById(examId);
     if (!examDtl) {
       return res.status(404).json({ msg: "Exam not found!" });
@@ -65,9 +69,7 @@ router.get("/studentResponse/:id", auth, async (req, res) => {
     }
 
     // Fetch exam questions
-    const exam = await ExamQuestions.findOne({ examId: examId }).populate(
-      "questions"
-    );
+    const exam = await ExamQuestions.findOne({ examId: examId });
     if (!exam || !exam.questions) {
       throw new Error("Exam or Questions not found.");
     }
@@ -114,6 +116,10 @@ router.get("/studentResponse/:id", auth, async (req, res) => {
             percentage: existingUserResult.percentage,
             rank: existingUserResult.rank,
           },
+          userResponses: document.responses.map(response => ({
+            ...response._doc,
+            question: questionsMap.get(response.questionId.toString()) // Map the questionId to the actual question
+          }))
         });
         continue; // Skip to the next user
       }
@@ -123,34 +129,36 @@ router.get("/studentResponse/:id", auth, async (req, res) => {
       let obtainedMarks = 0;
       let attemptedQuestions = 0;
 
-      for (const response of document.responses) {
-        const questionIdString = response.questionId.toString();
-        const question = questionsMap.get(questionIdString);
+      const userResponses = await Promise.all(
+        document.responses.map(async (response) => {
+          const question = questionsMap.get(response.questionId.toString());
+          if (question) {
+            totalMarks += question.marks;
 
-        if (question) {
-          totalMarks += question.marks;
+            if (response.selectedOption) {
+              attemptedQuestions++;
+            }
 
-          if (response.selectedOption) {
-            attemptedQuestions++;
+            // Await the result of validateAnswer since it's an async function
+            const { awardedMarks } = await validateAnswer(question, response.selectedOption);
+
+            console.log('awardedMarks marks', awardedMarks);
+            obtainedMarks += awardedMarks;
+
+            if (negativeMarking) {
+              obtainedMarks -= negativeMarks;
+            }
           }
+          return {
+            ...response._doc, // Keep other response fields
+            question // Add the full question details to the response
+          };
+        })
+      );
 
-          const { isCorrect, awardedMarks } = await validateAnswer(
-            question,
-            response.selectedOption
-          );
-
-          obtainedMarks += awardedMarks;
-
-          if (negativeMarking) {
-            obtainedMarks -= negativeMarks;
-          }
-        }
-      }
-
-      const percentage =
-        totalMarks > 0
-          ? ((obtainedMarks / totalMarks) * 100).toFixed(2)
-          : "0.00";
+      const percentage = totalMarks > 0
+        ? ((obtainedMarks / totalMarks) * 100).toFixed(2)
+        : "0.00";
 
       const userResult = {
         user: document.userId._id,
@@ -178,6 +186,7 @@ router.get("/studentResponse/:id", auth, async (req, res) => {
           obtainedMarks,
           percentage: parseFloat(percentage),
         },
+        userResponses // Include populated user responses with question details
       });
     }
 
@@ -189,18 +198,17 @@ router.get("/studentResponse/:id", auth, async (req, res) => {
       userResult.rank = index + 1; // Rank starts from 1
     });
 
+
     // Save the updated exam result document
     await examResult.save();
 
-    resultsByUser = examResult.userResults.map((userResult) => ({
+    // Prepare the final response by adding userResponses in sorted order
+    resultsByUser = examResult.userResults.map(userResult => ({
       user: {
         id: userResult.user,
-        name: resultsByUser.find((u) => u.user.id === userResult.user).user
-          .name,
-        email: resultsByUser.find((u) => u.user.id === userResult.user).user
-          .email,
-        enrollmentId: resultsByUser.find((u) => u.user.id === userResult.user)
-          .user.enrollmentId,
+        name: resultsByUser.find(u => u.user.id.toString() === userResult.user.toString()).user.name,
+        email: resultsByUser.find(u => u.user.id.toString() === userResult.user.toString()).user.email,
+        enrollmentId: resultsByUser.find(u => u.user.id.toString() === userResult.user.toString()).user.enrollmentId,
       },
       result: {
         totalQuestions: userResult.totalQuestions,
@@ -210,6 +218,7 @@ router.get("/studentResponse/:id", auth, async (req, res) => {
         percentage: userResult.percentage,
         rank: userResult.rank,
       },
+      userResponses: resultsByUser.find(u => u.user.id.toString() === userResult.user.toString()).userResponses
     }));
 
     res.status(200).json({ results: resultsByUser });
@@ -218,6 +227,9 @@ router.get("/studentResponse/:id", auth, async (req, res) => {
     res.status(500).json({ msg: err.message });
   }
 });
+
+
+
 
 router.post("/publishResult/:id", async (req, res) => {
   try {
@@ -290,8 +302,14 @@ router.get("/viewResultOfStd/:id", auth, async (req, res) => {
 
 router.get("/listOfResults", auth, async (req, res) => {
   try {
-    // Fetch published exam results
-    const examResults = await Result.find({ published: true }).populate({
+    // Calculate the date for 24 hours ago
+    const last24Hours = moment().subtract(24, 'hours').toDate();
+
+    // Fetch published exam results within the last 24 hours
+    const examResults = await Result.find({
+      published: true,
+      publishedDate: { $gte: last24Hours } // Only results published in the last 24 hours
+    }).populate({
       path: "examId", // Path to the field you want to populate
       select: "examName", // Only include the examName field from the Exam model
     });
@@ -323,8 +341,6 @@ router.get("/listOfResults", auth, async (req, res) => {
           user: user, // Add user details
           percentage: result.percentage,
           rank: result.rank,
-          
-          // Exclude percentage and rank
         };
       });
 

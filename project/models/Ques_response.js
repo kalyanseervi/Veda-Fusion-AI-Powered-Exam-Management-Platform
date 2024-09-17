@@ -14,7 +14,7 @@ const quesResponseSchema = new mongoose.Schema({
   responses: [{
     questionId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Question', // Reference to the Question model, assuming you have one
+      ref: 'ExamQuestions', // Reference to the Question model, assuming you have one
       required: true
     },
     selectedOption: {

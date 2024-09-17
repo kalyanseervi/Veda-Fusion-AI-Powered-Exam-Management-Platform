@@ -376,26 +376,24 @@ router.post("/forgot-password", async (req, res) => {
 
 // POST: /api/auth/reset-password/:token
 router.post("/reset-password/:token", async (req, res) => {
-  const resetPasswordToken = crypto
-    .createHash("sha256")
-    .update(req.params.token)
-    .digest("hex");
+  const resetPasswordToken = req.params.token;
 
   try {
     // Find user by reset token and ensure token has not expired
-    let user;
-
-    // Try finding the user in User, Teacher, and Student collections
-    user = await User.findOne({
+    let user = await User.findOne({
       resetPasswordToken,
       resetPasswordTokenExpiry: { $gt: Date.now() },
     });
+
+    // If not found in User, try in Teacher
     if (!user) {
       user = await Teacher.findOne({
         resetPasswordToken,
         resetPasswordTokenExpiry: { $gt: Date.now() },
       });
     }
+
+    // If still not found, try in Student
     if (!user) {
       user = await Student.findOne({
         resetPasswordToken,
@@ -403,43 +401,59 @@ router.post("/reset-password/:token", async (req, res) => {
       });
     }
 
-    // If the user is not found
+    // If no user is found
     if (!user) {
-      return res.status(400).json({ msg: "User not found" });
+      return res.status(400).json({ message: "User not found or token expired" });
     }
+
     // Set the new password
     const { password } = req.body;
 
-    user.password = password;
+    if (!password) {
+      return res.status(400).json({ message: "Password is required" });
+    }
+
+    // Make sure to hash the password before saving
+    user.password = await bcrypt.hash(password, 10);
 
     // Clear reset password token fields
     user.resetPasswordToken = undefined;
     user.resetPasswordTokenExpiry = undefined;
 
+    // Save the updated user
     await user.save();
 
     res.status(200).json({ message: "Password reset successful" });
   } catch (error) {
+    console.error("Error resetting password:", error);
     res.status(500).json({ message: "Server error" });
   }
 });
+
 
 router.get("/getUserDtl", auth, async (req, res) => {
   console.log("i am here ");
   try {
     const email = req.user.email
     console.log(email)
-    const user = await User.find({email:email},"name email");
-    console.log("hello", user);
+    let user;
+
+    // Try finding the user in User, Teacher, and Student collections
+    user = await User.findOne({ email });
     if (!user) {
-      user = await Teacher.findOne({ email });
+      user = await Teacher.findOne({ email }, "name email teachingClasses teachingSubjects  enrollmentId").populate({ path: "teachingClasses", select: "classname" })
+      .populate({ path: "teachingSubjects", select: "subjectName" });
     }
     if (!user) {
-      user = await Student.findOne({ email });
+      user = await Student.findOne({ email }, "name email studentClass studentsubjects  enrollmentId").populate({ path: "studentClass", select: "classname" })
+        .populate({ path: "studentsubjects", select: "subjectName" });
     }
+
+    // If the user is not found
     if (!user) {
       return res.status(400).json({ msg: "User not found" });
     }
+    console.log("hello", user);
     res.status(200).json(user);
   } catch (error) {
     res.status(500).json({ message: "Server error" });

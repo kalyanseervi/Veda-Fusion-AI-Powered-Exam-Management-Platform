@@ -5,7 +5,7 @@
   <div class="modal-container">
     <div class="modal-header">
       <h3 class="modal-title">Error</h3>
-      <button class="modal-close-button" (click)="message = ''">Close</button>
+      <button class="material-icons-sharp modal-close-button" (click)="message = ''">close</button>
     </div>
     <div class="modal-body">
       <p>{{ message }}</p>
@@ -51,4 +51,34 @@
     </tr>
   </tbody>
 </table>
+
+
+<!-- Modal to show the selected student's response -->
+<div *ngIf="showResponseModal" class="modal-overlay">
+  <div class="modal-container">
+    <div class="modal-header">
+      <h3 class="modal-title">Student Response</h3>
+      <button class="modal-close-button" (click)="closeModal()">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <!-- Display the student's response details -->
+      <div *ngIf="selectedStudentResponse">
+        <h4>Student: {{ selectedStudentResponse.user.name }}</h4>
+        <p>Enrollment ID: {{ selectedStudentResponse.user.enrollmentId }}</p>
+        <hr class="divider">
+        <h5>Responses:</h5>
+        <ul class="response-list">
+          <li *ngFor="let question of selectedStudentResponse.userResponses; let i = index;" class="response-item">
+            <p><strong>Q: {{i+1}} {{ question.question.title }}</strong></p>
+            <p class="selected-answer">Selected Answer: {{ question.selectedOption }}</p>
+            <p class="correct-answer">Correct Answer: {{ question.question.answer }}</p>
+          </li>
+        </ul>
+      </div>
+      <div *ngIf="!selectedStudentResponse">
+        <p>No response data available.</p>
+      </div>
+    </div>
+  </div>
+</div>
 

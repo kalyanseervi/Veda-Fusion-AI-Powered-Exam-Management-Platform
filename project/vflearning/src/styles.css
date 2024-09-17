@@ -247,43 +247,105 @@ aside .sidebar .message-count {
 }
 
 
-/* create teacher window */
 .popup-container {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.5); /* Transparent dark overlay */
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; /* Ensure it's on top of other content */
-  
+  z-index: 1000;
+  transition: opacity 0.3s ease-in-out;
+  opacity: 1; /* Visible when displayed */
 }
 
 .add_teacher {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+  background-color: var(--color-white);
+  padding: 2rem;
+  border-radius: var(--border-radius-2);
+  box-shadow: var(--box-shadow);
+  width: 100%;
+  max-width: 500px;
+  max-height: 90%;
+  overflow-y: auto;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .close-popup {
   position: absolute;
   top: 10px;
   right: 10px;
-  background: #ff0000;
-  color: #fff;
+  background-color: var(--color-danger);
+  color: var(--color-white);
   border: none;
-  border-radius: 5px;
-  padding: 5px 10px;
+  border-radius: var(--border-radius-1);
+  padding: 0.5rem 1rem;
   cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
 }
 
 .close-popup:hover {
-  background: #cc0000;
+  background-color: darken(var(--color-danger), 10%);
 }
+
+/* Animation for opening/closing */
+.popup-container.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.add_teacher.hidden {
+  opacity: 0;
+  transform: translateY(-50px);
+}
+
+/* Loading Indicator Styles */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left: 4px solid var(--color-primary);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive design for small screens */
+@media (max-width: 768px) {
+  .add_teacher {
+    width: 90%;
+    max-height: 80%;
+  }
+
+  .close-popup {
+    top: 5px;
+    right: 5px;
+  }
+}
+
 
 
 /* old */

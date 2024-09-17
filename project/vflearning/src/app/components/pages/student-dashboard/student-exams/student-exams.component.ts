@@ -56,7 +56,8 @@ export class StudentExamsComponent implements OnInit {
         ]);
       },
       error: (error) => {
-        this.message = error.error;
+        console.log('exam error',error.error)
+        this.message = error.error.error;
       },
     });
   }

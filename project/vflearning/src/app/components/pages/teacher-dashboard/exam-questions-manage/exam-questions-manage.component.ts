@@ -250,9 +250,13 @@ export class ExamQuestionsManageComponent implements OnInit {
             // Reset the form and clear fields after successful submission
           },
           error: (error) => {
+            alert('something went wrong')
             console.error('Error submitting questions:', error);
             // Handle errors, e.g., show an error message to the user
           },
+          complete:()=>{
+            alert('response sumbmitted Scuccessfully')
+          }
         });
 
   }

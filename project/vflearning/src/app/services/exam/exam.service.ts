@@ -2,21 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-interface Exam {
-  _id?: string;
-  examName: string;
-  examDate: Date;
-  examTime: string;
-  examDuration: number; // Duration in minutes
-  examDescription: string;
-  difficultyLevel: 'easy' | 'medium' | 'hard';
-  negativeMarking: boolean;
-  negativeMarks?: number; // Only required if negativeMarking is true
-  examType: 'multiple choice' | 'subjective' | 'both';
-  screenCaptureInterval?: number; // Only required if captureScreenDuringExam is true
-  captureScreenDuringExam: boolean;
-  createdBy: string; // Teacher ID
-}
+
 
 @Injectable({
   providedIn: 'root',

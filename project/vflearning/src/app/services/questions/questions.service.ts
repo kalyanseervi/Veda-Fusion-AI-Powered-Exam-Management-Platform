@@ -72,12 +72,12 @@ export class QuestionsService {
   }
 
   // Delete an exam question by ID
-  deleteExamQuestion(id: string): Observable<any> {
+  deleteExamQuestion(id: string,examId:string): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.getToken()}`,
     });
     return this.http
-      .delete(`${this.baseUrl}/exam-questions/${id}`, { headers })
+      .delete(`${this.baseUrl}/exam-questions/${examId}/question/${id}`, { headers })
       .pipe(catchError(this.handleError));
   }
 

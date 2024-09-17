@@ -15,8 +15,11 @@ declare var $: any; // Import jQuery
 export class ExamGenerateResultComponent implements OnInit, AfterViewInit {
   selectedExamId: any;
   studentResponseList: any[] = [];
+  selectedStudentResponse: any = null; // Holds the selected student's response
   loading: boolean = false; // Loading indicator flag
   message: string = '';
+  dataTableInitialized: boolean = false; // Track DataTable initialization
+  showResponseModal: boolean = false; // Flag to show/hide modal
 
   constructor(
     private route: ActivatedRoute,
@@ -88,8 +91,23 @@ export class ExamGenerateResultComponent implements OnInit, AfterViewInit {
     });
   }
 
-  showresponse(arg: string): void {
-    console.log(arg);
+  showresponse(studentId: string): void {
+    // Find the student's response based on the studentId
+    const studentResponse = this.studentResponseList.find(student => student.user.id === studentId);
+    console.log(studentResponse)
+    if (studentResponse) {
+      // Store the selected response to display it in the modal
+      this.selectedStudentResponse = studentResponse;
+      this.showResponseModal = true; // Open the modal to display the response
+    } else {
+      console.error('Student response not found');
+      this.message = 'Student response not found.';
+    }
+  }
+
+  closeModal(): void {
+    this.showResponseModal = false;
+    this.selectedStudentResponse = null; // Clear the selected response
   }
   publishResult():void{
     this.genResult.publishResult(this.selectedExamId).subscribe(

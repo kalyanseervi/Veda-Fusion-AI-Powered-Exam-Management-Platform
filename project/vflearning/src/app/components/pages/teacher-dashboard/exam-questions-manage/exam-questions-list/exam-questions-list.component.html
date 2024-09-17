@@ -19,12 +19,12 @@
 
     <!-- Questions List -->
     <div class="questions-list" *ngFor="let question of questions">
-        <div class="question-card" *ngFor="let question of question.questions">
+        <div class="question-card" *ngFor="let question of question.questions; let i = index">
 
             <ng-container *ngIf="!isEditing[question._id]; else editMode">
 
                 <div class="question-header">
-                    <h3>Question: {{ question.title }}</h3>
+                    <h3>Question:{{i+1}} {{ question.title }}</h3>
                     <span class="question-type">{{ question.type }} </span>
                 </div>
 
@@ -41,7 +41,7 @@
                     </div>
                 </div>
                 <div class="question-footer">
-                    <span class="material-icons-sharp danger">
+                    <span class="material-icons-sharp danger " (click)="deleteQuestion(question._id)">
                         delete
                     </span>
                     <span class="material-icons-sharp primary" (click)="enableEditMode(question._id)">
@@ -80,8 +80,8 @@
                         </div>
                     </div>
                     <div class="question-footer">
-                        <button (click)="examQuestionsEdit(question)">Save</button>
-                        <button (click)="cancelEdit(question._id)">Cancel</button>
+                        <span class="material-icons-sharp success" (click)="examQuestionsEdit(question)">save</span>
+                        <span class="material-icons-sharp danger" (click)="cancelEdit(question._id)">cancel</span>
                     </div>
 
                 </div>

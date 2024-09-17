@@ -49,7 +49,18 @@ const ResultSchema = new Schema({
   published: {
     type: Boolean,
     default: false // By default, the result is not published
+  },
+  publishedDate: {
+    type: Date // Field to track when the result was published
   }
+});
+
+// Before saving, set publishedDate if result is published
+ResultSchema.pre('save', function (next) {
+  if (this.published && !this.publishedDate) {
+    this.publishedDate = new Date(); // Set the current date when publishing
+  }
+  next();
 });
 
 module.exports = mongoose.model('Result', ResultSchema);

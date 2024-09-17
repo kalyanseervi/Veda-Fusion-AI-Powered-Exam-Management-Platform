@@ -1,8 +1,57 @@
-.dashboard {
-    padding: 20px;
+.dashboard-container {
+  padding: 20px;
+  background-color: var(--color-background);
+  color: var(--color-dark);
+
+  .top-students, .class-average {
+    margin-bottom: 20px;
   }
-  
-  canvas {
-    max-width: 100%;
+
+  .top-students ul {
+    list-style: none;
+    padding: 0;
   }
-  
+
+  .top-students li {
+    background: var(--color-primary);
+    padding: 10px;
+    border-radius: var(--border-radius-1);
+    margin-bottom: 5px;
+    color: var(--color-white);
+  }
+
+  .class-average {
+    font-size: 1.5rem;
+    background: var(--color-success);
+    padding: 10px;
+    border-radius: var(--border-radius-2);
+    color: var(--color-white);
+  }
+
+  .marks-chart {
+    margin-bottom: 30px;
+  }
+
+  .student-progress {
+    h3 {
+      margin-bottom: 15px;
+    }
+
+    .progress {
+      background-color: var(--color-light);
+      border-radius: var(--border-radius-3);
+      overflow: hidden;
+      height: 25px;
+      margin-bottom: 15px;
+
+      .progress-bar {
+        height: 100%;
+        background-color: var(--color-primary);
+        color: var(--color-white);
+        padding-left: 10px;
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+}

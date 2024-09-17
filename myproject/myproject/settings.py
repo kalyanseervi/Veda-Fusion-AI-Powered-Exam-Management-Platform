@@ -13,8 +13,6 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 
 
-# settings.py
-import environ
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -34,16 +32,10 @@ ALLOWED_HOSTS = []
 
 
 
-# Initialise environment variables
-env = environ.Env()
-environ.Env.read_env()  # read .env file
-
-
 # Application definition
 
 INSTALLED_APPS = [
-    
-    'corsheaders',
+ 
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -51,9 +43,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'channels',
+
     'questions',
-    'celery',
+
 ]
 
 MIDDLEWARE = [
@@ -85,13 +77,7 @@ TEMPLATES = [
     },
 ]
 
-# Celery Configuration Options
-CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
-CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/0'
-# CELERY_ACCEPT_CONTENT = ['application/json']
-# CELERY_TASK_SERIALIZER = 'json'
-# CELERY_RESULT_SERIALIZER = 'json'
-CELERY_IMPORTS = ('questions.tasks',)
+
 
 WSGI_APPLICATION = 'myproject.wsgi.application'
 

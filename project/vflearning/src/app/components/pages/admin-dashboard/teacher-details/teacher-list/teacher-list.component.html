@@ -10,7 +10,8 @@
                 </div>
             </div>
             <div class="teacher-card-body">
-                <p><strong>School:</strong> {{ teacher.school.name }}</p>
+                <p><strong>Class:</strong> {{ teacher.teachingClasses[0].classname }}</p>
+                <p><strong>Subject:</strong> {{ teacher.teachingSubjects[0].subjectName }}</p>
             </div>
             <div class="teacher-card-footer">
                 <button (click)="viewTeacherDetails(teacher._id)">View</button>

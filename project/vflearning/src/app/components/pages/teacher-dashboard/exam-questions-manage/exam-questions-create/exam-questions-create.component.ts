@@ -136,6 +136,7 @@ export class ExamQuestionsCreateComponent implements OnInit {
         })
       );
 
+      console.log(submittedQuestions)
 
       // Assuming you have a service method to handle the POST request
       this.examQuestionsService

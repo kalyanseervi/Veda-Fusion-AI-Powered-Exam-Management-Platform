@@ -39,6 +39,7 @@ export class TeacherCreateComponent implements OnInit {
   availableSubjects: Subject[] = [];
   isSecondSectionActive = false;
   selectedFile: File | null = null;
+  loading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -93,9 +94,9 @@ export class TeacherCreateComponent implements OnInit {
   }
 
   next(): void {
-    
-      this.isSecondSectionActive = true;
-    
+
+    this.isSecondSectionActive = true;
+
   }
 
   back(): void {
@@ -112,6 +113,7 @@ export class TeacherCreateComponent implements OnInit {
   }
 
   onSubmit(): void {
+    this.loading = true;
     if (this.teacherForm.valid) {
       const formData = new FormData();
       Object.keys(this.teacherForm.controls).forEach(key => {
@@ -124,10 +126,12 @@ export class TeacherCreateComponent implements OnInit {
 
       this.teacherService.createTeacher(formData).subscribe(
         () => {
+          this.loading = false;
           alert('Teacher registered successfully!');
           this.router.navigate(['/dashboard/admin']);
         },
         (error) => {
+          this.loading = false;
           console.error('Error registering teacher:', error);
           alert('Failed to register teacher. Please try again.');
         }

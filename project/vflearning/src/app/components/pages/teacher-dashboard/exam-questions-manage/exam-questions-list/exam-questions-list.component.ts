@@ -72,6 +72,18 @@ export class ExamQuestionsListComponent implements OnInit {
     );
   }
 
+  deleteQuestion(questionId:any){
+    this.examQuestionsService.deleteExamQuestion(questionId,this.selectedExamID).subscribe(
+      (response) => {
+     
+        console.log(response)
+      },
+      (error) => {
+        console.error('Error updating question:', error);
+      }
+    );
+  }
+
   onPageChange(page: number): void {
     this.page = page;
     this.loadQuestions();
