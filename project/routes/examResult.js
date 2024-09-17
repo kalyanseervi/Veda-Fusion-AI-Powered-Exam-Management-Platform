@@ -260,7 +260,20 @@ router.get("/viewResultOfStd/:id", auth, async (req, res) => {
     const userId = req.user._id; // Assuming you have user details in req.user from auth middleware
 
     // Fetch exam result
-    const examResult = await Result.findOne({ examId: examId });
+    const examResult = await Result.findOne({ examId: examId }) .populate({
+      path: "examId",
+      select:'examName',
+      populate: {
+        path: "subject",
+        model: "Subject", // Optional: If you want to specify the model for `subject`
+        select:'subjectName'
+      },
+    });
+
+    // console.log('examResult',examResult.examId.examName)
+    // console.log('examResult subject',examResult.examId.subject.subjectName)
+    const examName = examResult.examId.examName;
+    const subjectName = examResult.examId.subject.subjectName;
 
     // If result document doesn't exist, return 404
     if (!examResult) {
@@ -286,6 +299,8 @@ router.get("/viewResultOfStd/:id", auth, async (req, res) => {
     res.status(200).json({
       user: {
         id: userResult.user,
+        examName:examName,
+        subjectName:subjectName,
         totalQuestions: userResult.totalQuestions,
         attemptedQuestions: userResult.attemptedQuestions,
         totalMarks: userResult.totalMarks,

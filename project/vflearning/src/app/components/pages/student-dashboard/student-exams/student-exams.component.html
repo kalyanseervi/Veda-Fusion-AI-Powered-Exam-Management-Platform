@@ -14,6 +14,7 @@
   <table class="assigned-exam-table">
     <thead>
       <tr>
+        <th>Subject</th>
         <th>Exam Name</th>
         <th>Status</th>
         <th>Exam Date & Time</th>
@@ -23,6 +24,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let exam of stdexamdtl.assignedExams">
+        <td>{{ exam.examId.subject.subjectName }}</td>
         <td>{{ exam.examId.examName }}</td>
         <td>{{ exam.status }}</td>
 
@@ -45,7 +47,7 @@
 
 <div class="popup-container" *ngIf="isPopupVisible">
   <div class="popup-dtl" *ngIf="resultDtl">
-    <h2 class="popup-title">Your Exam Result</h2>
+    <h2 class="popup-title">{{resultDtl.examName}}</h2>
     
     <div class="popup-body">
       <span class="close-popup material-icons-sharp danger" (click)="closePopup()">close</span>

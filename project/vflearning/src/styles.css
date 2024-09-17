@@ -373,6 +373,8 @@ main .insights {
   gap: 1.6rem;
 }
 
+
+
 main .insights>div {
   background: var(--color-white);
   padding: var(--card-padding);

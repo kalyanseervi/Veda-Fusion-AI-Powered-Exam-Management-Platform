@@ -24,6 +24,7 @@ app.use('/api/exam-questions',require('./routes/examQuestion'));
 app.use('/api/assignExam',require('./routes/assignExam'));
 app.use('/api/examResult',require('./routes/examResult'));
 app.use('/api/student',require('./routes/student'));
+app.use('/api/dashbaord',require('./routes/dashboard'));
 app.use('/api/protected', require('./routes/protected')); // Example of protected routes
 
 

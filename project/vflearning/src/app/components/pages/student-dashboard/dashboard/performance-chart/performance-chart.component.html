@@ -1,0 +1,16 @@
+<div class="student_data">
+    <div class="filters">
+        <label for="examFilter">Filter by Exam:</label>
+        <select id="examFilter" (change)="onFilterChange($event)">
+            <option value="all">All Exams</option>
+            <option *ngFor="let exam of exams" [value]="exam._id">{{ exam.examName }}</option>
+        </select>
+
+        <label for="subjectFilter">Filter by Subject:</label>
+        <select id="subjectFilter" (change)="onFilterChange($event)">
+            <option value="all">All Subjects</option>
+            <option *ngFor="let subject of subjects" [value]="subject._id">{{ subject.subjectName }}</option>
+        </select>
+    </div>
+</div>
+

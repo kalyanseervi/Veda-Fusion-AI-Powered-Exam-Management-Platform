@@ -3,7 +3,7 @@ const { body, validationResult } = require("express-validator");
 const router = express.Router();
 const Exam = require("../models/Exam"); // Adjust the path as necessary
 const AssignedExam = require("../models/AssignedExam");
-const QuesResponse = require("../models/Ques_response")
+const QuesResponse = require("../models/Ques_response");
 const { decodeTokenFromParams, auth } = require("../middleware/auth"); //
 const transporter = require("../config/nodemailer");
 const examMiddleware = require("../middleware/examMiddleware");
@@ -19,7 +19,6 @@ const sendVerificationEmail = async (email, code) => {
   try {
     await transporter.sendMail(mailOptions);
   } catch (err) {
-    
     throw new Error(
       "Could not send verification email. Please try again later."
     );
@@ -39,7 +38,7 @@ router.post("/assignExamAndNotify", auth, async (req, res) => {
     if (existingAssignments.length > 0) {
       // If assignments exist, handle the scenario (e.g., update existing assignments or ignore the request)
       // For now, let's log a message and return without making any changes
-      
+
       return res.status(200).json({
         message:
           "Assignments already exist for the provided exam ID and student IDs.",
@@ -65,7 +64,6 @@ router.post("/assignExamAndNotify", auth, async (req, res) => {
         // This could involve sending emails, push notifications, or any other form of communication
         const code = "assignexam";
         await sendVerificationEmail(email, code);
-       
       })
     );
 
@@ -77,14 +75,26 @@ router.post("/assignExamAndNotify", auth, async (req, res) => {
   }
 });
 
-router.get("/assignedExams",auth, async (req, res) => {
+router.get("/assignedExams", auth, async (req, res) => {
   try {
     const studentId = req.user._id; // Assuming the student ID is stored in req.user._id after authentication
 
     // Find all assigned exams for the authenticated student
     const assignedExams = await AssignedExam.find({
       studentId: studentId,
-    }).populate("examId").populate('assignedBy');
+    })
+      .populate({
+        path: "examId",
+        populate: {
+          path: "subject",
+          model: "Subject", // Optional: If you want to specify the model for `subject`
+          select:'subjectName'
+        },
+      })
+      .populate({
+        path: "assignedBy",
+        select: "name email",
+      });
 
     if (!assignedExams) {
       return res.status(404).json({
@@ -117,18 +127,18 @@ router.post("/startExam", auth, examMiddleware, async (req, res) => {
     }
 
     // At this point, the middleware has already validated the timing and status
-    res.status(200).json({ message: "Exam can be started", examDetails: assignedExam });
+    res
+      .status(200)
+      .json({ message: "Exam can be started", examDetails: assignedExam });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
-
 router.post("/quesresponseAll", auth, async (req, res) => {
   try {
     const userId = req.user._id;
     const { examId, responses } = req.body;
-    
 
     if (examId && userId) {
       // Create a new QuesResponse document or update the existing one
@@ -148,7 +158,6 @@ router.post("/quesresponseAll", auth, async (req, res) => {
         (response) => response.selectedOption
       ).length;
       const totalCount = responses.length;
-      
 
       // Update the status to 'completed' if at least one question is answered
       if (answeredCount > 0) {
@@ -176,14 +185,12 @@ router.post("/quesresponse/:quesId", auth, async (req, res) => {
     const quesId = req.params.quesId;
     const { examId, responses } = req.body;
     const selectedOption = responses[0].selectedOption; // Accessing selectedOption from the first element of responses array
-   
 
     if (userId && examId && quesId) {
       // Find the existing QuesResponse document or create a new one
       let quesResponse = await QuesResponse.findOne({ userId, examId });
 
       if (!quesResponse) {
-        
         // If no existing document found, create a new one with the new response
         quesResponse = new QuesResponse({
           userId,
@@ -195,10 +202,10 @@ router.post("/quesresponse/:quesId", auth, async (req, res) => {
         const existingResponse = quesResponse.responses.find(
           (response) => response.questionId.toString() === quesId
         );
-       
+
         if (existingResponse) {
           // If response for the specific question already exists, update the selectedOption
-         
+
           existingResponse.selectedOption = selectedOption;
         } else {
           // If response for the specific question does not exist, add a new response

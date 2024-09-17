@@ -1,27 +1,18 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-
-import { DashboardService } from '../../../../services/dashbaord/dashboard.service';
-import { AuthService } from '../../../../services/auth/auth.service';
-
-import { BaseChartDirective } from 'ng2-charts';
-import { PerformanceChartComponent } from './performance-chart/performance-chart.component';
-
 import { Chart, registerables } from 'chart.js';
-
+import { DashboardService } from '../../../../../services/dashbaord/dashboard.service';
 import { CommonModule } from '@angular/common';
 
 Chart.register(...registerables);
 
 @Component({
-  selector: 'app-dashboard',
+  selector: 'app-performance-chart',
   standalone: true,
-  imports: [BaseChartDirective,PerformanceChartComponent,CommonModule],
-  templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.css',
+  imports: [CommonModule],
+  templateUrl: './performance-chart.component.html',
+  styleUrl: './performance-chart.component.css',
 })
-export class DashboardComponent implements OnInit,OnDestroy {
-
-  DashboardData:any
+export class PerformanceChartComponent implements OnInit, OnDestroy {
   exams: any[] = [];
   subjects: any[] = [];
   studentResults: any[] = [];
@@ -29,21 +20,10 @@ export class DashboardComponent implements OnInit,OnDestroy {
   chart: Chart | undefined;
   selectedExam: string = 'all';
   selectedSubject: string = 'all';
-  
-  constructor(
-    private dashboardService: DashboardService,
-    private authService: AuthService
-  ) {}
+
+  constructor(private dashboardService: DashboardService) {}
+
   ngOnInit(): void {
-    this.dashboardService.getDashboardData().subscribe({
-      next: (res) => {
-        this.DashboardData = res;
-        console.log(res);
-      },
-      error: (err) => {
-        console.log(err);
-      },
-    });
     this.loadDashboardData();
   }
 
@@ -52,6 +32,7 @@ export class DashboardComponent implements OnInit,OnDestroy {
       this.chart.destroy();
     }
   }
+
   loadDashboardData(): void {
     this.dashboardService.getDashboardData().subscribe((data) => {
       this.studentResults = data.studentResults;
@@ -164,4 +145,3 @@ export class DashboardComponent implements OnInit,OnDestroy {
     return 'D';
   }
 }
-

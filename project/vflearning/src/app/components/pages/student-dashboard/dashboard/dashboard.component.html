@@ -1,1 +1,75 @@
 <h1>Dashboard</h1>
+
+<div class="insights-data">
+    <!-- Total Exams -->
+    <div class="student_data">
+        <span class="material-icons-sharp">analytics</span>
+        <div class="middle">
+            <div class="left">
+                <h3>Total Exams</h3>
+                <h1>{{DashboardData.totalExams}}</h1>
+            </div>
+        </div>
+        <small class="text-muted">Exams you've taken</small>
+    </div>
+
+    <!-- Total Subjects -->
+    <div class="student_data">
+        <span class="material-icons-sharp">bar_chart</span>
+        <div class="middle">
+            <div class="left">
+                <h3>Total Subjects</h3>
+                <h1>{{DashboardData.totalSubjects}}</h1>
+            </div>
+        </div>
+        <small class="text-muted">Your subjects</small>
+    </div>
+
+    <div class="student_data">
+        <div class="filters">
+            <label for="examFilter">Filter by Exam:</label>
+            <select id="examFilter" (change)="onFilterChange($event)">
+                <option value="all">All Exams</option>
+                <option *ngFor="let exam of exams" [value]="exam._id">{{ exam.examName }}</option>
+            </select>
+    
+            <label for="subjectFilter">Filter by Subject:</label>
+            <select id="subjectFilter" (change)="onFilterChange($event)">
+                <option value="all">All Subjects</option>
+                <option *ngFor="let subject of subjects" [value]="subject._id">{{ subject.subjectName }}</option>
+            </select>
+        </div>
+    </div>
+
+
+   
+</div>
+<div class="container">
+    <div class="chart-container">
+        <canvas id="performanceChart"></canvas>
+    </div>
+
+    <div class="table-container">
+        <h3>Performance Details</h3>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Exam</th>
+                    <th>Subject</th>
+                    <th>Percentage</th>
+                    <th>Grade</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let result of filteredResults">
+                    <td>{{ result.examId.examName }}</td>
+                    <td>{{ result.examId.subject.subjectName }}</td>
+                    <td>{{ result.userResults[0].percentage }}%</td>
+                    <td>{{ getGrade(result.userResults[0].percentage) }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
