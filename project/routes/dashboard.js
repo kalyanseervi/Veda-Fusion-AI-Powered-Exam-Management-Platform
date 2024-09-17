@@ -17,49 +17,97 @@ router.get("/teacher", auth, async (req, res) => {
 });
 
 router.get("/student", auth, async (req, res) => {
-    try {
-      console.log("i am here");
-      const studentId = req.user._id;
-  
-      // Count total exams
-      const totalExams = await Result.countDocuments({
-        "userResults.user": studentId,
+  try {
+    console.log("i am here");
+    const studentId = req.user._id;
+
+    // Count total exams
+    const totalExams = await Result.countDocuments({
+      "userResults.user": studentId,
+    });
+
+    // Find student and populate subjects
+    const student = await Student.findById(studentId).populate("studentsubjects");
+
+    const totalSubjects = student.studentsubjects ? student.studentsubjects.length : 0;
+
+    // Find student results and populate exam and subject details
+    const studentResults = await Result.find({
+      "userResults.user": studentId,
+    }).populate({
+      path: "examId",
+      select: "examName",
+      populate: {
+        path: "subject",
+        model: "Subject", 
+        select: "subjectName",
+      },
+    });
+
+    console.log("my results", studentResults);
+
+    // Calculate the average percentage for each subject and all subjects
+    const classResults = await Result.find({}).populate({
+      path: "examId",
+      select: "examName",
+      populate: {
+        path: "subject",
+        model: "Subject",
+        select: "subjectName",
+      },
+    });
+
+    // Group by subject and calculate the average percentage for each subject
+    const subjectAverages = {};
+    const allPercentages = [];
+
+    classResults.forEach(result => {
+      const subjectId = result.examId.subject._id.toString();
+      const userResults = result.userResults;
+
+      // Loop through the results to calculate total percentage per subject
+      userResults.forEach(userResult => {
+        const percentage = userResult.percentage;
+        allPercentages.push(percentage); // Collect all percentages for total average
+
+        if (!subjectAverages[subjectId]) {
+          subjectAverages[subjectId] = {
+            subjectName: result.examId.subject.subjectName,
+            totalPercentage: 0,
+            count: 0,
+          };
+        }
+
+        subjectAverages[subjectId].totalPercentage += percentage;
+        subjectAverages[subjectId].count += 1;
       });
-  
-      // Find student and populate subjects
-      const student = await Student.findById(studentId).populate("studentsubjects");
-  
-      const totalSubjects = student.studentsubjects
-        ? student.studentsubjects.length
-        : 0;
-  
-      // Find student results and populate exam and subject details
-      const studentResults = await Result.find({
-        "userResults.user": studentId,
-      }).populate({
-        path: "examId",
-        select: "examName",
-        populate: {
-          path: "subject",
-          model: "Subject", // Optional: If you want to specify the model for `subject`
-          select: "subjectName",
-        },
-      });
-  
-      console.log("my results", studentResults);
-  
-      // Send response
-      res.status(200).json({
-        totalExams: totalExams,
-        totalSubjects: totalSubjects,
-        studentResults: studentResults, // Include studentResults in the response
-        msg: "Welcome to the student area",
-      });
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      res.status(500).json({ msg: "Error fetching data", error });
+    });
+
+    // Calculate average percentage for each subject
+    for (const subjectId in subjectAverages) {
+      const subjectData = subjectAverages[subjectId];
+      subjectData.averagePercentage = subjectData.totalPercentage / subjectData.count;
     }
-  });
-  
+
+    // Calculate the average percentage across all subjects with 2 decimal places
+    const totalClassAverage = parseFloat(
+      (allPercentages.reduce((acc, curr) => acc + curr, 0) / allPercentages.length).toFixed(2)
+    );
+
+    // Send response
+    res.status(200).json({
+      totalExams,
+      totalSubjects,
+      studentResults, // Include studentResults in the response
+      subjectAverages, // Send average percentage for each subject
+      totalClassAverage, // Send the overall average percentage across all subjects
+      msg: "Welcome to the student area",
+    });
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    res.status(500).json({ msg: "Error fetching data", error });
+  }
+});
+
 
 module.exports = router;
