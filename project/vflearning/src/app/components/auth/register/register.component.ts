@@ -16,6 +16,7 @@ export class RegisterComponent {
   stepIndex = 0;
   registrationForm: FormGroup;
   message: string = '';
+  loading: boolean = false;
 
   constructor(private authService: AuthService, private router: Router, private fb: FormBuilder) {
     this.registrationForm = this.fb.group({
@@ -62,11 +63,14 @@ export class RegisterComponent {
       this.authService.register(this.registrationForm.value).subscribe({
         next: () => {
           this.message = 'Registration successful!';
+          this.loading = false;
+          alert('Admin registered successfully!');
           this.router.navigate(['/login'])},
         error: (err) => {
           this.message = `${err.error['msg']}`;
           console.error(err)
         },
+       
       });
     } else {
       console.log('Form is invalid:', this.registrationForm.errors); // Debugging line
