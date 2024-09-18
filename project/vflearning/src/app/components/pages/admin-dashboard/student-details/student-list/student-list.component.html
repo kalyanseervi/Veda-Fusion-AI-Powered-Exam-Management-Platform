@@ -1,22 +1,48 @@
-<div class="student-cards-container">
-    <h2>students List</h2>
-    <div class="student-cards">
-        <div *ngFor="let student of students" class="student-card">
-            <div class="student-card-header">
-                <img src="assets\images\profile-avatar.png" alt="{{ student.name }}" class="student-photo">
-                <div class="student-info">
-                    <h4>{{ student.name |  uppercase }}</h4>
-                    <p>{{ student.email }}</p>
-                </div>
-            </div>
-            <div class="student-card-body">
-                <p><strong>School:</strong> {{ student.school.name }}</p>
-            </div>
-            <div class="student-card-footer">
-                <button (click)="viewStudentDetails(student._id)">View</button>
-                <button (click)="editStudent(student._id)">Edit</button>
-                <button (click)="deleteStudent(student._id)" class="delete-btn">Delete</button>
-            </div>
+<div class="student-list-container">
+    
+    <table class="student-table" id="studentListTable">
+        <thead>
+            <tr>
+                <th>Photo</th>
+                <th>Enrollment Id</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Class</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let student of students" class="student-row">
+                <td><img src="assets\images\profile-avatar.png" alt="{{ student.name }}" class="student-photo"></td>
+                <td>{{ student.enrollmentId}}</td>
+                <td>{{ student.name | uppercase }}</td>
+                <td>{{ student.email }}</td>
+                <td>{{ student.studentClass[0].classname }}</td>
+                <td>
+                    <button (click)="viewStudentDetail(student._id)" class="view-btn">View</button>
+                    <button (click)="editStudent(student._id)" class="edit-btn">Edit</button>
+                    <button (click)="deleteStudent(student._id)" class="delete-btn">Delete</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="popup-container-std-list" *ngIf="isPopupVisible">
+    <div class="popup-content-std-list">
+        <button class="close-popup-std-list material-icons-sharp" (click)="closePopup()">close</button>
+        <div class="popup-details">
+            <p><strong>Name:</strong> {{ singleStudent['name'] || 'N/A' }}</p>
+            <p><strong>Email:</strong> {{ singleStudent['email'] || 'N/A' }}</p>
+            <p *ngFor="let class of singleStudent.studentClass">
+                <strong>Class:</strong> {{ class['classname'] || 'N/A' }}
+            </p>
+            <p><strong>Subjects:</strong> 
+                <span *ngFor="let subject of singleStudent.studentsubjects">
+                    {{ subject['subjectName'] || 'N/A' }}&nbsp;
+                </span>
+            </p>
         </div>
     </div>
 </div>
+

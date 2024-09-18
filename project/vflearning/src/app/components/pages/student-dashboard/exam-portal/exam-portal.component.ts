@@ -126,8 +126,6 @@ export class ExamPortalComponent implements OnInit, OnDestroy {
     this.currentQuestionIndex = index;
     this.currentQuestion = this.questions[index];
     this.enforceWordLimit();
-    
-    
   }
 
   prevQuestion(): void {

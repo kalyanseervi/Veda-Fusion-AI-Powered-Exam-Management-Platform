@@ -192,9 +192,11 @@ router.get("/:id", auth, async (req, res) => {
 router.put("/:id", auth, async (req, res) => {
   try {
     const {
+      name,
       studentsubjects,
       studentClass,
     } = req.body;
+    console.log('i am here',req.body)
 
     // Ensure the user is an admin
     if (req.user.role.name !== "admin") {
@@ -212,7 +214,6 @@ router.put("/:id", auth, async (req, res) => {
         studentsubjects: studentsubjects
         ? studentsubjects.split(",").map((id) => id.trim())
         : [],
-       
       },
       { new: true }
     ).populate("school", "name");

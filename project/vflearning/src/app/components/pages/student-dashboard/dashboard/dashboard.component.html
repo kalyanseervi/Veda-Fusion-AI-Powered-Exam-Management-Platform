@@ -29,8 +29,10 @@
             <div class="middle">
                 <h3>Class Average</h3>
                 <h1>{{DashboardData.totalClassAverage}}%</h1>
-                <span *ngIf="averagePercentage !== null"><h3>Subject Average</h3>
-                    <h1>{{ averagePercentage }}%</h1></span>
+                <span *ngIf="averagePercentage !== null">
+                    <h3>Subject Average</h3>
+                    <h1>{{ averagePercentage }}%</h1>
+                </span>
             </div>
         </div>
 
@@ -57,7 +59,7 @@
         <div class="chart-container">
             <canvas id="performanceChart"></canvas>
             <!-- Display average percentage below the chart -->
-           
+
         </div>
 
         <div class="table-container">

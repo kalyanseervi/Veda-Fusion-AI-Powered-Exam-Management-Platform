@@ -1,51 +1,48 @@
-
-<!-- Loading Indicator -->
-<div *ngIf="loading" class="loading-overlay">
-    <div class="spinner"></div>
-    <p>Please wait.... Student Registaring</p>
-  </div>
+<div class="loading-overlay" *ngIf="loading">
+  <div class="spinner"></div>
+  <p>Please wait....</p>
+</div>
 
 <div class="form-container mat-dialog-content">
-    <h2>Student Registration</h2>
-    <form [formGroup]="studentForm" (ngSubmit)="onSubmit()" class="form">
-      <!-- Personal Details -->
-      <div class="details personal">
-        
-        <div class="fields">
-          <div class="input-field">
-            <label for="name">Name</label>
-            <input id="name" formControlName="name" type="text" placeholder="Enter username" />
-          </div>
-  
-          <div class="input-field">
-            <label for="email">Email</label>
-            <input id="email" formControlName="email" type="email" placeholder="Enter email" />
-          </div>
-  
-          <div class="input-field">
-            <label for="studentClass">Select Class</label>
-            <select id="studentClass" formControlName="studentClass">
-              <option *ngFor="let classItem of availableClasses" [value]="classItem._id">{{ classItem.classname }}</option>
+  <h2>{{ isEditMode ? 'Edit Student' : 'Student Registration' }}</h2>
+  <form [formGroup]="studentForm" (ngSubmit)="onSubmit()" class="form">
+    <!-- Personal Details -->
+    <div class="details personal">
+      <div class="fields">
+        <div class="input-field">
+          <label for="name">Name</label>
+          <input id="name" formControlName="name" type="text" placeholder="Enter name" />
+        </div>
+
+        <div class="input-field">
+          <label for="email">Email</label>
+          <input id="email" formControlName="email" type="email" placeholder="Enter email" />
+        </div>
+
+        <div class="input-field">
+          <label for="studentClass">Select Class</label>
+          <select id="studentClass" formControlName="studentClass">
+            <option *ngFor="let classItem of availableClasses" [value]="classItem._id">{{ classItem.classname }}</option>
+          </select>
+        </div>
+
+        <div class="input-field">
+          <label for="studentsubjects">Subjects</label>
+          <div class="custom-multi-select">
+            <select id="studentsubjects" formControlName="studentsubjects" multiple>
+              <option *ngFor="let subject of availableSubjects" [value]="subject._id">{{ subject.subjectName }}</option>
             </select>
           </div>
-  
-          <div class="input-field">
-            <label for="studentsubjects">Subjects</label>
-            <div class="custom-multi-select">
-                <select id="studentsubjects" formControlName="studentsubjects" multiple>
-                    <option *ngFor="let subject of availableSubjects" [value]="subject._id">{{ subject.subjectName }}</option>
-                </select>
-            </div>
-        </div>
-        </div>
-        <!-- Submit Button -->
-        <div class="buttons">
-          <button type="submit" class="submit">
-            <span class="btnText">Submit</span>
-            <i class="uil uil-navigator"></i>
-          </button>
         </div>
       </div>
-    </form>
-  </div>
-  
+
+      <!-- Submit Button -->
+      <div class="buttons">
+        <button type="submit" class="submit">
+          <span class="btnText">{{ isEditMode ? 'Update' : 'Submit' }}</span>
+          <i class="uil uil-navigator"></i>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

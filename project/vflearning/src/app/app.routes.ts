@@ -70,9 +70,11 @@ export const routes: Routes = [
         component: StudentDetailsManageComponent,
         children: [
           { path: 'student-create', component: StudentCreateComponent },
+         
           { path: 'student-list', component: StudentListComponent },
         ],
       },
+      { path: 'student-details/:id', component: StudentCreateComponent },
       {
         path: 'subject-manage',
         component: SubjectManageComponent,

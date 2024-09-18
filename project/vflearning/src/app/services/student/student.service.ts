@@ -36,6 +36,7 @@ export class StudentService {
 
   // Update a teacher
   updateStudent(id: string, studentData: FormData): Observable<any> {
+    console.log("my studentData",studentData)
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.getToken()}`,
     }); // Add token handling as needed

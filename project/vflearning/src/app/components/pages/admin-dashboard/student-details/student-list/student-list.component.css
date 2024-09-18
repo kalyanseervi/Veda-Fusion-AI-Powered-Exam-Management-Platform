@@ -1,38 +1,49 @@
-.student-cards-container {
-    width: 100%;
-    max-width: 1000px;
-    margin: 0 auto;
+/* Styling the table */
+.student-list-container {
     padding: 2rem;
+    background-color: var(--color-background);
+}
+.student-list-container h2 {
+    margin: 2rem 0;
+    
 }
 
-.student-cards {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-}
-
-.student-card {
-    background: var(--color-white);
+.student-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+    
+    background-color: var(--color-white);
     border-radius: var(--border-radius-2);
     box-shadow: var(--box-shadow);
+}
+
+.student-table thead {
+    background-color: var(--color-info-variant);
+    color: var(--color-dark);
+    text-transform: uppercase;
+    
+    letter-spacing: 2px;
+}
+
+.student-table th, .student-table td {
     padding: 1rem;
-    width: calc(33.333% - 1.5rem);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+    
+
 }
 
-.student-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 2rem 4rem var(--color-light);
+.student-table th {
+    font-weight: 600;
 }
 
-.student-card-header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
+.student-table tbody tr {
+    transition: background-color 0.3s ease;
+    letter-spacing: 1px;
+}
+
+.student-table tbody tr:hover {
+    background-color: var(--color-light);
 }
 
 .student-photo {
@@ -40,65 +51,168 @@
     height: 50px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid var(--color-primary);
+    border: 2px solid var(--color-info-light);
 }
 
-.student-info h4 {
-    margin: 0;
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: var(--color-dark);
-}
-
-.student-info p {
-    margin: 0.3rem 0 0;
-    font-size: 0.9rem;
-    color: var(--color-info-dark);
-}
-
-.student-card-body p {
-    margin: 0.5rem 0;
-    font-size: 0.9rem;
-    color: var(--color-dark-variant);
-}
-
-.student-card-footer {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 1rem;
-}
-
-.student-card-footer button {
-    padding: 0.4rem 1rem;
+.student-table td button {
+    padding: 0.5rem 0.5rem;
     border: none;
     border-radius: var(--border-radius-1);
-    background: var(--color-primary);
-    color: var(--color-white);
     cursor: pointer;
     transition: background-color 0.3s ease;
-    margin: 0.3rem;
+    margin: 0.5rem;
 }
 
-.student-card-footer button:hover {
-    background: var(--color-primary-variant);
+.view-btn {
+    background-color: var(--color-primary);
+    color: var(--color-white);
 }
 
-.student-card-footer .delete-btn {
+.edit-btn {
+    background-color: var(--color-success);
+    color: var(--color-white);
+}
+
+.delete-btn {
+    background-color: var(--color-danger);
+    color: var(--color-white);
+}
+
+.view-btn:hover, .edit-btn:hover, .delete-btn:hover {
+    opacity: 0.8;
+}
+
+/* Modal Background */
+.popup-container-std-list {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    backdrop-filter: blur(5px); /* Adds blur to background */
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Modal Content */
+.popup-content-std-list {
+    background-color: var(--color-white);
+    padding: 2rem;
+    border-radius: var(--border-radius-3);
+    width: 90%;
+    max-width: 600px; /* Limit max width */
+    box-shadow: 0 2rem 4rem rgba(0, 0, 0, 0.2);
+    position: relative;
+    transform: scale(0.9);
+    animation: scaleUp 0.3s ease-in-out;
+}
+
+@keyframes scaleUp {
+    from {
+        transform: scale(0.9);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+/* Close Button */
+.close-popup-std-list {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
     background: var(--color-danger);
+    border-radius: var(--border-radius-2);
+    color: var(--color-white  );
+    padding: 0.5rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.3s ease;
 }
 
-.student-card-footer .delete-btn:hover {
-    background: var(--color-danger-dark);
+.close-popup-std-list:hover {
+    color: var(--color-warning);
 }
 
-@media (max-width: 768px) {
-    .student-card {
-        width: calc(50% - 1.5rem);
+/* Popup Details */
+.popup-details p {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    color: var(--color-dark);
+    letter-spacing: 1.2px;
+}
+
+.popup-details strong {
+    color: var(--color-primary);
+}
+.popup-details span{
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    background: var(--color-info-light);
+    margin: 0.5rem;
+
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .popup-content-std-list {
+        width: 95%;
+        padding: 1.5rem;
+    }
+
+    .popup-details p {
+        font-size: 0.9rem;
+    }
+
+    .close-popup-std-list {
+        font-size: 1.2rem;
     }
 }
 
-@media (max-width: 480px) {
-    .student-card {
-        width: 100%;
-    }
+/* Style for the custom search label */
+.filter-search {
+    font-weight: bold;
+    color: var(--color-primary); /* Matches your color palette */
+    font-size: 1rem;
+    margin-right: 10px;
+    display: inline-block;
+}
+
+/* Style for the search input field */
+.dataTables_filter input {
+    border: 1px solid var(--color-info-light);
+    padding: 5px 10px;
+    border-radius: var(--border-radius-1);
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+/* On focus, change border color */
+.dataTables_filter input:focus {
+    border-color: var(--color-primary);
+}
+
+/* Adjust the overall layout of the search filter */
+.dataTables_filter {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+/* Optional: Add some margin to the table */
+#studentListTable_wrapper {
+    margin: 20px 0;
 }
