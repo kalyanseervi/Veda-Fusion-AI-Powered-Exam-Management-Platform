@@ -3,6 +3,7 @@
     <table class="student-table" id="studentListTable">
         <thead>
             <tr>
+                <th>Sr.No.</th>
                 <th>Photo</th>
                 <th>Enrollment Id</th>
                 <th>Name</th>
@@ -12,16 +13,17 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let student of students" class="student-row">
+            <tr *ngFor="let student of students; let i = index;" class="student-row">
+                <td>{{i+1}}</td>
                 <td><img src="assets\images\profile-avatar.png" alt="{{ student.name }}" class="student-photo"></td>
                 <td>{{ student.enrollmentId}}</td>
                 <td>{{ student.name | uppercase }}</td>
                 <td>{{ student.email }}</td>
                 <td>{{ student.studentClass[0].classname }}</td>
                 <td>
-                    <button (click)="viewStudentDetail(student._id)" class="view-btn">View</button>
-                    <button (click)="editStudent(student._id)" class="edit-btn">Edit</button>
-                    <button (click)="deleteStudent(student._id)" class="delete-btn">Delete</button>
+                    <button (click)="viewStudentDetail(student._id)" class="view-btn material-icons-sharp">visibility</button>
+                    <button (click)="editStudent(student._id)" class="edit-btn material-icons-sharp">edit</button>
+                    <button (click)="deleteStudent(student._id)" class="delete-btn material-icons-sharp">delete</button>
                 </td>
             </tr>
         </tbody>

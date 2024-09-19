@@ -39,7 +39,7 @@
   
   .profile-body {
     background-color: var(--color-primary-light);
-    padding: var(--padding-1);
+    
     border-radius: var(--border-radius-2);
   }
   

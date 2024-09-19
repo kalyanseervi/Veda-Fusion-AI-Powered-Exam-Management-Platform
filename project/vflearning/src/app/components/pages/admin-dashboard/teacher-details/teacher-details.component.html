@@ -1,19 +1,16 @@
-<!-- <app-teacher-list></app-teacher-list>
-
-<div class="add_teacher">
-    <app-teacher-create></app-teacher-create>
-    <button (click)="openPopup()">Add Teacher</button>
-
-</div>
-<router-outlet></router-outlet> -->
-<button (click)="openPopup()" style="padding: 10px 20px; cursor: pointer;">Add Teacher</button>
-<app-teacher-list></app-teacher-list>
-
-<!-- Popup Container -->
-<div class="popup-container" *ngIf="isPopupVisible">
-  <div class="add_teacher">
-    <app-teacher-create></app-teacher-create>
+<div>
+  <div class="std-dtl">
+    <h2>Teachers List</h2>
+    <button (click)="openPopup()" class="add_teacher_btn">Add Teacher</button>
   </div>
-  <button class="close-popup" (click)="closePopup()">Close</button>
+  <app-teacher-list></app-teacher-list>
+  <!-- Popup Container -->
+  <div class="popup-container" *ngIf="isPopupVisible">
+    <div class="add_teacher">
+      <app-teacher-create></app-teacher-create>
+    </div>
+    <button class="close-popup" (click)="closePopup()">Close</button>
+  </div>
+  <!-- <router-outlet></router-outlet> -->
 </div>
-<!-- <router-outlet></router-outlet> -->
+

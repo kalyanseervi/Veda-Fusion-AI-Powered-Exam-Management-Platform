@@ -8,3 +8,36 @@
 
     z-index: 1000;
 }
+
+.std-dtl{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+    text-transform: uppercase;
+    padding: 10px;
+}
+
+/* Global button styling */
+.add_exam_btn {
+    background-color: var(--color-primary);
+    border: none;
+    border-radius: var(--border-radius-1);
+    color: var(--color-white);
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    letter-spacing: 0.15rem;
+    font-weight: 500;
+}
+
+.add_exam_btn:hover {
+    background-color: var(--color-primary-variant);
+}
+
+/* Add Student Button Styling */
+.add_exam_btn[style] {
+    margin: 5px auto;
+    display: block;
+    box-shadow: var(--box-shadow);
+}

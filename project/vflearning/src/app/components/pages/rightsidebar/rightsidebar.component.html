@@ -10,7 +10,7 @@
                 <p>{{currentUserDtl.email}}</p>
             </div>
         </div>
-        <div class="profile-body">
+        <div class="profile-body" *ngIf="currentUserDtl">
             <p *ngIf="currentUserDtl.enrollmentId"><b>Enrollment ID:</b> {{currentUserDtl.enrollmentId}}</p>
             <p *ngIf="currentUserDtl.studentClass"><b>Class:</b> <span *ngFor="let class of currentUserDtl.studentClass">{{class.classname}} </span></p>
             <p *ngIf="currentUserDtl.teachingClasses"><b>Class:</b> <span *ngFor="let class of currentUserDtl.teachingClasses">{{class.classname}} </span></p>
@@ -19,7 +19,7 @@
         </div>
     </div>
 </div>
-<div class="results">
+<div class="results" *ngIf="resultDtl">
     <h2>Results</h2>
     <div class="result-col" *ngFor="let item of resultDtl">
         <div class="icon">

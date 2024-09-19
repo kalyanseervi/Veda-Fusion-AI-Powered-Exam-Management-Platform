@@ -1,11 +1,20 @@
-<button (click)="openPopup()" style="padding: 10px 20px; cursor: pointer;">Add Exam</button>
+<div>
+  <div class="std-dtl">
 
-<app-exam-list></app-exam-list>
+    <h2>Exam Details</h2>
+    <button (click)="openPopup()"class="add_exam_btn">Add Exam</button>
+
+  </div>
+  <app-exam-list></app-exam-list>
 
 
-<div class="popup-container" *ngIf="isPopupVisible">
+
+  <div class="popup-container" *ngIf="isPopupVisible">
     <div class="add_teache1r">
+
       <app-exam-create></app-exam-create>
     </div>
     <button class="close-popup" (click)="closePopup()">Close</button>
   </div>
+
+</div>

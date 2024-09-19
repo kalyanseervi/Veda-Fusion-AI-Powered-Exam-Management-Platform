@@ -95,7 +95,7 @@ h1 {
   display: flex;
   flex-direction: row;
   gap: 2rem;
-  justify-content: center;
+  /* justify-content: center; */
   margin-top: 20px;
 }
 
@@ -104,14 +104,16 @@ h1 {
   position: relative;
   width: 50%;
   height: 400px;
+  margin: 0.5rem;
   border-radius: var(--border-radius-2);
   background-color: var(--color-white);
   box-shadow: var(--box-shadow);
+  overflow: scroll;
 }
 
 /* Table Container Styles */
 .table-container {
-  width: 40%;
+  width: 50%;
   padding: 10px;
   border-radius: var(--border-radius-2);
   background-color: var(--color-white);
@@ -124,6 +126,7 @@ h1 {
   font-size: 1.2rem;
   font-weight: 600;
   color: var(--color-dark);
+  text-align: center;
 }
 
 /* Responsive Table */

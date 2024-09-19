@@ -514,8 +514,9 @@ main .recent-exams a {
 
 .right {
   margin-top: 1.4rem;
-  position: fixed;
-  right: 1.4rem;
+  position: relative;
+  right: 0.4rem;
+  margin-left: 0.5rem;
  
 }
 
