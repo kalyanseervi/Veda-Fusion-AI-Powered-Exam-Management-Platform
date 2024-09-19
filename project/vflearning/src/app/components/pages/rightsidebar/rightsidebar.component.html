@@ -12,10 +12,10 @@
         </div>
         <div class="profile-body" *ngIf="currentUserDtl">
             <p *ngIf="currentUserDtl.enrollmentId"><b>Enrollment ID:</b> {{currentUserDtl.enrollmentId}}</p>
-            <p *ngIf="currentUserDtl.studentClass"><b>Class:</b> <span *ngFor="let class of currentUserDtl.studentClass">{{class.classname}} </span></p>
-            <p *ngIf="currentUserDtl.teachingClasses"><b>Class:</b> <span *ngFor="let class of currentUserDtl.teachingClasses">{{class.classname}} </span></p>
-            <p *ngIf="currentUserDtl.studentsubjects"><b>Subjects:</b><span *ngFor="let subject of currentUserDtl.studentsubjects"> {{subject.subjectName}} </span></p>
-            <p *ngIf="currentUserDtl.teachingSubjects"><b>Subjects:</b><span *ngFor="let subject of currentUserDtl.teachingSubjects">{{subject.subjectName}} </span></p>
+            <p *ngIf="currentUserDtl.studentClass"><b>Class: </b> <span *ngFor="let class of currentUserDtl.studentClass">{{class.classname}} </span></p>
+            <p *ngIf="currentUserDtl.teachingClasses"><b>Class: </b> <span *ngFor="let class of currentUserDtl.teachingClasses">{{class.classname}} </span></p>
+            <p *ngIf="currentUserDtl.studentsubjects"><b>Subjects: </b><span *ngFor="let subject of currentUserDtl.studentsubjects"> {{subject.subjectName}} </span></p>
+            <p *ngIf="currentUserDtl.teachingSubjects"><b>Subjects: </b><span *ngFor="let subject of currentUserDtl.teachingSubjects">{{subject.subjectName}} </span></p>
         </div>
     </div>
 </div>

@@ -1,4 +1,4 @@
-<h1 class="assigned-exam-title">Exam Result</h1>
+
 
 
 <div *ngIf="message" class="modal-overlay">
@@ -17,7 +17,11 @@
   <div class="spinner"></div>
   <p>Please wait.... Result is Generating</p>
 </div>
-<button class="action-button" (click)="publishResult()">Publish Result</button>
+<div class="std-dtl">
+
+  <h1 class="assigned-exam-title">Exam Result</h1>
+  <button class="action-button" (click)="publishResult()"><span class="material-icons-sharp">publish</span>Publish Result</button>
+</div>
 <!-- Table -->
 <table id="examResultsTable" class="assigned-exam-table display" *ngIf="!loading">
   <thead>

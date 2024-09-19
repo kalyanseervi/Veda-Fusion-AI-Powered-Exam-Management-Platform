@@ -36,7 +36,7 @@
 }
 
 .action-button {
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0.5rem;
   border: none;
   border-radius: var(--border-radius-1);
   background-color: var(--color-primary);
@@ -213,4 +213,12 @@ p {
   .modal-close-button {
     font-size: 1.4rem;
   }
+}
+
+.std-dtl{
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+  text-transform: uppercase;
+  padding: 10px;
 }

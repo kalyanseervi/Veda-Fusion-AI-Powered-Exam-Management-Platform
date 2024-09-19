@@ -108,3 +108,30 @@
     font-family: 'Poppins', sans-serif;
   }
   
+  .card-footer button {
+    padding: 0.2rem 0.2rem;
+    border: none;
+    border-radius: var(--border-radius-1);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 0.2rem;
+}
+
+.view-btn {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+}
+
+.edit-btn {
+    background-color: var(--color-success);
+    color: var(--color-white);
+}
+
+.delete-btn {
+    background-color: var(--color-danger);
+    color: var(--color-white);
+}
+
+.view-btn:hover, .edit-btn:hover, .delete-btn:hover {
+    opacity: 0.8;
+}

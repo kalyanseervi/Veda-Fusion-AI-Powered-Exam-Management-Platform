@@ -9,14 +9,15 @@
         <p><strong>Time:</strong> {{ exam.examTime }}</p>
         <p><strong>Duration:</strong> {{ exam.examDuration }} minutes</p>
         <p><strong>Negative Marking:</strong> {{ exam.negativeMarking }}</p>
-        <p><button class="action-btn view-btn" (click)="examAssign(exam._id)">Assign Exam</button> <button class="action-btn view-btn" (click)="generateResult(exam._id)">Generate Result</button></p>
+        
 
       </div>
       <div class="card-footer">
-        <button class="action-btn view-btn">View Details</button>
+        <button class="view-btn material-icons-sharp"> visibility</button>
         
-        <button class="action-btn edit-btn" >Edit Exam</button>
+        <button class=" edit-btn material-icons-sharp" >edit</button>
         <button class="action-btn edit-btn" (click)="examQuestionsManage(exam._id)">Add Questions</button>
+        <button class="action-btn view-btn" (click)="examAssign(exam._id)">Assign Exam</button> <button class="action-btn view-btn" (click)="generateResult(exam._id)">Generate Result</button>
       </div>
     </div>
   </div>
