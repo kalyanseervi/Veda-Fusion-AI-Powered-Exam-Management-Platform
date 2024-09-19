@@ -140,12 +140,12 @@ router.get("/studentResponse/:id", auth, async (req, res) => {
             }
 
             // Await the result of validateAnswer since it's an async function
-            const { awardedMarks } = await validateAnswer(question, response.selectedOption);
+            const { awardedMarks,isCorrect } = await validateAnswer(question, response.selectedOption);
 
             console.log('awardedMarks marks', awardedMarks);
             obtainedMarks += awardedMarks;
 
-            if (negativeMarking) {
+            if (negativeMarking && !isCorrect && attemptedQuestions) {
               obtainedMarks -= negativeMarks;
             }
           }

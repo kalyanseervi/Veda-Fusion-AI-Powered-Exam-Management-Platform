@@ -37,7 +37,7 @@ router.post("/exam-questions", auth, async (req, res) => {
       type: question.type || question.question_type,
       title: question.title || question.question,
       marks: question.marks,
-      wordLimit: question.wordLimit || question.word_limit,
+      wordLimit: question.wordLimit || 100,
       answer: question.answer,
       options: question.options || Array.isArray(question.options) ? question.options : [],
       imageUrl: question.imageUrl,

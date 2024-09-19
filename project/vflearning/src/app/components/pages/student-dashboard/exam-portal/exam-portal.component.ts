@@ -12,7 +12,7 @@ import { AuthService } from '../../../../services/auth/auth.service';
   standalone: true,
   imports: [FormsModule, CommonModule, ReactiveFormsModule],
   templateUrl: './exam-portal.component.html',
-  styleUrl: './exam-portal.component.css'
+  styleUrls: ['./exam-portal.component.css']
 })
 export class ExamPortalComponent implements OnInit, OnDestroy {
 
@@ -38,8 +38,8 @@ export class ExamPortalComponent implements OnInit, OnDestroy {
     private examService: ExamService,
     private route: ActivatedRoute,
     private examQuestionsService: QuestionsService,
-    private examPortalService:ExamPortalService,
-    private authservice:AuthService
+    private examPortalService: ExamPortalService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -72,8 +72,8 @@ export class ExamPortalComponent implements OnInit, OnDestroy {
   loadExamDetails(examId: string): void {
     this.examService.getExamById(examId).subscribe(
       (response: any) => {
-        this.totalTime = response.examDuration * 60;
-        this.remainingTime = this.totalTime;
+        const examEndTime = new Date(response.examEndTime);
+        this.remainingTime = (examEndTime.getTime() - new Date().getTime()) / 1000;
         this.startCountdown();
       },
       (error) => {
@@ -123,9 +123,11 @@ export class ExamPortalComponent implements OnInit, OnDestroy {
   }
 
   goToQuestion(index: number): void {
-    this.currentQuestionIndex = index;
-    this.currentQuestion = this.questions[index];
-    this.enforceWordLimit();
+    if (index >= 0 && index < this.questions.length) {
+      this.currentQuestionIndex = index;
+      this.currentQuestion = this.questions[index];
+      this.enforceWordLimit();
+    }
   }
 
   prevQuestion(): void {
@@ -139,7 +141,6 @@ export class ExamPortalComponent implements OnInit, OnDestroy {
     if (this.currentQuestionIndex !== undefined && this.currentQuestionIndex < this.questions.length - 1) {
       this.saveResponse(this.currentQuestionIndex);
       this.goToQuestion(this.currentQuestionIndex + 1);
-      
     }
   }
 
@@ -169,28 +170,22 @@ export class ExamPortalComponent implements OnInit, OnDestroy {
   saveResponse(index: number): void {
     const question = this.questions[index];
     const singleOption = this.selectedOptions[index];
-    console.log(index)
-
-    // console.log(question)
     if (question && singleOption) {
-      // Save the response for the current question
       if (!this.examId) {
-        console.log('exam id not found in single response save');
+        console.log('Exam ID not found in single response save');
       } else {
         this.examPortalService
           .submitResponseSingleId(
             this.examId,
-            question._id,            
+            question._id,
             singleOption
           )
           .subscribe(
-            (response:any) => {
-             
+            (response: any) => {
               // Optionally, navigate to a confirmation page or display a success message
             },
-            (error:any) => {
+            (error: any) => {
               console.error('Error submitting response:', error);
-              // Handle error (e.g., display an error message to the user)
             }
           );
       }
@@ -200,13 +195,13 @@ export class ExamPortalComponent implements OnInit, OnDestroy {
   submitExam(): void {
     if (!this.examId) {
       console.error('Exam ID is undefined');
-      return; // Exit the function if examId is undefined
+      return;
     }
     const responses = [];
     for (let i = 0; i < this.questions.length; i++) {
       responses.push({
         questionId: this.questions[i]._id,
-        selectedOption: this.selectedOptions[i], // Assuming selectedOptions is an array corresponding to each question
+        selectedOption: this.selectedOptions[i],
       });
     }
 
@@ -214,20 +209,15 @@ export class ExamPortalComponent implements OnInit, OnDestroy {
       .submitResponses(this.examId, responses)
       .subscribe(
         (response) => {
-          this.Message = `Congratulations! You have successfully Submited your Exam`;
-         
-          this.authservice.logout();
-          // Optionally, navigate to a confirmation page or display a success message
+          this.Message = 'Congratulations! You have successfully submitted your exam';
+          this.authService.logout();
         },
         (error) => {
           console.error('Error submitting responses:', error);
-          // Handle error (e.g., display an error message to the user)
         }
       );
   }
 
-
-  // Fullscreen handling
   toggleFullScreen(): void {
     if (!document.fullscreenElement) {
       document.documentElement.requestFullscreen();
@@ -251,13 +241,10 @@ export class ExamPortalComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Handle selection of options and save the selected option
   onOptionSelected(option: string, index: number): void {
     this.selectedOptions[this.currentQuestionIndex || 0] = option;
- 
   }
 
-  // Event handlers
   handleKeyDown(event: KeyboardEvent): void {
     const forbiddenKeys = ['F12', 'F5', 'Control', 'Alt'];
     if (forbiddenKeys.includes(event.key)) {
@@ -275,7 +262,6 @@ export class ExamPortalComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Fullscreen control
   enterFullScreen(): void {
     this.toggleFullScreen();
   }

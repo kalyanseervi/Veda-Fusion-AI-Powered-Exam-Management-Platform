@@ -183,6 +183,7 @@ export class ExamQuestionsManageComponent implements OnInit {
             this.completeMcqOutput =parsedResponse.questions;
             if(!this.completeMcqOutput){
               this.completeMcqOutput =parsedResponse;
+              console.log('completed mcq output',this.completeMcqOutput)
 
             }
           } catch (e) {
@@ -235,9 +236,9 @@ export class ExamQuestionsManageComponent implements OnInit {
         type: question.question_type,
         title: question.question,
         marks: question.marks,
-        wordLimit: question.word_limit,
+        wordLimit: question.question_type === 'short'|| question.question_type === 'short_answer' ? 30 : question.question_type === 'long'||question.question_type === 'long_answer' ? 400 : 50,
         answer: question.answer,
-        options: Array.isArray(question.options) ? question.options : [], // Ensure options is an array
+        options: Array.isArray(question.options) ? question.options : [], // Ensure options is an array "short_answer", "long_answer"
         imageUrl: question.imageUrl,
       })
     );

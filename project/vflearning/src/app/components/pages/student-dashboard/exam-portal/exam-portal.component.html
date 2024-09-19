@@ -1,64 +1,61 @@
 <div *ngIf="Message" class="modal-overlay">
-    <div class="modal-container">
+  <div class="modal-container">
       <div class="modal-header">
-        <h3 class="modal-title">Error</h3>
-        <button class="modal-close-button" (click)="Message = ''">Close</button>
+          <h3 class="modal-title">Message</h3>
+          <button class="modal-close-button" (click)="Message = ''">Close</button>
       </div>
       <div class="modal-body">
-        <p>{{ Message }}</p>
+          <p>{{ Message }}</p>
       </div>
-    </div>
   </div>
+</div>
 
 <div class="exam-portal-container">
-    <div class="exam-header">
-        <h1>Exam Portal</h1>
+  <div class="exam-header">
+      <h1>Exam Portal</h1>
+  </div>
 
-    </div>
+  <div class="exam-timer">
+      <p>Time Remaining: {{ getFormattedTime(remainingTime) }}</p>
+  </div>
 
-    <div class="exam-timer">
-        <p>Time Remaining: {{ getFormattedTime(remainingTime) }}</p>
-    </div>
+  <div class="exam-questions" *ngIf="currentQuestion">
+      <h2>Question {{ (currentQuestionIndex !== undefined ? currentQuestionIndex + 1 : 0) }} of {{ questions.length }}</h2>
+      <p class="question-heading">{{ currentQuestion.question }}</p>
 
-    <div class="exam-questions" *ngIf="currentQuestion">
-        <h2>Question {{ currentQuestionIndex !== undefined ? currentQuestionIndex + 1 : 0 }} of {{ questions.length }}
-        </h2>
-        <p class="question-heasding">{{ currentQuestion.question }}</p>
+      <!-- Textarea for Short, Long, and Fill-in-the-Blank Questions -->
+      <div *ngIf="currentQuestion.question_type === 'short' || currentQuestion.question_type === 'short_answer' || currentQuestion.question_type === 'long' || currentQuestion.question_type === 'long_answer' || currentQuestion.question_type === 'fill_blank'">
+          <textarea [(ngModel)]="selectedOptions[currentQuestionIndex || 0]" (input)="enforceWordLimit()"
+              placeholder="Write your answer here" rows="5" class="short-answer-textarea">
+          </textarea>
+          <p *ngIf="currentQuestion.word_limit">
+              Word Limit: {{ currentQuestion.word_limit }} | <span class="word-left"> Words Left: {{ wordsLeft }}</span>
+          </p>
+      </div>
 
-        <!-- Textarea for Short, Long, and Fill-in-the-Blank Questions -->
-        <div
-            *ngIf="currentQuestion.question_type === 'short'||currentQuestion.question_type === 'short_answer' || currentQuestion.question_type === 'long'|| currentQuestion.question_type === 'long_answer' || currentQuestion.question_type === 'fill_blank'">
-            <textarea [(ngModel)]="selectedOptions[currentQuestionIndex || 0]" (input)="enforceWordLimit()"
-                placeholder="Write your answer here" rows="5" class="short-answer-textarea">
-    </textarea>
-            <p *ngIf="currentQuestion.word_limit">
-                Word Limit: {{ currentQuestion.word_limit }} | <span class="word-left">  Words Left: {{ wordsLeft }}</span>
-            </p>
-        </div>
-
-        <!-- Multiple-Choice Question  word_limit -->
-        <div *ngFor="let option of currentQuestion.options; let i = index" class="option">
-            <input type="radio" [name]="'question-' + currentQuestionIndex" [id]="'option-' + i" [value]="option"
-              [(ngModel)]="selectedOptions[currentQuestionIndex || 0]" (change)="onOptionSelected(option, i)" />
-            <label [for]="'option-' + i"
-              [ngClass]="{'selected-option': selectedOptions[currentQuestionIndex || 0] === option}">
-              {{ option }}
-            </label>
+      <!-- Multiple-Choice Question -->
+      <div *ngIf="currentQuestion.question_type === 'multiple_choice'">
+          <div *ngFor="let option of currentQuestion.options; let i = index" class="option">
+              <input type="radio" [name]="'question-' + currentQuestionIndex" [id]="'option-' + i" [value]="option"
+                  [(ngModel)]="selectedOptions[currentQuestionIndex || 0]" (change)="onOptionSelected(option, i)" />
+              <label [for]="'option-' + i"
+                  [ngClass]="{'selected-option': selectedOptions[currentQuestionIndex || 0] === option}">
+                  {{ option }}
+              </label>
           </div>
-          
+      </div>
+  </div>
 
-    </div>
+  <div class="question-navigation">
+      <button class="btn nav-btn" (click)="prevQuestion()"
+          [disabled]="currentQuestionIndex === 0 || currentQuestionIndex === undefined">
+          Previous
+      </button>
+      <button class="btn nav-btn" (click)="nextQuestion()"
+          [disabled]="currentQuestionIndex === undefined || currentQuestionIndex >= (questions.length - 1)">
+          Next
+      </button>
+  </div>
 
-    <div class="question-navigation">
-        <button class="btn nav-btn" (click)="prevQuestion()"
-            [disabled]="currentQuestionIndex === 0 || currentQuestionIndex === undefined">
-            Previous
-        </button>
-        <button class="btn nav-btn" (click)="nextQuestion()"
-            [disabled]="currentQuestionIndex === undefined || currentQuestionIndex >= (questions.length - 1)">
-            Next
-        </button>
-    </div>
-
-    <button class="btn submit-exam-btn" (click)="submitExam()">Submit Exam</button>
+  <button class="btn submit-exam-btn" (click)="submitExam()">Submit Exam</button>
 </div>

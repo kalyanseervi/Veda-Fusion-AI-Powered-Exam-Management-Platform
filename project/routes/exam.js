@@ -127,15 +127,36 @@ router.get("/exams", auth, async (req, res) => {
 router.get("/exams/:id", auth, async (req, res) => {
   try {
     const exam = await Exam.findById(req.params.id).populate("createdBy class subject");
+    
     if (!exam) {
       return res.status(404).json({ message: "Exam not found" });
     }
-    res.status(200).json(exam);
+
+    const currentTime = new Date();
+    const examEndTime = new Date(exam.examEndTime);
+    
+    // Check if the exam has already ended
+    let remainingTime = 0;
+    let status = "Ongoing";
+
+    if (currentTime >= examEndTime) {
+      status = "Completed";
+    } else {
+      // Calculate the remaining time in seconds
+      remainingTime = Math.floor((examEndTime - currentTime) / 1000); // Convert milliseconds to seconds
+    }
+
+    res.status(200).json({
+      exam,
+      remainingTime, // Time left in seconds
+      status
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error", error });
   }
 });
+
 
 // Update an exam
 router.put(
