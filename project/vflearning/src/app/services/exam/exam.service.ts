@@ -36,6 +36,12 @@ export class ExamService {
     }); // Add token handling as needed
     return this.http.get<any[]>(`${this.baseUrl}/exams/${examid}`, { headers });
   }
+  deleteExamById(examid:any): Observable<any[]> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.getToken()}`,
+    }); // Add token handling as needed
+    return this.http.delete<any[]>(`${this.baseUrl}/exams/${examid}`, { headers });
+  }
 
   genQuestions(formData: FormData): Observable<string> {
     console.log('FormData:', Array.from((formData as any).entries()));

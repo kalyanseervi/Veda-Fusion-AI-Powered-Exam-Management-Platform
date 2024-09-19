@@ -14,6 +14,7 @@ import { ExamAssignComponent } from "../exam-assign/exam-assign.component";
 export class ExamListComponent implements OnInit {
   allExams: any[] = [];
   selectedExamId: string | undefined;
+  message: string = '';
 
   constructor(private examservice: ExamService, private router: Router,private route: ActivatedRoute,) {}
   ngOnInit(): void {
@@ -53,5 +54,17 @@ export class ExamListComponent implements OnInit {
   examAssign(arg0:string){
     this.selectedExamId = arg0
     this.isPopupVisible = true;
+  }
+  deleteExam(arg0:string){
+    console.log('i am here',arg0)
+    this.examservice.deleteExamById(arg0).subscribe({
+      next:(response)=>{
+        alert('Exam Deleted Successfully')
+      },
+      error:(err)=> {
+        alert('Error Occured')
+        console.log('error in deleting exam',err)
+      },
+    })
   }
 }
