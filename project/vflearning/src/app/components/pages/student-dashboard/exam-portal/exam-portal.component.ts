@@ -22,7 +22,7 @@ export class ExamPortalComponent implements OnInit, OnDestroy {
   examId: string | undefined;
   questions: any[] = [];
   selectedOptions: string[] = [];
-  currentQuestionIndex: number | undefined;
+  currentQuestionIndex: number = 0;
   currentQuestion: any;
   @Input() totalTime: number | undefined;
   Message: string = '';
@@ -61,9 +61,7 @@ export class ExamPortalComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.timerInterval) {
-      clearInterval(this.timerInterval);
-    }
+    this.clearTimer();
     window.removeEventListener('keydown', this.handleKeyDown.bind(this));
     window.removeEventListener('contextmenu', this.handleContextMenu.bind(this));
     window.removeEventListener('beforeunload', this.handleBeforeUnload.bind(this));
@@ -72,12 +70,31 @@ export class ExamPortalComponent implements OnInit, OnDestroy {
   loadExamDetails(examId: string): void {
     this.examService.getExamById(examId).subscribe(
       (response: any) => {
-        const examEndTime = new Date(response.examEndTime);
-        this.remainingTime = (examEndTime.getTime() - new Date().getTime()) / 1000;
-        this.startCountdown();
+        if (response && response.exam && response.exam.examEndTime) {
+          const examEndTime = new Date(response.exam.examEndTime);
+
+          if (isNaN(examEndTime.getTime())) {
+            console.error('Invalid exam end time:', response.exam.examEndTime);
+            this.Message = 'Invalid exam end time. Please contact support.';
+            return;
+          }
+
+          this.remainingTime = Math.max((examEndTime.getTime() - new Date().getTime()) / 1000, 0);
+
+          if (this.remainingTime > 0) {
+            this.startCountdown();
+          } else {
+            this.Message = 'The exam time has already ended.';
+            this.submitExam(); // Automatically submit if the exam is over
+          }
+        } else {
+          console.error('Exam details not found in response:', response);
+          this.Message = 'Exam details not found. Please contact support.';
+        }
       },
       (error) => {
         console.error('Error fetching exam details:', error);
+        this.Message = 'An error occurred while fetching exam details. Please try again later.';
       }
     );
   }
@@ -104,7 +121,10 @@ export class ExamPortalComponent implements OnInit, OnDestroy {
         this.remainingTime--;
       } else {
         this.clearTimer();
-        this.submitExam();
+        if (this.remainingTime <= 0) {
+          this.Message = 'Time is up!';
+          this.submitExam();
+        }
       }
     }, 1000);
   }
@@ -118,7 +138,7 @@ export class ExamPortalComponent implements OnInit, OnDestroy {
   getFormattedTime(remainingTime: number): string {
     const hours = Math.floor(remainingTime / 3600);
     const minutes = Math.floor((remainingTime % 3600) / 60);
-    const seconds = remainingTime % 60;
+    const seconds = Math.floor(remainingTime % 60); // Use Math.floor to get an integer value
     return `${hours}h ${minutes}m ${seconds}s`;
   }
 
@@ -131,14 +151,14 @@ export class ExamPortalComponent implements OnInit, OnDestroy {
   }
 
   prevQuestion(): void {
-    if (this.currentQuestionIndex && this.currentQuestionIndex > 0) {
+    if (this.currentQuestionIndex > 0) {
       this.saveResponse(this.currentQuestionIndex);
       this.goToQuestion(this.currentQuestionIndex - 1);
     }
   }
 
   nextQuestion(): void {
-    if (this.currentQuestionIndex !== undefined && this.currentQuestionIndex < this.questions.length - 1) {
+    if (this.currentQuestionIndex < this.questions.length - 1) {
       this.saveResponse(this.currentQuestionIndex);
       this.goToQuestion(this.currentQuestionIndex + 1);
     }
@@ -170,25 +190,19 @@ export class ExamPortalComponent implements OnInit, OnDestroy {
   saveResponse(index: number): void {
     const question = this.questions[index];
     const singleOption = this.selectedOptions[index];
-    if (question && singleOption) {
-      if (!this.examId) {
-        console.log('Exam ID not found in single response save');
-      } else {
-        this.examPortalService
-          .submitResponseSingleId(
-            this.examId,
-            question._id,
-            singleOption
-          )
-          .subscribe(
-            (response: any) => {
-              // Optionally, navigate to a confirmation page or display a success message
-            },
-            (error: any) => {
-              console.error('Error submitting response:', error);
-            }
-          );
-      }
+    if (question && singleOption && this.examId) {
+      this.examPortalService
+        .submitResponseSingleId(this.examId, question._id, singleOption)
+        .subscribe(
+          (response: any) => {
+            // Optionally, navigate to a confirmation page or display a success message
+          },
+          (error: any) => {
+            console.error('Error submitting response:', error);
+          }
+        );
+    } else {
+      console.warn('Question, selected option, or exam ID missing for saving response');
     }
   }
 
@@ -197,25 +211,20 @@ export class ExamPortalComponent implements OnInit, OnDestroy {
       console.error('Exam ID is undefined');
       return;
     }
-    const responses = [];
-    for (let i = 0; i < this.questions.length; i++) {
-      responses.push({
-        questionId: this.questions[i]._id,
-        selectedOption: this.selectedOptions[i],
-      });
-    }
+    const responses = this.questions.map((question, i) => ({
+      questionId: question._id,
+      selectedOption: this.selectedOptions[i],
+    }));
 
-    this.examPortalService
-      .submitResponses(this.examId, responses)
-      .subscribe(
-        (response) => {
-          this.Message = 'Congratulations! You have successfully submitted your exam';
-          this.authService.logout();
-        },
-        (error) => {
-          console.error('Error submitting responses:', error);
-        }
-      );
+    this.examPortalService.submitResponses(this.examId, responses).subscribe(
+      (response) => {
+        this.Message = 'Congratulations! You have successfully submitted your exam';
+        this.authService.logout();
+      },
+      (error) => {
+        console.error('Error submitting responses:', error);
+      }
+    );
   }
 
   toggleFullScreen(): void {

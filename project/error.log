@@ -9,3 +9,15 @@
 {"level":"error","message":"Login error for kalyanseervi567@gmail.com: read ECONNRESET","timestamp":"2024-09-16T17:01:57.638Z"}
 {"level":"error","message":"Login error for fayaj68593@degcos.com: read ECONNRESET","timestamp":"2024-09-16T17:05:09.336Z"}
 {"level":"error","message":"Login error for gopido1631@cetnob.com: read ECONNRESET","timestamp":"2024-09-17T15:35:41.407Z"}
+{"level":"error","message":"Error creating Student: Student validation failed: studentsubjects.0: Cast to [ObjectId] failed for value \"[ '[]' ]\" (type string) at path \"studentsubjects.0\" because of \"CastError\"","timestamp":"2024-09-19T05:26:37.965Z"}
+{"level":"error","message":"Error creating Student: Student validation failed: studentsubjects.0: Cast to [ObjectId] failed for value \"[ '[]' ]\" (type string) at path \"studentsubjects.0\" because of \"CastError\"","timestamp":"2024-09-19T05:26:46.400Z"}
+{"level":"error","message":"Error creating Student: Student validation failed: studentsubjects.0: Cast to [ObjectId] failed for value \"[ '[]' ]\" (type string) at path \"studentsubjects.0\" because of \"CastError\"","timestamp":"2024-09-19T05:28:26.876Z"}
+{"level":"error","message":"Error creating Student: Student validation failed: studentsubjects.0: Cast to [ObjectId] failed for value \"[ 'false', 'false', 'false' ]\" (type string) at path \"studentsubjects.0\" because of \"CastError\"","timestamp":"2024-09-19T05:30:50.629Z"}
+{"level":"error","message":"Error creating Student: studentsubjects.split is not a function","timestamp":"2024-09-19T05:32:38.126Z"}
+{"level":"error","message":"Error creating Student: Student validation failed: studentsubjects.0: Cast to [ObjectId] failed for value \"[\\n' +\n  \"  'true,true,true',\\n\" +\n  \"  '66e87923bc2f7f0855ceb929',\\n\" +\n  \"  '66e8792bbc2f7f0855ceb931',\\n\" +\n  \"  '66e87936bc2f7f0855ceb936'\\n\" +\n  ']\" (type string) at path \"studentsubjects.0\" because of \"CastError\"","timestamp":"2024-09-19T05:34:51.102Z"}
+{"level":"error","message":"Error creating Student: Class constructor ObjectId cannot be invoked without 'new'","timestamp":"2024-09-19T05:36:01.807Z"}
+{"level":"error","message":"Error creating Student: Class constructor ObjectId cannot be invoked without 'new'","timestamp":"2024-09-19T05:37:10.969Z"}
+{"level":"error","message":"Error creating Student: Class constructor ObjectId cannot be invoked without 'new'","timestamp":"2024-09-19T05:37:30.089Z"}
+{"level":"error","message":"Error creating Student: Class constructor ObjectId cannot be invoked without 'new'","timestamp":"2024-09-19T05:41:48.356Z"}
+{"level":"error","message":"Error creating Student: Class constructor ObjectId cannot be invoked without 'new'","timestamp":"2024-09-19T05:45:42.861Z"}
+{"level":"error","message":"Error creating Student: Class constructor ObjectId cannot be invoked without 'new'","timestamp":"2024-09-19T05:46:42.323Z"}

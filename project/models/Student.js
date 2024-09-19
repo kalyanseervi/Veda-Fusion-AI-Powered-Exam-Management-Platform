@@ -84,8 +84,8 @@ StudentSchema.methods.updatePassword = async function (currentPassword, newPassw
         throw new Error('Current password is incorrect');
     }
 
-   
-    this.password = newPassword;
+    // Hash the new password before saving
+    this.password = await bcrypt.hash(newPassword, 10);
     await this.save();
 };
 

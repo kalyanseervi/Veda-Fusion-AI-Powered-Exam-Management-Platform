@@ -42,3 +42,24 @@
 {"level":"error","message":"Login error for gopido1631@cetnob.com: read ECONNRESET","timestamp":"2024-09-17T15:35:41.407Z"}
 {"level":"info","message":"Verification email sent to jikibis612@nastyx.com successfully.","timestamp":"2024-09-18T04:54:49.024Z"}
 {"level":"info","message":"Credentials email sent to jikibis612@nastyx.com successfully.","timestamp":"2024-09-18T04:54:51.404Z"}
+{"level":"info","message":"Verification email sent to jikibis612@nastyx.com successfully.","timestamp":"2024-09-19T05:02:23.845Z"}
+{"level":"info","message":"Verification email sent to lebar46201@nastyx.com successfully.","timestamp":"2024-09-19T05:11:43.052Z"}
+{"level":"info","message":"Credentials email sent to lebar46201@nastyx.com successfully.","timestamp":"2024-09-19T05:11:45.452Z"}
+{"level":"info","message":"Verification email sent to lebar46201@nastyx.com successfully.","timestamp":"2024-09-19T05:14:59.589Z"}
+{"level":"info","message":"Credentials email sent to lebar46201@nastyx.com successfully.","timestamp":"2024-09-19T05:15:02.896Z"}
+{"level":"error","message":"Error creating Student: Student validation failed: studentsubjects.0: Cast to [ObjectId] failed for value \"[ '[]' ]\" (type string) at path \"studentsubjects.0\" because of \"CastError\"","timestamp":"2024-09-19T05:26:37.965Z"}
+{"level":"error","message":"Error creating Student: Student validation failed: studentsubjects.0: Cast to [ObjectId] failed for value \"[ '[]' ]\" (type string) at path \"studentsubjects.0\" because of \"CastError\"","timestamp":"2024-09-19T05:26:46.400Z"}
+{"level":"error","message":"Error creating Student: Student validation failed: studentsubjects.0: Cast to [ObjectId] failed for value \"[ '[]' ]\" (type string) at path \"studentsubjects.0\" because of \"CastError\"","timestamp":"2024-09-19T05:28:26.876Z"}
+{"level":"error","message":"Error creating Student: Student validation failed: studentsubjects.0: Cast to [ObjectId] failed for value \"[ 'false', 'false', 'false' ]\" (type string) at path \"studentsubjects.0\" because of \"CastError\"","timestamp":"2024-09-19T05:30:50.629Z"}
+{"level":"error","message":"Error creating Student: studentsubjects.split is not a function","timestamp":"2024-09-19T05:32:38.126Z"}
+{"level":"error","message":"Error creating Student: Student validation failed: studentsubjects.0: Cast to [ObjectId] failed for value \"[\\n' +\n  \"  'true,true,true',\\n\" +\n  \"  '66e87923bc2f7f0855ceb929',\\n\" +\n  \"  '66e8792bbc2f7f0855ceb931',\\n\" +\n  \"  '66e87936bc2f7f0855ceb936'\\n\" +\n  ']\" (type string) at path \"studentsubjects.0\" because of \"CastError\"","timestamp":"2024-09-19T05:34:51.102Z"}
+{"level":"error","message":"Error creating Student: Class constructor ObjectId cannot be invoked without 'new'","timestamp":"2024-09-19T05:36:01.807Z"}
+{"level":"error","message":"Error creating Student: Class constructor ObjectId cannot be invoked without 'new'","timestamp":"2024-09-19T05:37:10.969Z"}
+{"level":"error","message":"Error creating Student: Class constructor ObjectId cannot be invoked without 'new'","timestamp":"2024-09-19T05:37:30.089Z"}
+{"level":"error","message":"Error creating Student: Class constructor ObjectId cannot be invoked without 'new'","timestamp":"2024-09-19T05:41:48.356Z"}
+{"level":"error","message":"Error creating Student: Class constructor ObjectId cannot be invoked without 'new'","timestamp":"2024-09-19T05:45:42.861Z"}
+{"level":"error","message":"Error creating Student: Class constructor ObjectId cannot be invoked without 'new'","timestamp":"2024-09-19T05:46:42.323Z"}
+{"level":"info","message":"Verification email sent to bojawi3040@ofionk.com successfully.","timestamp":"2024-09-19T05:48:08.711Z"}
+{"level":"info","message":"Credentials email sent to bojawi3040@ofionk.com successfully.","timestamp":"2024-09-19T05:48:11.383Z"}
+{"level":"info","message":"Verification email sent to nogevob246@nastyx.com successfully.","timestamp":"2024-09-19T05:50:16.407Z"}
+{"level":"info","message":"Credentials email sent to nogevob246@nastyx.com successfully.","timestamp":"2024-09-19T05:50:18.935Z"}

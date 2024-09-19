@@ -45,7 +45,7 @@ const sendCredentialsEmail = async (email, name, randomPassword) => {
     from: process.env.EMAIL_USER,
     to: email,
     subject: "Your Account Credentials",
-    text: `Hello ${name},\n\nYour account has been created successfully. Here are your login credentials:\n\nUsername: ${name}\nPassword: ${randomPassword}\n\nPlease change your password after logging in.\n\nBest regards,\nAdmin`,
+    text: `Hello ${name},\n\nYour account has been created successfully. Here are your login credentials:\n\nUsername: ${email}\nPassword: ${randomPassword}\n\nPlease change your password after logging in.\n\nBest regards,\nAdmin`,
   };
 
   try {

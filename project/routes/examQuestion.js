@@ -22,7 +22,6 @@ router.post("/exam-questions", auth, async (req, res) => {
       return res.status(403).json({ msg: "Unauthorized" });
     }
 
-   
     // type: question.question_type,
     // title: question.question,
     // marks: question.marks,
@@ -32,19 +31,26 @@ router.post("/exam-questions", auth, async (req, res) => {
     // imageUrl: question.imageUrl,
     // Prepare the questions data
 
-   
     const newQuestions = req.body.questions.map((question) => ({
       type: question.type || question.question_type,
       title: question.title || question.question,
       marks: question.marks,
-      wordLimit: question.wordLimit || 100,
+      wordLimit:
+        question.wordLimit ||
+        question.question_type === "short" ||
+        question.question_type === "short_answer"
+          ? 30
+          : question.question_type === "long" ||
+            question.question_type === "long_answer"
+          ? 400
+          : 50,
       answer: question.answer,
-      options: question.options || Array.isArray(question.options) ? question.options : [],
+      options:
+        question.options || Array.isArray(question.options)
+          ? question.options
+          : [],
       imageUrl: question.imageUrl,
     }));
-
-    
-    
 
     // Find the existing document by examId
     let examQuestion = await ExamQuestions.findOne({ examId: req.body.examId });
@@ -52,7 +58,7 @@ router.post("/exam-questions", auth, async (req, res) => {
     if (examQuestion) {
       // Merge new questions with existing ones
       examQuestion.questions = [...examQuestion.questions, ...newQuestions];
-      
+
       examQuestion = await examQuestion.save();
       res.status(200).json(examQuestion);
     } else {
@@ -128,20 +134,19 @@ router.get("/exam-questions", auth, async (req, res) => {
 });
 router.get("/examportalQues/:id", auth, async (req, res) => {
   try {
-   
-
     // Find the exam by examId and only return the 'questions' field
-    const examQuestions = await ExamQuestions.find({ examId: req.params.id }, "questions");
+    const examQuestions = await ExamQuestions.find(
+      { examId: req.params.id },
+      "questions"
+    );
 
     // Check if the exam was found
     if (!examQuestions || examQuestions.length === 0) {
-      return res.status(404).json({ msg: 'Exam questions not found' });
+      return res.status(404).json({ msg: "Exam questions not found" });
     }
 
     // Since find returns an array, access the first element
     const questions = examQuestions[0].questions;
-
-   
 
     // Format the questions if needed
     const formattedQuestions = questions.map((question) => ({
@@ -160,7 +165,6 @@ router.get("/examportalQues/:id", auth, async (req, res) => {
     res.status(500).json({ msg: err.message });
   }
 });
-
 
 // Get a single ExamQuestions document by ID
 router.get("/exam-questions/:id", auth, async (req, res) => {
@@ -185,12 +189,12 @@ router.put("/exam-questions/:examId/question/:id", auth, async (req, res) => {
     const updatedExam = await ExamQuestions.findOneAndUpdate(
       {
         examId: examId,
-        "questions._id": id,  // Match the specific question in the array
+        "questions._id": id, // Match the specific question in the array
       },
       {
         $set: {
-          "questions.$": updateData  // Update the matched question
-        }
+          "questions.$": updateData, // Update the matched question
+        },
       },
       { new: true }
     );
@@ -206,28 +210,32 @@ router.put("/exam-questions/:examId/question/:id", auth, async (req, res) => {
 });
 
 // Delete an existing ExamQuestions document by ID
-router.delete("/exam-questions/:examId/question/:id", auth, async (req, res) => {
-  try {
-    const { examId, id } = req.params;
+router.delete(
+  "/exam-questions/:examId/question/:id",
+  auth,
+  async (req, res) => {
+    try {
+      const { examId, id } = req.params;
 
-    // Find the ExamQuestions document and pull (remove) the specific question from the array
-    const examQuestion = await ExamQuestions.findOneAndUpdate(
-      { examId: examId },
-      { $pull: { questions: { _id: id } } },  // Use $pull to remove the question with the matching _id
-      { new: true }  // Return the updated document after the deletion
-    );
+      // Find the ExamQuestions document and pull (remove) the specific question from the array
+      const examQuestion = await ExamQuestions.findOneAndUpdate(
+        { examId: examId },
+        { $pull: { questions: { _id: id } } }, // Use $pull to remove the question with the matching _id
+        { new: true } // Return the updated document after the deletion
+      );
 
-    // Check if the document was found and updated
-    if (!examQuestion) {
-      return res.status(404).json({ msg: "Exam question not found" });
+      // Check if the document was found and updated
+      if (!examQuestion) {
+        return res.status(404).json({ msg: "Exam question not found" });
+      }
+
+      // Return success message if the question was deleted
+      res.status(200).json({ msg: "Exam question deleted successfully" });
+    } catch (err) {
+      // Return an error message if something goes wrong
+      res.status(500).json({ msg: "Server error", error: err.message });
     }
-
-    // Return success message if the question was deleted
-    res.status(200).json({ msg: "Exam question deleted successfully"});
-  } catch (err) {
-    // Return an error message if something goes wrong
-    res.status(500).json({ msg: "Server error", error: err.message });
   }
-});
+);
 
 module.exports = router;

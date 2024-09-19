@@ -34,7 +34,7 @@
       </div>
 
       <!-- Multiple-Choice Question -->
-      <div *ngIf="currentQuestion.question_type === 'multiple_choice'">
+      <div *ngIf="currentQuestion.question_type === 'mcq'">
           <div *ngFor="let option of currentQuestion.options; let i = index" class="option">
               <input type="radio" [name]="'question-' + currentQuestionIndex" [id]="'option-' + i" [value]="option"
                   [(ngModel)]="selectedOptions[currentQuestionIndex || 0]" (change)="onOptionSelected(option, i)" />

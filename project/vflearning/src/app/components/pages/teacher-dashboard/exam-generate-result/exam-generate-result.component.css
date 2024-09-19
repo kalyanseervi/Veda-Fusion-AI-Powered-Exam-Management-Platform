@@ -167,7 +167,7 @@ p {
 }
 
 .selected-answer {
-  color: var(--color-warning);
+  color: var(--color-primary-variant);
 }
 
 .correct-answer {
@@ -195,7 +195,7 @@ p {
 }
 
 .response-item:hover {
-  background-color: var(--color-info-light);
+  
   transform: translateY(-5px);
 }
 
