@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../services/auth/auth.service';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-forgot-password',
@@ -15,7 +16,7 @@ export class ForgotPasswordComponent {
   successMessage: string = '';
   errorMessage: string = '';
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  constructor(private fb: FormBuilder, private authService: AuthService,private router: Router) {
     this.forgotPasswordForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
     });
@@ -35,5 +36,9 @@ export class ForgotPasswordComponent {
         }
       });
     }
+  }
+
+  onSignIn():void{
+    this.router.navigate(['/login']);
   }
 }

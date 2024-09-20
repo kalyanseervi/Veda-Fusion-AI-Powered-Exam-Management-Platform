@@ -53,6 +53,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   loadDashboardData(): void {
     this.dashboardService.getDashboardData().subscribe((data) => {
       this.studentResults = data.studentResults;
+      console.log(this.studentResults)
 
       // Extract unique exams
       this.exams = [

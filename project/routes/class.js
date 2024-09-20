@@ -4,10 +4,10 @@ const Teacher = require('../models/Teacher');
 const School = require('../models/School');
 const User = require('../models/User');
 const Class = require('../models/Class');
-const {decodeTokenFromParams} = require('../middleware/auth'); // Middleware to verify user
+const {decodeTokenFromParams,auth} = require('../middleware/auth'); // Middleware to verify user
 
 // Create a new class
-router.post('/classes', async (req, res) => {
+router.post('/classes',auth, async (req, res) => {
     try {
       const newClass = new Class({
         classname: req.body.classname,
@@ -23,7 +23,7 @@ router.post('/classes', async (req, res) => {
   });
 
   // Get all classes
-router.get('/classes', async (req, res) => {
+router.get('/classes',auth, async (req, res) => {
     try {
       const classes = await Class.find();
       res.status(200).json(classes);
@@ -33,7 +33,7 @@ router.get('/classes', async (req, res) => {
   });
 
   // Get a single class by ID
-router.get('/classes/:id', async (req, res) => {
+router.get('/classes/:id',auth, async (req, res) => {
     try {
       const classItem = await Class.findById(req.params.id);
       if (!classItem) return res.status(404).json({ message: 'Class not found' });
@@ -44,7 +44,7 @@ router.get('/classes/:id', async (req, res) => {
   });
 
   // Update a class by ID
-router.put('/classes/:id', async (req, res) => {
+router.put('/classes/:id',auth, async (req, res) => {
     try {
       const updatedClass = await Class.findByIdAndUpdate(
         req.params.id,
@@ -59,7 +59,7 @@ router.put('/classes/:id', async (req, res) => {
   });
 
   // Delete a class by ID
-router.delete('/classes/:id', async (req, res) => {
+router.delete('/classes/:id',auth, async (req, res) => {
     try {
       const deletedClass = await Class.findByIdAndDelete(req.params.id);
       if (!deletedClass) return res.status(404).json({ message: 'Class not found' });

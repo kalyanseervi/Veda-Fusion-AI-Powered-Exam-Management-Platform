@@ -61,4 +61,14 @@ export class LoginComponent {
       });
     }
   }
+
+  onForgotPassword() {
+    // Logic to handle forgotten password
+    this.router.navigate(['/forgot-password']);
+  }
+  
+  onSignUp() {
+    // Logic to navigate to the signup page
+    this.router.navigate(['/register']);
+  }
 }

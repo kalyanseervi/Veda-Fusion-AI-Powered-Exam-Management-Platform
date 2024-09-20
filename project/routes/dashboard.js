@@ -7,6 +7,7 @@ const User = require("../models/User");
 const Class = require("../models/Class");
 const Result = require("../models/Result");
 const { decodeTokenFromParams, auth } = require("../middleware/auth"); // Middleware to verify user
+const mongoose = require("mongoose");
 
 router.get("/admin", auth, async (req, res) => {
   res.status(200).json({ msg: "Welcome to the admin area" });
@@ -19,7 +20,10 @@ router.get("/teacher", auth, async (req, res) => {
 router.get("/student", auth, async (req, res) => {
   try {
 
-    const studentId = req.user._id;
+    const studentId = new mongoose.Types.ObjectId(req.user._id); // Cast to ObjectId
+    console.log("Student ID:", studentId); // Debug log to verify student ID
+
+
 
     // Count total exams
     const totalExams = await Result.countDocuments({
@@ -43,6 +47,18 @@ router.get("/student", auth, async (req, res) => {
         select: "subjectName",
       },
     });
+
+    // Filter results to include only the results for this student
+    const filteredResults = studentResults.map((result) => {
+      return {
+        examId: result.examId,
+        userResults: result.userResults.filter((userResult) => {
+          return userResult.user.toString() === studentId.toString(); // Match the studentId
+        }),
+      };
+    });
+
+    console.log("Filtered Student Results:", filteredResults);
 
 
 
@@ -98,7 +114,7 @@ router.get("/student", auth, async (req, res) => {
     res.status(200).json({
       totalExams,
       totalSubjects,
-      studentResults, // Include studentResults in the response
+      studentResults:filteredResults, // Include studentResults in the response
       subjectAverages, // Send average percentage for each subject
       totalClassAverage, // Send the overall average percentage across all subjects
       msg: "Welcome to the student area",

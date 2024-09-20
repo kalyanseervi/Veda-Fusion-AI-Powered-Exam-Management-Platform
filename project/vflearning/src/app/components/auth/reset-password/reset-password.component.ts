@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { AuthService } from '../../../services/auth/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-reset-password',
@@ -20,7 +21,7 @@ export class ResetPasswordComponent {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,private router: Router
   ) {
     this.resetPasswordForm = this.fb.group({
       newPassword: ['', [Validators.required, Validators.minLength(6)]],
@@ -45,6 +46,7 @@ export class ResetPasswordComponent {
         next: (response) => {
           this.successMessage = 'Password reset successful.';
           this.errorMessage = '';
+          this.router.navigate(['/login']);
         },
         error: (err) => {
           this.errorMessage = err.error.message || 'Failed to reset password.';

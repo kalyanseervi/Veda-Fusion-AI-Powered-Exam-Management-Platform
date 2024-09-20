@@ -1,78 +1,89 @@
 <div *ngIf="loading" class="loading-overlay">
   <div class="spinner"></div>
-  <p>Please wait.... Teacher Registaring</p>
+  <p>Please wait.... Teacher Registering</p>
 </div>
 
 <div class="container main-banner">
-    <div *ngIf="message" class="modal-overlay">
-        <div class="modal-container">
-          <div class="modal-header">
-            <h3 class="modal-title">Error</h3>
-            <button class="modal-close-button" (click)="message = ''">Close</button>
-          </div>
-          <div class="modal-body">
-            <p>{{ message }}</p>
-          </div>
-        </div>
+  <!-- Modal for Error Messages -->
+  <div *ngIf="message" class="modal-overlay">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3 class="modal-title">Form Errors</h3>
+        <button class="modal-close-button" (click)="message = ''">Close</button>
       </div>
-
-    <div class="reg-heading">Registration</div>
-  <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" class="form-container">
-      <div *ngIf="stepIndex === 0">
-          
-          <div class="form-group">
-              <label for="name">Name</label>
-              <input id="name" formControlName="name" type="text" />
-          </div>
-          
-          <div class="form-group">
-              <label for="email">Email</label>
-              <input id="email" formControlName="email" type="email" />
-          </div>
-          <!-- <div class="form-group">
-              <label for="confirmEmail">Confirm Email</label>
-              <input id="confirmEmail" formControlName="confirmEmail" type="email" />
-          </div>
-          <div *ngIf="registrationForm.hasError('emailsMismatch') && registrationForm.get('confirmEmail')?.touched">
-            Emails do not match.
-          </div> -->
+      <div class="modal-body">
+        <p>{{ message }}</p>
       </div>
-
-
-      <div *ngIf="stepIndex === 1">
-          
-
-          <div class="form-group">
-              <label for="instituteName">School/Institute Name</label>
-              <input id="instituteName" formControlName="instituteName" type="text" />
-          </div>
-          <div class="form-group">
-            <label for="instituteAddress">Address</label>
-            <input id="instituteAddress" formControlName="instituteAddress" type="text" />
-        </div>
-          <div class="form-group">
-              <label for="institutephoneNumber">Institute Phone Number</label>
-              <input id="institutephoneNumber" formControlName="institutephoneNumber" type="number" />
-          </div>
+    </div>
+  </div>
+  <div class="reg-heading">Registration</div>
+  <div class="form-container">
+  <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" >
+    
+    <div class="form-group" [ngClass]="{'error': registrationForm.get('name')?.invalid && registrationForm.get('name')?.touched}">
+      <label for="name">Name</label>
+      <input id="name" formControlName="name" type="text" required />
+      <div *ngIf="registrationForm.get('name')?.invalid && registrationForm.get('name')?.touched" class="error-message">
+        Name must contain only letters and spaces.
       </div>
-
-      <div *ngIf="stepIndex === 2">
-         
-         
-          <div class="form-group">
-            <label for="password">Password:</label>
-            <input id="password" formControlName="password" type="password" required />
-          </div>
-          <div class="form-group">
-            <label for="confirmpassword">Confirm Password:</label>
-            <input id="confirmpassword" formControlName="confirmpassword" type="password" required />
-          </div>
+    </div>
+    
+    <div class="form-group" [ngClass]="{'error': registrationForm.get('email')?.invalid && registrationForm.get('email')?.touched}">
+      <label for="email">Email</label>
+      <input id="email" formControlName="email" type="email" required />
+      <div *ngIf="registrationForm.get('email')?.invalid && registrationForm.get('email')?.touched" class="error-message">
+        A valid email is required.
       </div>
+    </div>
 
-      <div class="buttons">
-          <button type="button" (click)="prevStep()" [disabled]="stepIndex === 0">Previous</button>
-          <button type="button" *ngIf="stepIndex < 2" (click)="nextStep()">Next</button>
-          <button type="submit" *ngIf="stepIndex === 2" class="submit-button">Submit</button>
+    <div class="form-group" [ngClass]="{'error': registrationForm.get('instituteName')?.invalid && registrationForm.get('instituteName')?.touched}">
+      <label for="instituteName">School/Institute Name</label>
+      <input id="instituteName" formControlName="instituteName" type="text" required />
+      <div *ngIf="registrationForm.get('instituteName')?.invalid && registrationForm.get('instituteName')?.touched" class="error-message">
+        Institute name is required.
       </div>
+    </div>
+    
+    <div class="form-group" [ngClass]="{'error': registrationForm.get('instituteAddress')?.invalid && registrationForm.get('instituteAddress')?.touched}">
+      <label for="instituteAddress">Address</label>
+      <input id="instituteAddress" formControlName="instituteAddress" type="text" required />
+      <div *ngIf="registrationForm.get('instituteAddress')?.invalid && registrationForm.get('instituteAddress')?.touched" class="error-message">
+        Address is required.
+      </div>
+    </div>
+    
+    <div class="form-group" [ngClass]="{'error': registrationForm.get('institutephoneNumber')?.invalid && registrationForm.get('institutephoneNumber')?.touched}">
+      <label for="institutephoneNumber">Institute Phone Number</label>
+      <input id="institutephoneNumber" maxlength="10" formControlName="institutephoneNumber" type="tel" required />
+      <div *ngIf="registrationForm.get('institutephoneNumber')?.invalid && registrationForm.get('institutephoneNumber')?.touched" class="error-message">
+        A valid 10-digit phone number is required.
+      </div>
+    </div>
+    
+    <div class="form-group" [ngClass]="{'error': registrationForm.get('password')?.invalid && registrationForm.get('password')?.touched}">
+      <label for="password">Password:</label>
+      <input id="password" maxlength="30" formControlName="password" type="password" required />
+      <div *ngIf="registrationForm.get('password')?.invalid && registrationForm.get('password')?.touched" class="error-message">
+        Password is required and must be at least 6 characters.
+      </div>
+    </div>
+    
+    <div class="form-group" [ngClass]="{'error': registrationForm.get('confirmpassword')?.invalid && registrationForm.get('confirmpassword')?.touched}">
+      <label for="confirmpassword">Confirm Password:</label>
+      <input id="confirmpassword" formControlName="confirmpassword" type="password" required />
+      <div *ngIf="registrationForm.get('confirmpassword')?.invalid && registrationForm.get('confirmpassword')?.touched" class="error-message">
+        Confirmation is required.
+      </div>
+      <div *ngIf="registrationForm.hasError('passwordsMismatch') && registrationForm.get('confirmpassword')?.touched" class="error-message">
+        Passwords must match.
+      </div>
+    </div>
+
+    <button type="submit" class="submit-button" [disabled]="registrationForm.invalid">Submit</button>
   </form>
+  <div class="additional-links">
+    
+    <button class="link-btn" (click)="onSignIn()">Sign In</button>
+  </div>
+</div>
 </div>

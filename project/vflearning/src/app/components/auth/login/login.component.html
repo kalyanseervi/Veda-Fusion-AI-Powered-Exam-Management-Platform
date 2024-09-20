@@ -26,8 +26,9 @@
       </div>
       <button class="btn" type="submit" [disabled]="loginForm.invalid">Login</button>
     </form>
-    <div>
-      
+    <div class="additional-links">
+      <button class="link-btn" (click)="onForgotPassword()">Forgot Password?</button>
+      <button class="link-btn" (click)="onSignUp()">Sign Up</button>
     </div>
   </div>
 </div>
