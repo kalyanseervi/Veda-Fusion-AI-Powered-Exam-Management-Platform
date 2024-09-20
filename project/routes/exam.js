@@ -3,8 +3,12 @@ const { body, validationResult } = require("express-validator");
 const router = express.Router();
 const Exam = require("../models/Exam"); // Adjust the path as necessary
 const { decodeTokenFromParams, auth } = require("../middleware/auth"); // Adjust the path as necessary
-const multer = require('multer');
+const multer = require("multer");
 const upload = multer();
+const AssignedExam = require("../models/AssignedExam");
+const ExamQuestions = require("../models/ExamQuestion");
+const QuesResponse = require("../models/Ques_response");
+const Result = require("../models/Result");
 
 // Validation rules
 const examValidationRules = () => [
@@ -44,7 +48,6 @@ const examValidationRules = () => [
   body("captureScreenDuringExam")
     .isBoolean()
     .withMessage("Capture screen during exam must be a boolean"),
-
 ];
 
 // Middleware to validate request data
@@ -57,65 +60,82 @@ const validate = (req, res, next) => {
 };
 
 /// Create a new exam
-router.post("/create", [auth,validate,...examValidationRules()],upload.none(), async (req, res) => {
-  try {
-    const {
-      examName,
-      examDate,
-      examTime,
-      examDuration,
-      examDescription,
-      negativeMarking,
-      negativeMarks,
-      captureScreenDuringExam,
-      screenCaptureInterval,
-      class: classId,
-      subject: subjectId,
-    } = req.body;
+router.post(
+  "/create",
+  [auth, validate, ...examValidationRules()],
+  upload.none(),
+  async (req, res) => {
+    try {
+      const {
+        examName,
+        examDate,
+        examTime,
+        examDuration,
+        examDescription,
+        negativeMarking,
+        negativeMarks,
+        captureScreenDuringExam,
+        screenCaptureInterval,
+        class: classId,
+        subject: subjectId,
+      } = req.body;
 
-    console.log(req.body);
+      console.log(req.body);
 
-    // Ensure boolean values are parsed correctly
-    const isNegativeMarking = negativeMarking === "true" || negativeMarking === true;
-    const isCaptureScreen = captureScreenDuringExam === "true" || captureScreenDuringExam === true;
+      // Ensure boolean values are parsed correctly
+      const isNegativeMarking =
+        negativeMarking === "true" || negativeMarking === true;
+      const isCaptureScreen =
+        captureScreenDuringExam === "true" || captureScreenDuringExam === true;
 
-    // Validate required fields (optional but recommended)
-    if (!examName || !examDate || !examTime || !examDuration || !classId || !subjectId) {
-      return res.status(400).json({ message: "Missing required fields." });
+      // Validate required fields (optional but recommended)
+      if (
+        !examName ||
+        !examDate ||
+        !examTime ||
+        !examDuration ||
+        !classId ||
+        !subjectId
+      ) {
+        return res.status(400).json({ message: "Missing required fields." });
+      }
+
+      // Create new exam
+      const newExam = new Exam({
+        examName,
+        examDate,
+        examTime,
+        examDuration,
+        examStatus: "Incoming", // Set default status to "Incoming"
+        examDescription,
+        negativeMarking: isNegativeMarking,
+        negativeMarks: isNegativeMarking ? negativeMarks : null, // Only set negative marks if negative marking is enabled
+        captureScreenDuringExam: isCaptureScreen,
+        screenCaptureInterval: isCaptureScreen ? screenCaptureInterval : null, // Only set interval if screen capture is enabled
+        createdBy: req.user._id, // Use the logged-in user for createdBy
+        class: classId,
+        subject: subjectId,
+      });
+
+      // Save the exam to the database
+      const savedExam = await newExam.save();
+      res.status(201).json(savedExam);
+    } catch (error) {
+      console.error("Error creating exam:", error);
+      res
+        .status(500)
+        .json({ message: "Failed to create exam. Please try again." });
     }
-
-    // Create new exam
-    const newExam = new Exam({
-      examName,
-      examDate,
-      examTime,
-      examDuration,
-      examStatus: "Incoming", // Set default status to "Incoming"
-      examDescription,
-      negativeMarking: isNegativeMarking,
-      negativeMarks: isNegativeMarking ? negativeMarks : null, // Only set negative marks if negative marking is enabled
-      captureScreenDuringExam: isCaptureScreen,
-      screenCaptureInterval: isCaptureScreen ? screenCaptureInterval : null, // Only set interval if screen capture is enabled
-      createdBy: req.user._id, // Use the logged-in user for createdBy
-      class: classId,
-      subject: subjectId
-    });
-
-    // Save the exam to the database
-    const savedExam = await newExam.save();
-    res.status(201).json(savedExam);
-  } catch (error) {
-    console.error("Error creating exam:", error);
-    res.status(500).json({ message: "Failed to create exam. Please try again." });
   }
-});
-
+);
 
 // Get all exams
 router.get("/exams", auth, async (req, res) => {
   try {
     const userId = req.user._id;
-    const exams = await Exam.find({ createdBy: userId }).populate("createdBy class subject");
+    const exams = await Exam.find({ createdBy: userId }).populate(
+      "createdBy class subject"
+    );
     res.status(200).json(exams);
   } catch (error) {
     console.error(error);
@@ -126,15 +146,17 @@ router.get("/exams", auth, async (req, res) => {
 // Get a single exam by ID
 router.get("/exams/:id", auth, async (req, res) => {
   try {
-    const exam = await Exam.findById(req.params.id).populate("createdBy class subject");
-    
+    const exam = await Exam.findById(req.params.id).populate(
+      "createdBy class subject"
+    );
+
     if (!exam) {
       return res.status(404).json({ message: "Exam not found" });
     }
 
     const currentTime = new Date();
     const examEndTime = new Date(exam.examEndTime);
-    
+
     // Check if the exam has already ended
     let remainingTime = 0;
     let status = "Ongoing";
@@ -149,7 +171,7 @@ router.get("/exams/:id", auth, async (req, res) => {
     res.status(200).json({
       exam,
       remainingTime, // Time left in seconds
-      status
+      status,
     });
   } catch (error) {
     console.error(error);
@@ -157,14 +179,15 @@ router.get("/exams/:id", auth, async (req, res) => {
   }
 });
 
-
 // Update an exam
 router.put(
   "/exams/:id",
   [auth, ...examValidationRules(), validate],
   async (req, res) => {
     try {
-      const exam = await Exam.findByIdAndUpdate(req.params.id, req.body, { new: true });
+      const exam = await Exam.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+      });
       if (!exam) {
         return res.status(404).json({ message: "Exam not found" });
       }
@@ -176,16 +199,33 @@ router.put(
   }
 );
 
-// Delete an exam
+// Delete an exam and related documents
 router.delete("/exams/:id", auth, async (req, res) => {
   try {
-    const exam = await Exam.findByIdAndDelete(req.params.id);
+    // Find the exam by its ID
+    const exam = await Exam.findById(req.params.id);
+
     if (!exam) {
       return res.status(404).json({ message: "Exam not found" });
     }
-    res.status(200).json({ message: "Exam deleted successfully" });
+
+    const examId = exam._id;
+
+    // Ensure the exam and related documents are deleted in parallel
+    await Promise.all([
+      exam.deleteOne(), // Delete the exam itself
+      AssignedExam.deleteMany({ examId }), // Delete all assigned exams
+      ExamQuestions.deleteMany({ examId }), // Delete all exam questions
+      QuesResponse.deleteMany({ examId }), // Delete all question responses
+      Result.deleteMany({ examId }), // Delete all results
+    ]);
+
+    // Return success response
+    res
+      .status(200)
+      .json({ message: "Exam and related documents deleted successfully" });
   } catch (error) {
-    console.error(error);
+    console.error("Error deleting exam and related documents:", error);
     res.status(500).json({ message: "Server error", error });
   }
 });

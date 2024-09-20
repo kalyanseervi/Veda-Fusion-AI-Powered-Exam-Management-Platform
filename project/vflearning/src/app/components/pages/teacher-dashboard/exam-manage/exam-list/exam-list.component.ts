@@ -55,16 +55,23 @@ export class ExamListComponent implements OnInit {
     this.selectedExamId = arg0
     this.isPopupVisible = true;
   }
-  deleteExam(arg0:string){
-    console.log('i am here',arg0)
-    this.examservice.deleteExamById(arg0).subscribe({
-      next:(response)=>{
-        alert('Exam Deleted Successfully')
-      },
-      error:(err)=> {
-        alert('Error Occured')
-        console.log('error in deleting exam',err)
-      },
-    })
+  deleteExam(arg0: string) {
+    const confirmationMessage = "If you delete this exam, you will lose all associated data. Please type 'delete exam' to confirm.";
+    const userInput = prompt(confirmationMessage);
+  
+    if (userInput === 'delete exam') {
+      console.log('Deleting exam with ID:', arg0);
+      this.examservice.deleteExamById(arg0).subscribe({
+        next: (response) => {
+          alert('Exam Deleted Successfully');
+        },
+        error: (err) => {
+          alert('Error Occurred');
+          console.log('Error in deleting exam:', err);
+        },
+      });
+    } else {
+      alert('Deletion canceled or input did not match.');
+    }
   }
 }
