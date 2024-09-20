@@ -189,14 +189,16 @@ router.get("/:id", auth, async (req, res) => {
 });
 
 // Update a teacher
-router.put("/:id", auth, async (req, res) => {
+router.put("/:id", auth, upload.none(), async (req, res) => {
   try {
     const {
       name,
       studentsubjects,
       studentClass,
+      photo, // If you plan to handle photo uploads
     } = req.body;
-    console.log('i am here',req.body)
+
+    console.log('i am here', req.body);
 
     // Ensure the user is an admin
     if (req.user.role.name !== "admin") {
@@ -205,34 +207,35 @@ router.put("/:id", auth, async (req, res) => {
         .json({ msg: "Access denied. Only admins can update student." });
     }
 
-    const updatedTeacher = await Student.findByIdAndUpdate(
+    // Prepare the update data
+    const updateData = {
+      name,
+      studentClass: studentClass ? studentClass.split(",").map(id => id.trim()) : [],
+      studentsubjects: studentsubjects ? studentsubjects.split(",").map(id => id.trim()) : [],
+    };
+
+    // If you want to handle photo uploads, include that in the updateData
+    if (photo && photo !== 'null') {
+      // Handle the photo upload logic here, e.g., saving the photo URL or file path
+    }
+
+    const updatedStudent = await Student.findByIdAndUpdate(
       req.params.id,
-      {
-        studentClass: studentClass
-        ? studentClass.split(",").map((id) => id.trim())
-        : [],
-        studentsubjects: studentsubjects
-        ? studentsubjects.split(",").map((id) => id.trim())
-        : [],
-      },
+      updateData,
       { new: true }
     ).populate("school", "name");
 
-    if (!updatedTeacher) {
+    if (!updatedStudent) {
       return res.status(404).json({ msg: "Student not found" });
     }
 
-    res
-      .status(200)
-      .json({
-        message: "Student updated successfully",
-        teacher: updatedTeacher,
-      });
+    res.status(200).json({
+      message: "Student updated successfully",
+      student: updatedStudent, // Optionally return the updated student
+    });
   } catch (error) {
     console.error(`Error updating student: ${error.message}`);
-    res
-      .status(500)
-      .json({ message: "Failed to update student", error: error.message });
+    res.status(500).json({ message: "Failed to update student", error: error.message });
   }
 });
 

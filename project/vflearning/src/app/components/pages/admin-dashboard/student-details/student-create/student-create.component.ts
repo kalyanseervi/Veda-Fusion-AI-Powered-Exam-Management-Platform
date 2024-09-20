@@ -95,14 +95,17 @@ export class StudentCreateComponent implements OnInit {
 
   loadStudentData(id: string): void {
     this.studentService.getStudentById(id).subscribe(student => {
+      console.log(student);
+      
       this.studentForm.patchValue({
         name: student.name,
         email: student.email,
-        studentClass: student.studentClass.join(','),
-        studentsubjects: student.studentsubjects.join(',')
+        studentClass: student.studentClass.map((c: { _id: any; }) => c._id).join(','),  // Get classname from studentClass object
+        studentsubjects: student.studentsubjects.map((s: { _id: any; }) => s._id).join(',')  // Get subjectName from studentsubjects object
       });
     });
   }
+  
 
   next(): void {
     this.isSecondSectionActive = true;

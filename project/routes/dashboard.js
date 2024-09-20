@@ -18,7 +18,7 @@ router.get("/teacher", auth, async (req, res) => {
 
 router.get("/student", auth, async (req, res) => {
   try {
-    console.log("i am here");
+
     const studentId = req.user._id;
 
     // Count total exams
@@ -44,7 +44,7 @@ router.get("/student", auth, async (req, res) => {
       },
     });
 
-    console.log("my results", studentResults);
+
 
     // Calculate the average percentage for each subject and all subjects
     const classResults = await Result.find({}).populate({

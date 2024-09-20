@@ -270,8 +270,7 @@ router.get(
 router.post("/update-password", auth, async (req, res) => {
   const email = req.user.email;
   const { currentPassword, newPassword, confirmPassword } = req.body;
-  console.log(req.body);
-  console.log(email);
+
 
   // Check if all required fields are present
   if (!email || !currentPassword || !newPassword || !confirmPassword) {
@@ -324,7 +323,7 @@ router.post("/update-password", auth, async (req, res) => {
 // POST: /api/auth/forgot-password
 router.post("/forgot-password", async (req, res) => {
   const { email } = req.body;
-  console.log(email);
+
   try {
     let user;
 
@@ -432,10 +431,10 @@ router.post("/reset-password/:token", async (req, res) => {
 
 
 router.get("/getUserDtl", auth, async (req, res) => {
-  console.log("i am here ");
+
   try {
     const email = req.user.email
-    console.log(email)
+
     let user;
 
     // Try finding the user in User, Teacher, and Student collections
@@ -453,7 +452,7 @@ router.get("/getUserDtl", auth, async (req, res) => {
     if (!user) {
       return res.status(400).json({ msg: "User not found" });
     }
-    console.log("hello", user);
+
     res.status(200).json(user);
   } catch (error) {
     res.status(500).json({ message: "Server error" });

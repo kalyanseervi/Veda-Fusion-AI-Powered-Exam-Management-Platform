@@ -80,7 +80,7 @@ router.post(
         subject: subjectId,
       } = req.body;
 
-      console.log(req.body);
+
 
       // Ensure boolean values are parsed correctly
       const isNegativeMarking =

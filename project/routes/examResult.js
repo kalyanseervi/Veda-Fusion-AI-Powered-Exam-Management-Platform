@@ -15,8 +15,7 @@ const pyUrl = "http://localhost:8000/api/questions/evaluate/";
 // Function to validate answers using Gemini API or direct comparison
 const validateAnswer = async (question, userAnswer) => {
   if (question.type === "mcq") {
-    console.log('validateAnswer', userAnswer)
-    console.log('correct answer', question.answer)
+
     return {
       isCorrect: userAnswer === question.answer,
       awardedMarks: userAnswer === question.answer ? question.marks : 0,
@@ -142,7 +141,7 @@ router.get("/studentResponse/:id", auth, async (req, res) => {
             // Await the result of validateAnswer since it's an async function
             const { awardedMarks,isCorrect } = await validateAnswer(question, response.selectedOption);
 
-            console.log('awardedMarks marks', awardedMarks);
+
             obtainedMarks += awardedMarks;
 
             if (negativeMarking && !isCorrect && attemptedQuestions) {
@@ -234,7 +233,7 @@ router.get("/studentResponse/:id", auth, async (req, res) => {
 router.post("/publishResult/:id", async (req, res) => {
   try {
     const examId = req.params.id;
-    console.log("result examID", examId);
+
 
     // Find the exam result
     const examResult = await Result.findOne({ examId: examId });
