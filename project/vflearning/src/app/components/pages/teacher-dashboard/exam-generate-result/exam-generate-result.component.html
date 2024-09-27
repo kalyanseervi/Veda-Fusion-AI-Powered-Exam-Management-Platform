@@ -1,10 +1,6 @@
-
-
-
 <div *ngIf="message" class="modal-overlay">
   <div class="modal-container">
     <div class="modal-header">
-      <h3 class="modal-title">Error</h3>
       <button class="material-icons-sharp modal-close-button" (click)="message = ''">close</button>
     </div>
     <div class="modal-body">
@@ -20,7 +16,8 @@
 <div class="std-dtl">
 
   <h1 class="assigned-exam-title">Exam Result</h1>
-  <button class="action-button" (click)="publishResult()"><span class="material-icons-sharp">publish</span>Publish Result</button>
+  <button class="action-button" (click)="publishResult()"><span class="material-icons-sharp">publish</span>Publish
+    Result</button>
 </div>
 <!-- Table -->
 <table id="examResultsTable" class="assigned-exam-table display" *ngIf="!loading">
@@ -85,4 +82,3 @@
     </div>
   </div>
 </div>
-

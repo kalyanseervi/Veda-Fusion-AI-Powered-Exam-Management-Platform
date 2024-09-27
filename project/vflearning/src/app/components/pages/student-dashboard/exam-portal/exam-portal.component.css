@@ -1,3 +1,5 @@
+
+
 .exam-portal-container {
   display: flex;
   flex-direction: column;
@@ -39,14 +41,6 @@
   background-color: var(--color-primary-variant);
 }
 
-.fullscreen-btn {
-  background-color: var(--color-success);
-}
-
-.fullscreen-btn:hover {
-  background-color: var(--color-primary-variant);
-}
-
 .exam-timer {
   font-size: 1.2rem;
   color: var(--color-danger);
@@ -61,12 +55,60 @@
 
 .short-answer-textarea {
   width: 100%;
-  padding: 0.75rem;
+  padding: 1rem;
   border-radius: var(--border-radius-1);
-  border: 1px solid var(--color-info-dark);
+  border: 1px solid var(--color-dark-variant);
   resize: none;
   font-size: 1rem;
-  margin-top: 0.5rem;
+}
+
+.short-answer-textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 5px var(--color-primary);
+}
+
+.word-left {
+  color: var(--color-danger);
+}
+
+.questions-bar {
+  width: 100%;
+  max-width: 800px;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.questions-list {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.question-item {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-light);
+  border-radius: 50%;
+  border: 1px solid var(--color-dark);
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.question-item:hover {
+  transform: scale(1.1);
+}
+
+.attempted {
+  background-color: var(--color-success);
+}
+
+.not-attempted {
+  background-color: var(--color-danger);
 }
 
 .options {
@@ -82,9 +124,7 @@
 
 .option input[type="radio"] {
   margin-right: 0.5rem;
-  accent-color: var(
-    --color-primary
-  ); /* Apply the primary color to the radio buttons */
+  accent-color: var(--color-primary);
 }
 
 .option label {
@@ -97,9 +137,7 @@
 }
 
 .option label:hover {
-  background-color: var(
-    --color-info-dark
-  ); /* Slightly darken on hover for better visibility */
+  background-color: var(--color-info-dark);
 }
 
 .selected-option {
@@ -117,80 +155,45 @@
 
 .nav-btn {
   background-color: var(--color-warning);
-}
-
-.nav-btn:hover {
-  background-color: var(--color-primary-variant);
-}
-
-.submit-exam-btn {
-  background-color: var(--color-danger);
   margin-top: 1rem;
-  align-self: center;
 }
 
-.submit-exam-btn:hover {
-  background-color: var(--color-primary-variant);
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-@media (max-width: 768px) {
-  .exam-portal-container {
-    padding: 1rem;
-  }
-
-  .exam-header h1 {
-    font-size: 1.5rem;
-  }
-
-  .btn {
-    font-size: 0.9rem;
-  }
-
-  .exam-timer {
-    font-size: 1rem;
-  }
+.modal-container {
+  background-color: var(--color-white);
+  padding: var(--padding-1);
+  border-radius: var(--border-radius-2);
+  box-shadow: var(--box-shadow);
+  width: 90%;
+  max-width: 500px;
 }
 
-@media (max-width: 480px) {
-  .exam-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .exam-header h1 {
-    margin-bottom: 1rem;
-  }
-
-  .exam-timer {
-    font-size: 0.9rem;
-  }
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.short-answer-textarea {
-    width: 100%;
-    padding: 1rem;
-    border: 1px solid var(--color-dark-variant);
-    border-radius: var(--border-radius-1);
-    resize: none;
-  }
-  
-  .short-answer-textarea:focus {
-    outline: none;
-    border-color: var(--color-primary);
-    box-shadow: 0 0 5px var(--color-primary);
-  }
+.modal-close-button {
+  background-color: transparent;
+  border: none;
+  color: var(--color-danger);
+  cursor: pointer;
+}
 
-  .word-left{
-    color: var(--color-danger);
-  }
-  
-  /* p {
-    margin-top: 0.5rem;
-    font-size: 0.9rem;
-    color: var(--color-info-dark);
-  } */
-
-
-  .question-heasding{
-    font-size: 1.4rem;
-  }
+.modal-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}

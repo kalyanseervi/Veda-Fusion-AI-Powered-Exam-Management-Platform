@@ -1,11 +1,11 @@
-
-import { Component, ElementRef, ViewChild, AfterViewInit, OnInit,Pipe, HostListener } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, OnInit, Pipe, HostListener } from '@angular/core';
 import { RightsidebarComponent } from '../rightsidebar/rightsidebar.component';
 import { SidenavbarComponent } from '../sidenavbar/sidenavbar.component';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../../services/auth/auth.service';
 import { CommonModule } from '@angular/common';
 import { ExamPortalComponent } from "./exam-portal/exam-portal.component";
+import { ExamStateService } from '../../../services/exam/exam-state.service'; // Import the state service
 
 @Component({
   selector: 'app-student-dashboard',
@@ -14,11 +14,9 @@ import { ExamPortalComponent } from "./exam-portal/exam-portal.component";
   templateUrl: './student-dashboard.component.html',
   styleUrl: './student-dashboard.component.css',
 })
-export class StudentDashboardComponent implements AfterViewInit,OnInit {
-
-  
-  username:String | null = null
-  userrole:String | null = null
+export class StudentDashboardComponent implements AfterViewInit, OnInit {
+  username: String | null = null;
+  userrole: String | null = null;
   isFullscreen = false;
   isexamportal = false;
 
@@ -27,18 +25,17 @@ export class StudentDashboardComponent implements AfterViewInit,OnInit {
   @ViewChild('closeBtn') closeBtn!: ElementRef;
   @ViewChild('themeToggler') themeToggler!: ElementRef;
 
-  constructor(private authService:AuthService){}
+  constructor(private authService: AuthService, private examStateService: ExamStateService) {} // Inject the state service
+
   ngOnInit(): void {
     this.authService.decodeToken().subscribe({
       next: (res) => {
-        this.username = res.user.userName
-        this.userrole = res.user.userRole.toUpperCase()
+        this.username = res.user.userName;
+        this.userrole = res.user.userRole.toUpperCase();
       },
-      error: (err) => console.log(err)
-    })
+      error: (err) => console.log(err),
+    });
   }
-
-  
 
   ngAfterViewInit(): void {
     if (this.menuBtn) {
@@ -60,20 +57,20 @@ export class StudentDashboardComponent implements AfterViewInit,OnInit {
         this.toggleActiveClass(this.themeToggler.nativeElement, 2);
       });
     }
-
-    
   }
+
   onFullscreenChange(event: Event): void {
     this.isFullscreen = !!document.fullscreenElement;
   }
 
-
-  onexamportalchange(event:Event):void{
-    this.isexamportal = true
+  onexamportal(event: Event): void {
+    this.isexamportal = true;
+    this.examStateService.isInExamPortal = true; // Set the state when entering exam portal
   }
 
-  onexamportal(event: Event): void {
-    this.onexamportalchange(event);
+  exitExamPortal() {
+    this.isexamportal = false;
+    this.examStateService.isInExamPortal = false; // Reset the state when exiting exam portal
   }
 
   @HostListener('document:fullscreenchange', ['$event'])
@@ -88,5 +85,3 @@ export class StudentDashboardComponent implements AfterViewInit,OnInit {
     }
   }
 }
-
-

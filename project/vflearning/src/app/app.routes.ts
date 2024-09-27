@@ -44,6 +44,7 @@ import { VflearningComponent } from './components/vflearning/vflearning.componen
 import { SettingsComponent } from './components/pages/settings/settings.component';
 import { ForgotPasswordComponent } from './components/auth/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
+import { ExamGuard } from './guards/exam/exam-guard.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/vflearning', pathMatch: 'full' },
@@ -147,7 +148,7 @@ export const routes: Routes = [
       { path: '', component: DashboardComponent },
       { path: 'dashboard', component: DashboardComponent },
       { path: 'exams', component: StudentExamsComponent },
-      { path: 'exam-portal/:examId', component: ExamPortalComponent },
+      { path: 'exam-portal/:examId', component: ExamPortalComponent, canActivate: [ExamGuard] },
     ],
   },
   { path: 'login', component: LoginComponent },

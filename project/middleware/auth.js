@@ -42,7 +42,6 @@ const auth = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    console.log("decoded", decoded);
     req.user = await User.findOne({
       email: decoded.userEmail,
       school: decoded.school,

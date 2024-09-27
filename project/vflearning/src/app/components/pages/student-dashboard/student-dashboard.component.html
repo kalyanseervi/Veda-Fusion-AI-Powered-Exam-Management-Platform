@@ -3,7 +3,7 @@
         <div *ngIf="!isFullscreen">
             <div class="top">
                 <div class="logo">
-                    <img src="assets\images\logovf.jpg" alt="">
+                    <img src="assets/images/logovf.jpg" alt="">
                     <h2> VEDA <span class="danger">FUSION</span> </h2>
                 </div>
                 <div class="close" id="close-btn" #closeBtn>
@@ -13,15 +13,15 @@
             <app-sidenavbar></app-sidenavbar>
         </div>
         <div *ngIf="isFullscreen">
-            
+            <!-- Optional fullscreen content -->
         </div>
     </aside>
 
     <main>
         <router-outlet (fullscreenChange)="onFullscreenChange($event)" (isexamPortal)="onexamportal($event)"></router-outlet>
-
     </main>
-    <div class="right" *ngIf="!isFullscreen">
+
+    <div class="right" *ngIf="!isFullscreen && !isexamportal">
         <div class="top">
             <button id="menu-btn" #menuBtn>
                 <span class="material-icons-sharp">menu</span>
@@ -33,11 +33,10 @@
             <div class="profile">
                 <div class="info">
                     <p>Hey, <b>{{username}}</b></p>
-                    <small class="text-muted">{{userrole }}</small>
+                    <small class="text-muted">{{userrole}}</small>
                 </div>
                 <div class="profile-photo">
-                    <img src="assets\images\profile-avatar.png" alt="{{ username }}">
-
+                    <img src="assets/images/profile-avatar.png" alt="{{ username }}">
                 </div>
             </div>
         </div>
