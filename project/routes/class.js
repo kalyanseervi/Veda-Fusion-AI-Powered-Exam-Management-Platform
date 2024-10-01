@@ -12,7 +12,7 @@ router.post('/classes',auth, async (req, res) => {
       const newClass = new Class({
         classname: req.body.classname,
         section: req.body.section,
-        
+        school:req.user.school
       });
   
       await newClass.save();
@@ -25,7 +25,7 @@ router.post('/classes',auth, async (req, res) => {
   // Get all classes
 router.get('/classes',auth, async (req, res) => {
     try {
-      const classes = await Class.find();
+      const classes = await Class.find({school:req.user.school});
       res.status(200).json(classes);
     } catch (error) {
       res.status(500).json({ message: error.message });

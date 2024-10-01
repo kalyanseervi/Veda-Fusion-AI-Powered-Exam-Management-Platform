@@ -89,6 +89,7 @@ router.get("/studentResponse/:id", auth, async (req, res) => {
       examResult = new Result({
         examId: examId,
         userResults: [],
+        school:req.user.school,
       });
     }
 
@@ -322,7 +323,8 @@ router.get("/listOfResults", auth, async (req, res) => {
     // Fetch published exam results within the last 24 hours
     const examResults = await Result.find({
       published: true,
-      publishedDate: { $gte: last24Hours } // Only results published in the last 24 hours
+      publishedDate: { $gte: last24Hours }, // Only results published in the last 24 hours
+      school:req.user.school,
     }).populate({
       path: "examId", // Path to the field you want to populate
       select: "examName", // Only include the examName field from the Exam model

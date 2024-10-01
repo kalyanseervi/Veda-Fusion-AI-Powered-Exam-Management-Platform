@@ -17,73 +17,124 @@
     </div>
   </div>
   <div class="reg-heading">Registration</div>
+
   <div class="form-container">
-  <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" >
-    
-    <div class="form-group" [ngClass]="{'error': registrationForm.get('name')?.invalid && registrationForm.get('name')?.touched}">
-      <label for="name">Name</label>
-      <input id="name" formControlName="name" type="text" required />
-      <div *ngIf="registrationForm.get('name')?.invalid && registrationForm.get('name')?.touched" class="error-message">
-        Name must contain only letters and spaces.
+    <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+      <!-- Name Field -->
+      <div class="form-row">
+        <div class="icon"><i class="material-icons">person</i></div>
+        <div class="input-container"
+          [ngClass]="{'error': registrationForm.get('name')?.invalid && registrationForm.get('name')?.touched}">
+          <input id="name" formControlName="name" placeholder="Name" type="text" required />
+          <div *ngIf="registrationForm.get('name')?.invalid && registrationForm.get('name')?.touched"
+            class="error-message">
+            Name must contain only letters and spaces.
+          </div>
+        </div>
       </div>
-    </div>
-    
-    <div class="form-group" [ngClass]="{'error': registrationForm.get('email')?.invalid && registrationForm.get('email')?.touched}">
-      <label for="email">Email</label>
-      <input id="email" formControlName="email" type="email" required />
-      <div *ngIf="registrationForm.get('email')?.invalid && registrationForm.get('email')?.touched" class="error-message">
-        A valid email is required.
-      </div>
-    </div>
 
-    <div class="form-group" [ngClass]="{'error': registrationForm.get('instituteName')?.invalid && registrationForm.get('instituteName')?.touched}">
-      <label for="instituteName">School/Institute Name</label>
-      <input id="instituteName" formControlName="instituteName" type="text" required />
-      <div *ngIf="registrationForm.get('instituteName')?.invalid && registrationForm.get('instituteName')?.touched" class="error-message">
-        Institute name is required.
+      <!-- Email Field -->
+      <div class="form-row">
+        <div class="icon"><i class="material-icons">alternate_email</i></div>
+        <div class="input-container"
+          [ngClass]="{'error': registrationForm.get('email')?.invalid && registrationForm.get('email')?.touched}">
+          <input id="email" formControlName="email" placeholder="Email" type="email" required />
+          <div *ngIf="registrationForm.get('email')?.invalid && registrationForm.get('email')?.touched"
+            class="error-message">
+            A valid email is required.
+          </div>
+        </div>
       </div>
-    </div>
-    
-    <div class="form-group" [ngClass]="{'error': registrationForm.get('instituteAddress')?.invalid && registrationForm.get('instituteAddress')?.touched}">
-      <label for="instituteAddress">Address</label>
-      <input id="instituteAddress" formControlName="instituteAddress" type="text" required />
-      <div *ngIf="registrationForm.get('instituteAddress')?.invalid && registrationForm.get('instituteAddress')?.touched" class="error-message">
-        Address is required.
-      </div>
-    </div>
-    
-    <div class="form-group" [ngClass]="{'error': registrationForm.get('institutephoneNumber')?.invalid && registrationForm.get('institutephoneNumber')?.touched}">
-      <label for="institutephoneNumber">Institute Phone Number</label>
-      <input id="institutephoneNumber" maxlength="10" formControlName="institutephoneNumber" type="tel" required />
-      <div *ngIf="registrationForm.get('institutephoneNumber')?.invalid && registrationForm.get('institutephoneNumber')?.touched" class="error-message">
-        A valid 10-digit phone number is required.
-      </div>
-    </div>
-    
-    <div class="form-group" [ngClass]="{'error': registrationForm.get('password')?.invalid && registrationForm.get('password')?.touched}">
-      <label for="password">Password:</label>
-      <input id="password" maxlength="30" formControlName="password" type="password" required />
-      <div *ngIf="registrationForm.get('password')?.invalid && registrationForm.get('password')?.touched" class="error-message">
-        Password is required and must be at least 6 characters.
-      </div>
-    </div>
-    
-    <div class="form-group" [ngClass]="{'error': registrationForm.get('confirmpassword')?.invalid && registrationForm.get('confirmpassword')?.touched}">
-      <label for="confirmpassword">Confirm Password:</label>
-      <input id="confirmpassword" formControlName="confirmpassword" type="password" required />
-      <div *ngIf="registrationForm.get('confirmpassword')?.invalid && registrationForm.get('confirmpassword')?.touched" class="error-message">
-        Confirmation is required.
-      </div>
-      <div *ngIf="registrationForm.hasError('passwordsMismatch') && registrationForm.get('confirmpassword')?.touched" class="error-message">
-        Passwords must match.
-      </div>
-    </div>
 
-    <button type="submit" class="submit-button" [disabled]="registrationForm.invalid">Submit</button>
-  </form>
-  <div class="additional-links">
-    
-    <button class="link-btn" (click)="onSignIn()">Sign In</button>
+      <!-- School/Institute Name -->
+      <div class="form-row">
+        <div class="icon"><i class="material-icons">school</i></div>
+        <div class="input-container"
+          [ngClass]="{'error': registrationForm.get('instituteName')?.invalid && registrationForm.get('instituteName')?.touched}">
+          <input id="instituteName" formControlName="instituteName" placeholder="School/Institute Name" type="text"
+            required />
+          <div *ngIf="registrationForm.get('instituteName')?.invalid && registrationForm.get('instituteName')?.touched"
+            class="error-message">
+            Institute name is required.
+          </div>
+        </div>
+      </div>
+
+      <!-- Address Field -->
+      <div class="form-row">
+        <div class="icon"><i class="material-icons">location_on</i></div>
+        <div class="input-container"
+          [ngClass]="{'error': registrationForm.get('instituteAddress')?.invalid && registrationForm.get('instituteAddress')?.touched}">
+          <input id="instituteAddress" formControlName="instituteAddress" placeholder="Address" type="text" required />
+          <div
+            *ngIf="registrationForm.get('instituteAddress')?.invalid && registrationForm.get('instituteAddress')?.touched"
+            class="error-message">
+            Address is required.
+          </div>
+        </div>
+      </div>
+
+      <!-- Phone Number Field -->
+      <div class="form-row">
+        <div class="icon"><i class="material-icons">phone</i></div>
+        <div class="input-container"
+          [ngClass]="{'error': registrationForm.get('institutephoneNumber')?.invalid && registrationForm.get('institutephoneNumber')?.touched}">
+          <input id="institutephoneNumber" formControlName="institutephoneNumber" placeholder="Institute Phone Number"
+            maxlength="10" type="tel" required />
+          <div
+            *ngIf="registrationForm.get('institutephoneNumber')?.invalid && registrationForm.get('institutephoneNumber')?.touched"
+            class="error-message">
+            A valid 10-digit phone number is required.
+          </div>
+        </div>
+      </div>
+
+      <!-- Password Field -->
+      <div class="form-row">
+        <div class="icon"><i class="material-icons">lock</i></div>
+        <div class="input-container"
+          [ngClass]="{'error': registrationForm.get('password')?.invalid && registrationForm.get('password')?.touched}">
+          <input id="password" formControlName="password" placeholder="Password" type="password" maxlength="30"
+            required />
+          <div *ngIf="registrationForm.get('password')?.invalid && registrationForm.get('password')?.touched"
+            class="error-message">
+            Password is required and must be at least 6 characters.
+          </div>
+        </div>
+      </div>
+
+      <!-- Confirm Password Field -->
+      <div class="form-row">
+        <div class="icon"><i class="material-icons">lock</i></div>
+        <div class="input-container"
+          [ngClass]="{'error': registrationForm.get('confirmpassword')?.invalid && registrationForm.get('confirmpassword')?.touched}">
+          <input id="confirmpassword" formControlName="confirmpassword" placeholder="Confirm Password" type="password"
+            required />
+          <div
+            *ngIf="registrationForm.get('confirmpassword')?.invalid && registrationForm.get('confirmpassword')?.touched"
+            class="error-message">
+            Confirmation is required.
+          </div>
+          <div
+            *ngIf="registrationForm.hasError('passwordsMismatch') && registrationForm.get('confirmpassword')?.touched"
+            class="error-message">
+            Passwords must match.
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="submit-btn">
+        <button type="submit" class="submit-button" [disabled]="registrationForm.invalid">Submit</button>
+      </div>
+    </form>
+
+    <!-- Sign In Link -->
+    <div class="additional-links">
+      <div>
+        Already have Account <button class="link-btn" (click)="onSignIn()">Sign In</button>
+
+      </div>
+    </div>
   </div>
-</div>
 </div>

@@ -1,14 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const Subject = require('../models/Subject');
-
+const {decodeTokenFromParams,auth} = require('../middleware/auth'); // Middleware to verify user
 // Create a new subject
-router.post('/subjects', async (req, res) => {
+router.post('/subjects', auth,async (req, res) => {
   try {
     const newSubject = new Subject({
-        subjectName: req.body.subjectName,
-        
+        subjectName: req.body.subjectName,        
         classId: req.body.classId,
+        school:req.user.school
         
     });
   
@@ -21,9 +21,9 @@ router.post('/subjects', async (req, res) => {
 });
 
 // Get all subjects
-router.get('/subjects', async (req, res) => {
+router.get('/subjects',auth, async (req, res) => {
     try {
-      const subjects = await Subject.find().populate('classId');
+      const subjects = await Subject.find({school:req.user.school}).populate('classId');
       res.status(200).json(subjects);
     } catch (error) {
       res.status(500).json({ message: error.message });
@@ -31,7 +31,7 @@ router.get('/subjects', async (req, res) => {
   });
 
 // Get a single subject by ID
-router.get('/subjects/:id', async (req, res) => {
+router.get('/subjects/:id',auth, async (req, res) => {
     try {
       const subject = await Subject.findById(req.params.id).populate('classId');
       if (!subject) return res.status(404).json({ message: 'Subject not found' });
@@ -43,7 +43,7 @@ router.get('/subjects/:id', async (req, res) => {
 
   
 // Update a subject by ID
-router.put('/subjects/:id', async (req, res) => {
+router.put('/subjects/:id',auth, async (req, res) => {
     try {
       const updatedSubject = await Subject.findByIdAndUpdate(
         req.params.id,
@@ -59,7 +59,7 @@ router.put('/subjects/:id', async (req, res) => {
 
   
 // Delete a subject by ID
-router.delete('/subjects/:id', async (req, res) => {
+router.delete('/subjects/:id',auth, async (req, res) => {
     try {
       const deletedSubject = await Subject.findByIdAndDelete(req.params.id);
       if (!deletedSubject) return res.status(404).json({ message: 'Subject not found' });
@@ -69,7 +69,7 @@ router.delete('/subjects/:id', async (req, res) => {
     }
   });
 
-  router.get('/subjects/classSubject/:classId', async (req, res) => {
+  router.get('/subjects/classSubject/:classId',auth, async (req, res) => {
     try {
         const { classId } = req.params;
 

@@ -1,1 +1,24 @@
-<p *ngIf="message">{{ message }}</p>
+<div class="container main-banner">
+    <div class="email-verified" *ngIf="successMessage">
+        <div class="icon-container">
+            <img src="assets/success-icon.png" alt="Success Icon" class="success-icon" />
+        </div>
+        <h2>Email Verified Successfully!</h2>
+        <p class="welcome-message">Welcome to Vedafusion School Management</p>
+        <p class="description">
+            Thank you for verifying your email. Vedafusion School Management System is your comprehensive solution for
+            managing student information, attendance, exams, and much more. We are excited to have you onboard. Start
+            exploring the features to make your school's management easy and efficient!
+        </p>
+
+        <button class="btn" (click)="onSignIn()">Sign In</button>
+    </div>
+    <div class="email-verified" *ngIf="errorMessage">
+        <div class="icon-container">
+            <img src="assets/failed-icon.png" alt="Success Icon" class="success-icon" />
+        </div>
+        <h2>{{errorMessage}}</h2>
+
+        <button class="btn" (click)="homebtn()">Back</button>
+    </div>
+</div>
