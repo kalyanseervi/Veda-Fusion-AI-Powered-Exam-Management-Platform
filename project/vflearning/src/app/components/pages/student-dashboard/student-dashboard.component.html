@@ -1,46 +1,45 @@
 <div class="container1">
     <aside #sideMenu *ngIf="!isexamportal">
-        <div *ngIf="!isFullscreen">
-            <div class="top">
-                <div class="logo">
-                    <img src="assets/images/logovf.jpg" alt="">
-                    <h2> VEDA <span class="danger">FUSION</span> </h2>
-                </div>
-                <div class="close" id="close-btn" #closeBtn>
-                    <span class="material-icons-sharp">close</span>
-                </div>
-            </div>
-            <app-sidenavbar></app-sidenavbar>
-        </div>
-        <div *ngIf="isFullscreen">
-            <!-- Optional fullscreen content -->
-        </div>
-    </aside>
-
-    <main>
-        <router-outlet (fullscreenChange)="onFullscreenChange($event)" (isexamPortal)="onexamportal($event)"></router-outlet>
-    </main>
-
-    <div class="right" *ngIf="!isFullscreen && !isexamportal">
+      <div *ngIf="!isFullscreen">
         <div class="top">
-            <button id="menu-btn" #menuBtn>
-                <span class="material-icons-sharp">menu</span>
-            </button>
-            <div class="theme-toggle" #themeToggler>
-                <span class="material-icons-sharp active">light_mode</span>
-                <span class="material-icons-sharp">dark_mode</span>
-            </div>
-            <div class="profile">
-                <div class="info">
-                    <p>Hey, <b>{{username}}</b></p>
-                    <small class="text-muted">{{userrole}}</small>
-                </div>
-                <div class="profile-photo">
-                    <img src="assets/images/profile-avatar.png" alt="{{ username }}">
-                </div>
-            </div>
+          <div class="logo">
+            <img src="assets/images/logovf.jpg" alt="">
+            <h2> VEDA <span class="danger">FUSION</span> </h2>
+          </div>
+          <div class="close" id="close-btn" #closeBtn>
+            <span class="material-icons-sharp">close</span>
+          </div>
         </div>
-
-        <app-rightsidebar></app-rightsidebar>
+        <app-sidenavbar></app-sidenavbar>
+      </div>
+    </aside>
+  
+    <main>
+      <!-- router-outlet to load the component based on the route -->
+      <router-outlet></router-outlet>
+    </main>
+  
+    <div class="right" *ngIf="!isFullscreen && !isexamportal">
+      <div class="top">
+        <button id="menu-btn" #menuBtn>
+          <span class="material-icons-sharp">menu</span>
+        </button>
+        <div class="theme-toggle" #themeToggler>
+          <span class="material-icons-sharp active">light_mode</span>
+          <span class="material-icons-sharp">dark_mode</span>
+        </div>
+        <div class="profile">
+          <div class="info">
+            <p>Hey, <b>{{username}}</b></p>
+            <small class="text-muted">{{userrole}}</small>
+          </div>
+          <div class="profile-photo">
+            <img src="assets/images/profile-avatar.png" alt="{{ username }}">
+          </div>
+        </div>
+      </div>
+  
+      <app-rightsidebar></app-rightsidebar>
     </div>
-</div>
+  </div>
+  
