@@ -48,8 +48,7 @@ export class StudentExamsComponent implements OnInit {
     const examData = { examId};
     // Navigate to the exam page with the examId and examName as route parameters
     this.assignexam.startExam(examData).subscribe({
-      next: (response) => {
-        
+      next: (response) => {        
         this.router.navigate([
           '/dashboard/student/exam-portal',
           examId

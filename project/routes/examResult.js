@@ -129,11 +129,18 @@ router.get("/studentResponse/:id", auth, async (req, res) => {
       let obtainedMarks = 0;
       let attemptedQuestions = 0;
 
+      questionsMap.forEach((question) => {
+        // Assuming the question contains a "marks" property
+        totalMarks += question.marks;
+      });
+      
+      
+
       const userResponses = await Promise.all(
         document.responses.map(async (response) => {
           const question = questionsMap.get(response.questionId.toString());
           if (question) {
-            totalMarks += question.marks;
+            
 
             if (response.selectedOption) {
               attemptedQuestions++;

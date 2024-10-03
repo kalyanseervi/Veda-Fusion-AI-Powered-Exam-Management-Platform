@@ -43,6 +43,9 @@ export class ExamPortalComponent implements OnInit, OnDestroy {
   attemptedCount = 0;
   unattemptedCount = 0;
   notVisitedCount = 0;
+  visitedQuestions: any;
+  markedAsReadQuestions: any;
+  visitedCount = 0;
 
   constructor(
     private examService: ExamService,
@@ -63,15 +66,14 @@ export class ExamPortalComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.enterFullscreen()
+    this.enterFullscreen();
     this.isExamPortalEnabled = true;
     this.isExamPortal.emit(this.isExamPortalEnabled);
 
-    // Add a history state when entering the exam portal
+    // Prevent navigation back
     this.location.go(this.router.url);
     window.history.pushState(null, '', this.router.url);
     window.onpopstate = (event) => {
-      // Prevent navigating back
       this.location.go(this.router.url);
     };
 
@@ -83,14 +85,8 @@ export class ExamPortalComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.clearTimer();
     window.removeEventListener('keydown', this.handleKeyDown.bind(this));
-    window.removeEventListener(
-      'contextmenu',
-      this.handleContextMenu.bind(this)
-    );
-    window.removeEventListener(
-      'beforeunload',
-      this.handleBeforeUnload.bind(this)
-    );
+    window.removeEventListener('contextmenu', this.handleContextMenu.bind(this));
+    window.removeEventListener('beforeunload', this.handleBeforeUnload.bind(this));
   }
 
   loadExamDetails(examId: string): void {
@@ -115,6 +111,7 @@ export class ExamPortalComponent implements OnInit, OnDestroy {
           } else {
             this.Message = 'The exam time has already ended.';
             this.submitExam(); // Automatically submit if the exam is over
+            this.authService.logout();
           }
         } else {
           console.error('Exam details not found in response:', response);
@@ -137,6 +134,9 @@ export class ExamPortalComponent implements OnInit, OnDestroy {
         this.currentQuestion = this.questions[0];
         this.selectedOptions = new Array(this.questions.length).fill('');
         this.enforceWordLimit();
+        this.visitedQuestions = new Array(this.questions.length).fill(false);
+        this.markedAsReadQuestions = new Array(this.questions.length).fill(false);
+        this.currentQuestion = this.questions[this.currentQuestionIndex];
       },
       (error: any) => {
         console.error('Error fetching questions:', error);
@@ -172,11 +172,13 @@ export class ExamPortalComponent implements OnInit, OnDestroy {
     return `${hours}h ${minutes}m ${seconds}s`;
   }
 
+
   goToQuestion(index: number): void {
     if (index >= 0 && index < this.questions.length) {
       this.currentQuestionIndex = index;
       this.currentQuestion = this.questions[index];
       this.enforceWordLimit();
+      this.attemptedfn();
     }
   }
 
@@ -184,6 +186,7 @@ export class ExamPortalComponent implements OnInit, OnDestroy {
     if (this.currentQuestionIndex > 0) {
       this.saveResponse(this.currentQuestionIndex);
       this.goToQuestion(this.currentQuestionIndex - 1);
+      this.attemptedfn();
     }
   }
 
@@ -191,6 +194,30 @@ export class ExamPortalComponent implements OnInit, OnDestroy {
     if (this.currentQuestionIndex < this.questions.length - 1) {
       this.saveResponse(this.currentQuestionIndex);
       this.goToQuestion(this.currentQuestionIndex + 1);
+      this.attemptedfn();
+      
+    }
+  }
+
+  // Mark a question as read
+  markAsRead(): void {
+    if (this.currentQuestionIndex !== undefined) {
+      this.markedAsReadQuestions[this.currentQuestionIndex] = true;
+    }
+  }
+
+  // Mark a question as visited
+  markAsVisited(): void {
+    if (this.currentQuestionIndex !== undefined) {
+      this.visitedQuestions[this.currentQuestionIndex] = true;
+    }
+  }
+
+  // Clear the selection for the current question
+  clearSelection(): void {
+    if (this.currentQuestionIndex !== undefined) {
+      this.selectedOptions[this.currentQuestionIndex] = '';
+      this.attemptedfn()
     }
   }
 
@@ -243,24 +270,32 @@ export class ExamPortalComponent implements OnInit, OnDestroy {
       );
     }
   }
-
-  showConfirmationModal(): void {
-    this.attemptedCount = this.selectedOptions.filter(
-      (option) => option !== ''
-    ).length;
-    this.notVisitedCount =
-      this.questions.length -
-      this.selectedOptions.filter((option) => option !== undefined).length;
+  attemptedfn():void{
+    this.attemptedCount = this.selectedOptions.filter((option) => option !== '')
+      .length;
     this.unattemptedCount =
-      this.questions.length - this.attemptedCount - this.notVisitedCount;
+      this.questions.length - this.selectedOptions.filter((option) => option !== '').length;
+    this.visitedCount = this.visitedQuestions.filter((visited: any) => visited).length;
+  }
+  // Confirmation modal for submitting the exam
+  showConfirmationModal(): void {
+    this.attemptedCount = this.selectedOptions.filter((option) => option !== '')
+      .length;
+    this.unattemptedCount =
+      this.questions.length - this.selectedOptions.filter((option) => option !== '').length;
+    this.visitedCount = this.visitedQuestions.filter((visited: any) => visited).length;
     this.confirmationModal = true;
   }
+
   onOptionSelected(option: string, index: number): void {
     this.selectedOptions[this.currentQuestionIndex] = option;
   }
+
   confirmSubmit(): void {
     this.submitExam();
-    this.confirmationModal = false;
+    this.authService.logout()
+    // this.router.navigate(['/dashboard/student']);
+    
   }
 
   submitExam(): void {
@@ -283,44 +318,24 @@ export class ExamPortalComponent implements OnInit, OnDestroy {
       - Not visited: ${notVisited}
       Do you want to submit the exam?`);
     if (confirmSubmit) {
-      const responses = this.questions.map((question, i) => ({
-        questionId: question._id,
-        response: this.selectedOptions[i],
-      }));
-      this.examPortalService.submitResponses(this.examId, responses).subscribe(
-        (response: any) => {
-          // Handle successful submission
-          console.log('Exam submitted successfully:', response);
-          this.authService.logout();
-        },
-        (error: any) => {
-          console.error('Error submitting exam:', error);
-        }
-      );
+      this.examPortalService
+        .submitResponses(this.examId, this.selectedOptions)
+        .subscribe(
+          (response) => {
+            console.log('Exam submitted successfully');
+            this.authService.logout()
+            // this.router.navigate(['/dashboard/student']);
+          },
+          (error) => {
+            console.error('Error submitting exam:', error);
+          }
+        );
     }
-  }
-
-  @HostListener('window:beforeunload', ['$event'])
-  handleBeforeUnload(event: BeforeUnloadEvent): void {
-    event.preventDefault();
-    event.returnValue =
-      'Are you sure you want to leave? Your progress will be lost!';
   }
 
   handleKeyDown(event: KeyboardEvent): void {
-    // Disable F5 refresh
-    if (event.key === 'F5') {
+    if (event.key === 'F11' || (event.ctrlKey && event.key === 'F')) {
       event.preventDefault();
-    }
-
-    // Prevent right-click context menu
-    if (event.key === 'F12') {
-      event.preventDefault();
-    }
-
-    // Show confirmation modal when pressing 'Esc'
-    if (event.key === 'Escape') {
-      this.showConfirmationModal();
     }
   }
 
@@ -328,41 +343,25 @@ export class ExamPortalComponent implements OnInit, OnDestroy {
     event.preventDefault();
   }
 
+  handleBeforeUnload(event: BeforeUnloadEvent): void {
+    if (!this.canLeavePage) {
+      event.preventDefault();
+      event.returnValue = ''; // Prompt the user to confirm leaving the page
+    }
+  }
+
   @HostListener('document:fullscreenchange', ['$event'])
-  onDocumentFullscreenChange(event: Event): void {
+  fullscreenListener() {
     if (!document.fullscreenElement) {
-      const confirmStay = confirm(
-        'You have exited full-screen mode. Do you want to return to full-screen?'
-      );
-      if (confirmStay) {
-        this.enterFullscreen();
-      } else {
-        this.exitExamPortal();
-      }
+      this.enterFullscreen();
     }
   }
 
   enterFullscreen(): void {
-    const elem = document.documentElement as HTMLElement;
-
+    const elem = document.documentElement;
     if (elem.requestFullscreen) {
       elem.requestFullscreen();
-    } else if ((elem as any).webkitRequestFullscreen) {
-      // Type assertion for webkit
-      (elem as any).webkitRequestFullscreen();
-    } else if ((elem as any).msRequestFullscreen) {
-      // Type assertion for ms
-      (elem as any).msRequestFullscreen();
-    }
-  }
-
-  exitExamPortal(): void {
-    this.isExamPortalEnabled = false;
-    this.isExamPortal.emit(this.isExamPortalEnabled);
-    this.authService.logout();
+    } 
+    this.fullscreenChange.emit(true);
   }
 }
-function enterFullScreen() {
-  throw new Error('Function not implemented.');
-}
-

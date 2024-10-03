@@ -140,44 +140,60 @@ router.post("/quesresponseAll", auth, async (req, res) => {
     const userId = req.user._id;
     const { examId, responses } = req.body;
 
-    if (examId && userId) {
-      // Create a new QuesResponse document or update the existing one
-      let quesResponse = await QuesResponse.findOne({ userId, examId });
-
-      if (!quesResponse) {
-        // If no existing document found, create a new one
-        quesResponse = new QuesResponse({ userId, examId, responses });
-      } else {
-        // If existing document found, update the responses array
-        quesResponse.responses = responses;
-      }
-
-      // Save the updated document
-      await quesResponse.save();
-      const answeredCount = responses.filter(
-        (response) => response.selectedOption
-      ).length;
-      const totalCount = responses.length;
-
-      // Update the status to 'completed' if at least one question is answered
-      if (answeredCount > 0) {
-        await AssignedExam.findOneAndUpdate(
-          { studentId: userId, examId },
-          {
-            status: "completed",
-            completedAt: Date.now(),
-          }
-        );
-      }
-
-      res.status(201).send(quesResponse);
-    } else {
-      res.status(400).send("User ID and/or Exam ID missing from request body");
+    if (!examId || !userId) {
+      return res.status(400).send("User ID and/or Exam ID missing from request body");
     }
+
+    if (!Array.isArray(responses) || responses.length === 0) {
+      return res.status(400).send("Responses array is missing or empty");
+    }
+
+    // Find an existing QuesResponse or create a new one
+    let quesResponse = await QuesResponse.findOne({ userId, examId });
+
+    if (!quesResponse) {
+      // Create a new response if one does not exist
+      quesResponse = new QuesResponse({ userId, examId, responses });
+    } else {
+      // Update the existing responses array
+      quesResponse.responses = responses;
+    }
+
+    // Save the updated document
+    await quesResponse.save();
+
+    // Count how many questions were answered
+    const answeredCount = responses.filter(
+      (response) => response.selectedOption !== undefined && response.selectedOption !== null
+    ).length;
+
+    const totalCount = responses.length;
+
+    // If at least one question is answered, mark the exam as completed
+    if (answeredCount > 0) {
+      const updateResult = await AssignedExam.findOneAndUpdate(
+        { studentId: userId, examId }, // Ensure you're matching both student and exam IDs
+        {
+          status: "completed",
+          completedAt: Date.now(), // Set completion timestamp
+        },
+        { new: true } // Return the updated document
+      );
+
+      if (!updateResult) {
+        console.error(`AssignedExam not found for userId: ${userId} and examId: ${examId}`);
+        return res.status(404).send("Assigned exam not found");
+      }
+    }
+
+    res.status(201).send(quesResponse);
+
   } catch (error) {
+    console.error("Error updating question response:", error);
     res.status(400).send({ error: error.message });
   }
 });
+
 
 router.post("/quesresponse/:quesId", auth, async (req, res) => {
   try {
